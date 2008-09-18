@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui name="kling" version="1">
+  <ToolBar noMerge="1" name="mainToolBar" >
+    <text>Main Toolbar</text>
+    <Action name="newScript" />
+    <Action name="importScript" />
+    <Action name="saveText" />
+    <Separator/>
+    <Action name="play" />
+    <Action name="pause" />
+    <Action name="stop" />
+    <Separator/>
+    <Action name="showLog" />
+    <Action name="find" />
+  </ToolBar>
+  <MenuBar>
+    <Menu name="file" >
+      <Action name="newScript" />
+    </Menu>
+    <Menu name="edit" >
+      <Action name="find" />
+    </Menu>
+    <Menu name="view" >
+      <Action name="clear" />
+    </Menu>
+    <Menu name="tools" >
+      <Action name="clear" />
+    </Menu>
+    <Menu name="settings" >
+      <Action name="configure" />
+    </Menu>
+  </MenuBar>
+</gui>
