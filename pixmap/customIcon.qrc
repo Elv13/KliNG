@@ -1,0 +1,26 @@
+<RCC>
+  <qresource prefix="editor" >
+    <file>22x22/nextline.png</file>
+    <file>22x22/run.png</file>
+    <file>22x22/skipline.png</file>
+    <file>22x22/comment.png</file>
+    <file>22x22/uncomment.png</file>
+  </qresource>
+  <qresource prefix="oxygen" >
+    <file>22x22/oxygen/window-new.png</file>
+    <file>22x22/oxygen/window-suppressed.png</file>
+    <file>22x22/oxygen/rating.png</file>
+    <file>22x22/oxygen/arrow-right.png</file>
+    <file>22x22/oxygen/document-print.png</file>
+    <file>22x22/oxygen/document-save.png</file>
+    <file>22x22/oxygen/edit-copy.png</file>
+    <file>22x22/oxygen/edit-cut.png</file>
+    <file>22x22/oxygen/edit-paste.png</file>
+    <file>22x22/oxygen/edit-redo.png</file>
+    <file>22x22/oxygen/edit-undo.png</file>
+    <file>22x22/oxygen/go-next.png</file>
+    <file>22x22/oxygen/go-previous.png</file>
+    <file>22x22/oxygen/view-refresh.png</file>
+    <file>22x22/oxygen/window-close.png</file>
+  </qresource>
+</RCC>
