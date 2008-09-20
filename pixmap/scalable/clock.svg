@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="clock.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3372">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3374" />
+      <stop
+         id="stop3380"
+         offset="0.5"
+         style="stop-color:#535353;stop-opacity:1;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop3376" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3358">
+      <stop
+         style="stop-color:#acacac;stop-opacity:1;"
+         offset="0"
+         id="stop3360" />
+      <stop
+         id="stop3364"
+         offset="0.5"
+         style="stop-color:#d8d8d8;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ababab;stop-opacity:1;"
+         offset="1"
+         id="stop3362" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3352">
+      <stop
+         id="stop3354"
+         offset="0"
+         style="stop-color:#ececec;stop-opacity:1;" />
+      <stop
+         id="stop3356"
+         offset="1"
+         style="stop-color:#d2d2d2;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3292">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3294" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop3296" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3284">
+      <stop
+         style="stop-color:#000000;stop-opacity:0"
+         offset="0"
+         id="stop3286" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3288" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3220">
+      <stop
+         style="stop-color:#ececec;stop-opacity:1;"
+         offset="0"
+         id="stop3222" />
+      <stop
+         style="stop-color:#d2d2d2;stop-opacity:1;"
+         offset="1"
+         id="stop3224" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <filter
+       inkscape:collect="always"
+       id="filter3214">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="27.84447"
+         id="feGaussianBlur3216" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3220"
+       id="radialGradient3226"
+       cx="-544.28571"
+       cy="608.07648"
+       fx="-544.28571"
+       fy="608.07648"
+       r="396.21429"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3284"
+       id="linearGradient3290"
+       x1="-538.57141"
+       y1="496.63904"
+       x2="-477.14285"
+       y2="644.29163"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-5.7142857)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3292"
+       id="linearGradient3298"
+       x1="-507.88797"
+       y1="691.64264"
+       x2="-496.64285"
+       y2="308.98645"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-5.7142857)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3358"
+       id="linearGradient3328"
+       x1="-311.62698"
+       y1="227.57771"
+       x2="-183.34776"
+       y2="355.3569"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3372"
+       id="linearGradient3378"
+       x1="-35.799606"
+       y1="327.07858"
+       x2="149.49536"
+       y2="327.07858"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3372"
+       id="linearGradient3401"
+       x1="87.14286"
+       y1="353.79074"
+       x2="348.57141"
+       y2="353.79074"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.7990375,0,0,0.7990375,-151.58241,39.277495)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3358"
+       id="linearGradient3413"
+       gradientUnits="userSpaceOnUse"
+       x1="-311.62698"
+       y1="227.57771"
+       x2="-183.34776"
+       y2="355.3569"
+       gradientTransform="matrix(0.8048457,0,0,0.8048457,-33.878092,47.28286)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3372"
+       id="linearGradient3415"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.7990375,0,0,0.7990375,-151.58241,39.277495)"
+       x1="87.14286"
+       y1="353.79074"
+       x2="348.57141"
+       y2="353.79074" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-120.71429"
+     inkscape:cy="405.71429"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1677"
+     inkscape:window-height="1006"
+     inkscape:window-x="-3"
+     inkscape:window-y="9" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3408"
+       transform="matrix(-0.9890261,-0.1477413,-0.1477413,0.9890261,-1412.2393,-655.9906)">
+      <path
+         id="path3320"
+         d="M -311.92987,291.01346 L -250.14059,230.85021 L -181.84716,297.51759 L -242.01041,357.68084 L -311.92987,291.01346 z"
+         style="fill:url(#linearGradient3413);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <g
+         id="g3403"
+         transform="matrix(0.8059283,0,0,0.8059283,-39.237189,59.421311)">
+        <rect
+           style="opacity:1;fill:url(#linearGradient3415);fill-opacity:1;stroke:none;stroke-opacity:1"
+           id="rect3385"
+           width="208.89122"
+           height="86.752647"
+           x="-81.951981"
+           y="278.59326"
+           rx="16.812153"
+           ry="18.802786"
+           transform="matrix(0.7173883,0.6966736,-0.6966736,0.7173883,0,0)" />
+      </g>
+    </g>
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:#999999;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+       id="path2385"
+       sodipodi:cx="-544.28571"
+       sodipodi:cy="608.07648"
+       sodipodi:rx="395.71429"
+       sodipodi:ry="395.71429"
+       d="M -148.57141,608.07648 A 395.71429,395.71429 0 1 1 -940,608.07648 A 395.71429,395.71429 0 1 1 -148.57141,608.07648 z"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479" />
+    <path
+       style="fill:#b3b3b3;fill-opacity:1;stroke:#ffffff;stroke-width:0.9531278;stroke-opacity:1;filter:url(#filter3214)"
+       d="M -544.28571,230.9046 C -752.4815,230.9046 -921.44196,399.8963 -921.44196,608.0921 C -921.44196,816.28789 -752.4815,985.24834 -544.28571,985.24835 C -336.08996,985.24835 -167.12946,816.28789 -167.12946,608.0921 C -167.12946,399.89631 -336.08996,230.9046 -544.28571,230.9046 z M -544.28571,302.24835 C -375.4687,302.24835 -238.47326,439.27512 -238.47326,608.0921 C -238.47316,776.90908 -375.46873,913.9046 -544.28571,913.9046 C -713.10267,913.90461 -850.12946,776.90908 -850.12946,608.0921 C -850.12945,439.27511 -713.10269,302.24835 -544.28571,302.24835 z"
+       id="path2387"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:url(#radialGradient3226);fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+       id="path3218"
+       sodipodi:cx="-544.28571"
+       sodipodi:cy="608.07648"
+       sodipodi:rx="395.71429"
+       sodipodi:ry="395.71429"
+       d="M -148.57141,608.07648 A 395.71429,395.71429 0 1 1 -940,608.07648 A 395.71429,395.71429 0 1 1 -148.57141,608.07648 z"
+       transform="matrix(0.7512169,0,0,0.7512169,-135.40909,151.27915)"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479" />
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-591.42853"
+       y="383.79077"
+       id="text3228"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3230"
+         x="-591.42853"
+         y="383.79077">12</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-442.85715"
+       y="418.07648"
+       id="text3232"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3234"
+         x="-442.85715"
+         y="418.07648">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-362.85715"
+       y="506.64789"
+       id="text3236"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3238"
+         x="-362.85715"
+         y="506.64789">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-317.14285"
+       y="632.36218"
+       id="text3240"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3242"
+         x="-317.14285"
+         y="632.36218">3</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-357.14288"
+       y="778.07648"
+       id="text3244"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3246"
+         x="-357.14288"
+         y="778.07648">4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-451.42859"
+       y="858.07648"
+       id="text3248"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3250"
+         x="-451.42859"
+         y="858.07648">5</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-577.14288"
+       y="878.07648"
+       id="text3252"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3254"
+         x="-577.14288"
+         y="878.07648">6</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-697.14282"
+       y="823.79077"
+       id="text3256"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3258"
+         x="-697.14282"
+         y="823.79077">7</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-780"
+       y="752.36218"
+       id="text3260"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3262"
+         x="-780"
+         y="752.36218">8</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-802.85718"
+       y="623.79077"
+       id="text3264"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3266"
+         x="-802.85718"
+         y="623.79077">9</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-788.57141"
+       y="520.93365"
+       id="text3268"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3270"
+         x="-788.57141"
+         y="520.93365">10</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:55px;font-style:normal;font-weight:bold;fill:#2e2e2e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+       x="-714.28571"
+       y="423.79077"
+       id="text3272"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479"><tspan
+         sodipodi:role="line"
+         id="tspan3274"
+         x="-714.28571"
+         y="423.79077">11</tspan></text>
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+       id="path3276"
+       sodipodi:cx="-535.71429"
+       sodipodi:cy="619.50507"
+       sodipodi:rx="30"
+       sodipodi:ry="30"
+       d="M -505.71429,619.50507 A 30,30 0 1 1 -565.71429,619.50507 A 30,30 0 1 1 -505.71429,619.50507 z"
+       transform="translate(-8.571416,-11.42859)"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -545.8876,592.01555 L -360,489.50504 L -534.28571,629.50504 L -545.8876,592.01555 z"
+       id="path3278"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -569.58158,607.83136 L -568.57143,360.93361 L -525.71429,598.07647 L -569.58158,607.83136 z"
+       id="path3280"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479" />
+    <path
+       style="fill:url(#linearGradient3298);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient3290);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -837.14286,566.64789 C -638.09524,663.46088 -447.12884,662.32064 -248.08122,568.6682 C -248.08122,568.6682 -308.6656,301.21853 -548.57143,303.79075 C -788.46364,306.36283 -837.14286,566.64789 -837.14286,566.64789 z"
+       id="path3282"
+       sodipodi:nodetypes="cczc"
+       inkscape:export-filename="/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png"
+       inkscape:export-xdpi="2.4986479"
+       inkscape:export-ydpi="2.4986479" />
+  </g>
+</svg>
