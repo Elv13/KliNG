@@ -38,7 +38,7 @@
 #include <klistwidgetsearchline.h>
 #include <klineedit.h>
 
-class History 
+class History  : public QDockWidget
 {
   public:
     History(KLineEdit* mainWindowCL, QStringList* aStringList);
@@ -46,7 +46,7 @@ class History
     void translateUi();
     void addItem(QString command, bool insertDB);
 
-    QDockWidget *dockHistory;
+    //QDockWidget *dockHistory;
     QWidget *dockHistoryContents;
     QVBoxLayout *vboxLayout;
     KListWidget *listHistory;
