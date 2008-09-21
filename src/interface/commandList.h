@@ -29,7 +29,7 @@
 #ifndef DEF_COMMANDLIST
 #define DEF_COMMANDLIST
 
-#include "../../mainwindow.h"
+
 #include <QtGui/QDockWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
@@ -37,15 +37,14 @@
 #include <klistwidgetsearchline.h>
 #include "klistwidget.h"
 
-class CommandList : public KXmlGuiWindow
+class CommandList  : public QDockWidget
 {
   public:
-    CommandList(MainWindow* parent, QStringList* commandStringList);
+    CommandList(QWidget* parent, QStringList* commandStringList);
     ~CommandList();
     void translateUi();
     void indexCommand(QStringList* commandStringList);
 
-    QDockWidget *dockCommandList;
     QWidget *dockCommandListContents;
     QVBoxLayout *verticalLayout_5;
     KListWidgetSearchLine *txtFindCommand;
