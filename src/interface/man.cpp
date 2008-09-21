@@ -28,7 +28,6 @@
 
 #include "man.h"
 #include "../manParser.h"
-#include "../../mainwindow.h"
 
 #include <iostream>
 
@@ -52,7 +51,7 @@
 
   @param[in] parent The parent window
 */
-Man::Man(MainWindow* parent)
+Man::Man(QWidget* parent) : QDockWidget ( 0 )
 {
   
 //**************************************************************
@@ -60,18 +59,17 @@ Man::Man(MainWindow* parent)
 //**************************************************************
 
 
-    dockManual = new QDockWidget();
-    dockManual->setObjectName(QString::fromUtf8("dockManual"));
-    dockManual->setGeometry(QRect(783, 24, 201, 629));
+    setObjectName(QString::fromUtf8("dockManual"));
+    setGeometry(QRect(783, 24, 201, 629));
     QSizePolicy sizePolicy5(QSizePolicy::Ignored, QSizePolicy::Ignored);
     sizePolicy5.setHorizontalStretch(0);
     sizePolicy5.setVerticalStretch(0);
-    sizePolicy5.setHeightForWidth(dockManual->sizePolicy().hasHeightForWidth());
-    dockManual->setSizePolicy(sizePolicy5);
-    dockManual->setMinimumSize(QSize(200, 200));
-    dockManual->setMaximumSize(QSize(16777215, 16777215));
-    dockManual->setAllowedAreas(Qt::AllDockWidgetAreas);
-    dockManualContents = new QWidget(dockManual);
+    sizePolicy5.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    setSizePolicy(sizePolicy5);
+    setMinimumSize(QSize(200, 200));
+    setMaximumSize(QSize(16777215, 16777215));
+    setAllowedAreas(Qt::AllDockWidgetAreas);
+    dockManualContents = new QWidget(this);
     dockManualContents->setObjectName(QString::fromUtf8("dockManualContents"));
     dockManualContents->setGeometry(QRect(2, 22, 197, 605));
     verticalLayout = new QVBoxLayout(dockManualContents);
@@ -119,7 +117,7 @@ Man::Man(MainWindow* parent)
 
     verticalLayout_2->addWidget(rtfManPage);
 
-    tbManInfo->addItem(pageManual, QApplication::translate("MainWindow", "Manuel", 0, QApplication::UnicodeUTF8));
+    tbManInfo->addItem(pageManual, "Manuel");
     PageUsage = new QWidget();
     PageUsage->setObjectName(QString::fromUtf8("PageUsage"));
     PageUsage->setGeometry(QRect(0, 0, 179, 469));
@@ -141,7 +139,7 @@ Man::Man(MainWindow* parent)
 
     verticalLayout_4->addWidget(tblUsage);
 
-    tbManInfo->addItem(PageUsage, QApplication::translate("MainWindow", "Usage", 0, QApplication::UnicodeUTF8));
+    tbManInfo->addItem(PageUsage, "Usage");
     pageOptions = new QWidget();
     pageOptions->setObjectName(QString::fromUtf8("pageOptions"));
     pageOptions->setGeometry(QRect(0, 0, 179, 469));
@@ -162,14 +160,14 @@ Man::Man(MainWindow* parent)
 
     verticalLayout_3->addWidget(tblOptions);
 
-    tbManInfo->addItem(pageOptions, QApplication::translate("MainWindow", "Options", 0, QApplication::UnicodeUTF8));
+    tbManInfo->addItem(pageOptions, "Options");
 
     verticalLayout->addWidget(tbManInfo);
     tblUsage->verticalHeader()->hide();
     tblOptions->verticalHeader()->hide();
     
 
-    dockManual->setWidget(dockManualContents);
+    setWidget(dockManualContents);
 
     tbManInfo->setCurrentIndex(0);
     translateUi();
@@ -208,7 +206,6 @@ Man::~Man()
   delete hlFindManPage;
   delete verticalLayout;
   delete dockManualContents;
-  delete dockManual;
 }
 
 /**
@@ -216,16 +213,16 @@ Man::~Man()
 */
 void Man::translateUi()
 {
-      dockManual->setWindowTitle(QApplication::translate("MainWindow", "Manual", 0, QApplication::UnicodeUTF8));
-    btnFindManPage->setText(QApplication::translate("MainWindow", "Search", 0, QApplication::UnicodeUTF8));
-    rtfManPage->setHtml(QApplication::translate("MainWindow", "<center><h1>Welcome to kling</h1></center>", 0, QApplication::UnicodeUTF8));
-    tbManInfo->setItemText(tbManInfo->indexOf(pageManual), QApplication::translate("MainWindow", "Manuel", 0, QApplication::UnicodeUTF8));
-    tblUsage->horizontalHeaderItem(0)->setText(QApplication::translate("MainWindow", "Exemple", 0, QApplication::UnicodeUTF8));
-    tblUsage->horizontalHeaderItem(1)->setText(QApplication::translate("MainWindow", "Description", 0, QApplication::UnicodeUTF8));
-    tbManInfo->setItemText(tbManInfo->indexOf(PageUsage), QApplication::translate("MainWindow", "Usage", 0, QApplication::UnicodeUTF8));
-    tblOptions->horizontalHeaderItem(0)->setText(QApplication::translate("MainWindow", "Option", 0, QApplication::UnicodeUTF8));
-    tblOptions->horizontalHeaderItem(1)->setText(QApplication::translate("MainWindow", "Description", 0, QApplication::UnicodeUTF8));
-    tbManInfo->setItemText(tbManInfo->indexOf(pageOptions), QApplication::translate("MainWindow", "Options", 0, QApplication::UnicodeUTF8));
+    setWindowTitle("Manual");
+    btnFindManPage->setText("Search");
+    rtfManPage->setHtml("<center><h1>Welcome to kling</h1></center>");
+    tbManInfo->setItemText(tbManInfo->indexOf(pageManual),"Manuel");
+    tblUsage->horizontalHeaderItem(0)->setText("Exemple");
+    tblUsage->horizontalHeaderItem(1)->setText("Description");
+    tbManInfo->setItemText(tbManInfo->indexOf(PageUsage), "Usage");
+    tblOptions->horizontalHeaderItem(0)->setText("Option");
+    tblOptions->horizontalHeaderItem(1)->setText("Description");
+    tbManInfo->setItemText(tbManInfo->indexOf(pageOptions),"Options");
 }
 
 /**
@@ -294,7 +291,7 @@ void Man::loadPage()
 	QWidget* aWidget = new QWidget(tblUsage);
 	QLabel* aTableWidget = new QLabel(aWidget);
 	aTableWidget->setObjectName(QString::fromUtf8("aTableLabel"));
-	aTableWidget->setText(QApplication::translate("MainWindow", query3.value(0).toString().toStdString().c_str(), 0, QApplication::UnicodeUTF8));
+	aTableWidget->setText(query3.value(0).toString().toStdString().c_str());
 	tblUsage->setCellWidget((row2-1), 0, aWidget);
 	aWidget->setToolTip(query3.value(0).toString());
 	

@@ -29,7 +29,7 @@
 #ifndef DEF_MAN
 #define DEF_MAN
 
-#include "../../mainwindow.h"
+
 #include <QtGui/QDockWidget>
 #include <QtGui/QHBoxLayout>
 //#include <QtGui/QTreeWidget>
@@ -39,17 +39,28 @@
 #include <QtGui/QToolBox>
 #include "kpushbutton.h"
 #include "kcombobox.h"
+#include <QtSql>
+#include <QLabel>
+#include <QTableView>
+#include <QHeaderView>
+#include <QTextBrowser>
+#include <QTableWidget>
+/*#include <>
+#include <>
+#include <>
+#include <>
+#include <>*/
 
-class Man : public KXmlGuiWindow
+
+class Man  : public QDockWidget
 {
   Q_OBJECT
   public:
-    Man(MainWindow* parent);
+    Man(QWidget* parent);
     ~Man();
     void translateUi();
 
 
-    QDockWidget *dockManual;
     QWidget *dockManualContents;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *hlFindManPage;
