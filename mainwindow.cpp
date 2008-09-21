@@ -45,6 +45,7 @@
 
 
 
+
 #include <KFileDialog>
 #include <KMessageBox>
 #include <KIO/NetAccess>
@@ -109,7 +110,8 @@
 */
     MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent)
     {
-    
+      klingConfigSkeleton = new  KlingConfigSkeleton();
+      klingConfigSkeleton->readConfig();
       /*if (KStandardDirs::locateLocal("appdata","kling.db") == "") {
         KStandardDirs test;
         QFile::copy(KStandardDirs::locate( "appdata", "kling.db" ),test.saveLocation("appdata")+"kling.db");
@@ -575,26 +577,26 @@
     verticalLayout_11->addWidget(tabCategories);
 
   
-    ScriptBrowser* dockScriptBrowser;
-    SheduledTask* dockSheduledTask;
-    CommandList* dockCommandList;
-    Man* dockManual;
-    Debug* dockDebug;
+    //ScriptBrowser* dockScriptBrowser;
+    //SheduledTask* dockSheduledTask;
+    //CommandList* dockCommandList;
+    //Man* dockManual;
+    //Debug* dockDebug;
 
     commandStringList = new QStringList();
     dockScriptBrowser = new ScriptBrowser(this); 
-    addDockWidget(Qt::LeftDockWidgetArea, dockScriptBrowser->dockScriptBrowser);
+    addDockWidget(Qt::LeftDockWidgetArea, dockScriptBrowser);
 
      dockSheduledTask = new SheduledTask(this); 
-    addDockWidget(Qt::LeftDockWidgetArea, dockSheduledTask->dockSheduledTask);
+    addDockWidget(Qt::LeftDockWidgetArea, dockSheduledTask);
 
 
 
      dockCommandList = new CommandList(this, commandStringList); 
-    addDockWidget(Qt::LeftDockWidgetArea, dockCommandList->dockCommandList);
+    addDockWidget(Qt::LeftDockWidgetArea, dockCommandList);
 
      dockManual = new Man(this); 
-    addDockWidget(Qt::RightDockWidgetArea, dockManual->dockManual);
+    addDockWidget(Qt::RightDockWidgetArea, dockManual);
 
      //dockDebug = new Debug(this); //TODO uncomment when the variable debugger will work, otherwise, this dock is just useless
     //addDockWidget(Qt::LeftDockWidgetArea, dockDebug->dockDebug);
@@ -607,7 +609,7 @@
 
     historyStringList = new QStringList();
     dockHistory = new History(0, historyStringList); 
-    addDockWidget(Qt::LeftDockWidgetArea, dockHistory->dockHistory);
+    addDockWidget(Qt::LeftDockWidgetArea, dockHistory);
     tabShell = new Term (dockHistory ,this, commandStringList, historyStringList);
 
 
@@ -652,6 +654,7 @@
 
 
     //QObject::connect(kpushbutton_4, SIGNAL(clicked()), frame, SLOT(hide()));
+    QObject::connect(tabCategories, SIGNAL(currentChanged(int)), this, SLOT(modeChanged(int)));
     QObject::connect(kpushbutton_6, SIGNAL(clicked()), frame_2, SLOT(hide()));
     QObject::connect(btnSave, SIGNAL(clicked()), this, SLOT(saveFile()));
     QObject::connect(btnBack, SIGNAL(clicked()), webDefaultPage, SLOT(back()));
@@ -680,6 +683,10 @@
     QObject::connect(btnComment, SIGNAL(clicked()), this, SLOT(commentLine()));
     QObject::connect(btnUncomment, SIGNAL(clicked()), this, SLOT(uncommentLine()));
     //QObject::connect(btnUncomment, SIGNAL(isOver()), this, SLOT(resetCmdInputLine()));
+    QObject::connect(dockScriptBrowser, SIGNAL(enableEditor(bool)), txtScriptEditor, SLOT(setEnabled(bool)));
+    QObject::connect(dockScriptBrowser, SIGNAL(setFileName(QString)), this, SLOT(setFileName(QString)));
+    QObject::connect(dockScriptBrowser, SIGNAL(setEdirorText(QString)), txtScriptEditor, SLOT(setPlainText(QString)));
+    QObject::connect(dockScriptBrowser, SIGNAL(launchScript(QString, QString)), this, SLOT(launchScript(QString, QString)));
 
 
 
@@ -1381,25 +1388,6 @@ void MainWindow::loadWebPage()
   webDefaultPage->setUrl(QUrl(cbbUrl->currentText()));
 }
 
-
-// void MainWindow::updateCmdOutput(QString line){
-//   rtfCmdOutput->append(line);
-//   rtfCmdOutput->verticalScrollBar()->setValue(rtfCmdOutput->verticalScrollBar()->maximum());
-// }
-// void MainWindow::resetCmdInputLine() {
-//   rtfCmdOutput->append("\n");
-//   rtfCmdOutput->verticalScrollBar()->setValue(rtfCmdOutput->verticalScrollBar()->maximum());
-//   txtCommand->clear();
-//   pxmCmdInactive->load("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/gearI.png");
-//   cmdStatus->setPixmap(*pxmCmdInactive);
-//   txtCommand->setEnabled(true);
-//   txtCommand->setFocus();
-// }
-// 
-// void MainWindow::clearCmdOutput(){
-//   rtfCmdOutput->clear();
-// }
-
 void MainWindow::showLog() {
   LogView *dialog = new LogView( this );
   
@@ -1407,26 +1395,54 @@ void MainWindow::showLog() {
 }
 
  void MainWindow::showSettings(){
-   KConfigSkeleton* someSettings = new  KConfigSkeleton();
  
    if(KConfigDialog::showDialog("settings"))
      return;
      
-  Config* aConfigDialog = new Config(this, someSettings);
+  Config* aConfigDialog = new Config(this, klingConfigSkeleton);
   aConfigDialog->show();
-   /* KConfigDialog *dialog = new KConfigDialog(this, "settings", someSettings);
-   dialog->resize(600,500);
-   //dialog->setFaceType(KPageDialog::IconList);
-   KPageWidgetItem* page1 = dialog->addPage(new QLabel("test"), i18n("General") );
-   page1->setIcon( KIcon( "fork" ) );
 
-   KPageWidgetItem* page2 = dialog->addPage(new QLabel("test2"), i18n("Appearance") );
-   page2->setIcon( KIcon( "format-text-color" ) );
-   
-   KPageWidgetItem* page3 = dialog->addPage(new QLabel("test3"), i18n("Plugins") );
-   page3->setIcon( KIcon( "vcs_add" ) );
-
-   connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));
-   connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));
-   dialog->show();*/
  }
+ 
+void MainWindow::modeChanged(int index) {
+
+  if (index == TERMINAL_MODE) {
+    dockHistory->setVisible(klingConfigSkeleton->showHistoryTerminal);
+    dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserTerminal);
+    dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskTerminal);
+    dockCommandList->setVisible(klingConfigSkeleton->showCommandListTerminal);
+    dockManual->setVisible(klingConfigSkeleton->showManPageTerminal);
+  }
+  else if (index == MONITOR_MODE) {
+    dockHistory->setVisible(klingConfigSkeleton->showHistoryMonitor);
+    dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserMonitor);
+    dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskMonitor);
+    dockCommandList->setVisible(klingConfigSkeleton->showCommandListMonitor);
+    dockManual->setVisible(klingConfigSkeleton->showManPageMonitor);
+  }
+  else if (index == EDITOR_MODE) {
+    dockHistory->setVisible(klingConfigSkeleton->showHistoryEditor);
+    dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserEditor);
+    dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskEditor);
+    dockCommandList->setVisible(klingConfigSkeleton->showCommandListEditor);
+    dockManual->setVisible(klingConfigSkeleton->showManPageEditor);
+  }
+  else if (index == WEB_BROWSER_MODE) {
+    dockHistory->setVisible(klingConfigSkeleton->showHistoryrWebBrowser); //TODO typo
+    dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserWebBrowser);
+    dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskrWebBrowser);
+    dockCommandList->setVisible(klingConfigSkeleton->showCommandListrWebBrowser);
+    dockManual->setVisible(klingConfigSkeleton->showManPagerWebBrowser);
+  }
+ 
+ }
+
+void MainWindow::setFileName(QString name) {
+  fileName = name;
+}
+
+void MainWindow::launchScript(QString name, QString content) {
+  ScriptMonitor* aNewExecutionMonitor = new ScriptMonitor(tabGestion, name );
+  horizontalLayout_4->addWidget( aNewExecutionMonitor);
+  aNewExecutionMonitor->launchScript(content.toStdString());
+}
