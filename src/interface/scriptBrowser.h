@@ -29,7 +29,6 @@
 #ifndef DEF_SCRIPTBROWSER
 #define DEF_SCRIPTBROWSER
 
-#include "../../mainwindow.h"
 #include <QtGui/QDockWidget>
 #include <QtGui/QDockWidget>
 #include <QtGui/QHBoxLayout>
@@ -38,16 +37,15 @@
 #include <QtGui/QWidget>
 #include "kpushbutton.h"
 
-class ScriptBrowser : public KXmlGuiWindow
+class ScriptBrowser  : public QDockWidget
 {
   Q_OBJECT
   public:
-    ScriptBrowser(MainWindow* parent = NULL);
+    ScriptBrowser(QWidget* parent = NULL);
     ~ScriptBrowser();
     void translateUi();
     void fillTree();
 
-    QDockWidget* dockScriptBrowser;
     QWidget *dockScriptBrowserContents;
     QVBoxLayout *verticalLayout_9;
     QTreeWidget *tvScriptList;
@@ -57,11 +55,17 @@ class ScriptBrowser : public KXmlGuiWindow
     QSpacerItem *horizontalSpacer_2;
     KPushButton *btnEdit;
     KPushButton *btnLaunch;
-    MainWindow* mainwindow;
+    //MainWindow* mainwindow;
   private slots:
     void addNewScript();
     void editSelectedScript();
     void launchSelectedScript();
+    
+  signals:
+    void enableEditor(bool);
+    void setFileName(QString name);
+    void setEdirorText(QString text);
+    void launchScript(QString name, QString content);
 
 };
 #endif

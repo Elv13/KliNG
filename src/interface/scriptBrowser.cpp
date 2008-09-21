@@ -27,7 +27,6 @@
 */
 
 #include "scriptBrowser.h"
-#include "../../mainwindow.h"
 
 #include <iostream>
 
@@ -38,6 +37,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QTreeWidget>
 #include <QtGui/QVBoxLayout>
+#include <QTreeWidgetItem>
 #include <QString>
 #include <QtGui/QWidget>
 #include <QtSql>
@@ -53,28 +53,27 @@
 
   @param[in] parent The parent window
 */
-ScriptBrowser::ScriptBrowser(MainWindow* parent)
+ScriptBrowser::ScriptBrowser(QWidget* parent) : QDockWidget ( 0 )
 {
   
 //**************************************************************
 //                    dockScriptBrowser
 //**************************************************************
 
-    mainwindow = parent;
+    //mainwindow = parent;
     QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed); //
     sizePolicy1.setHorizontalStretch(31); //
     sizePolicy1.setVerticalStretch(31); //
-    dockScriptBrowser = new QDockWidget();
-    dockScriptBrowser->setGeometry(QRect(0, 24, 200, 151));
+    setGeometry(QRect(0, 24, 200, 151));
     QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Maximum);
     sizePolicy3.setHorizontalStretch(0);
     sizePolicy3.setVerticalStretch(0);
-    sizePolicy3.setHeightForWidth(dockScriptBrowser->sizePolicy().hasHeightForWidth());
-    dockScriptBrowser->setSizePolicy(sizePolicy3);
-    dockScriptBrowser->setMinimumSize(QSize(200, 75));
-    dockScriptBrowser->setAcceptDrops(true);
-    dockScriptBrowser->setFeatures(QDockWidget::AllDockWidgetFeatures);
-    dockScriptBrowserContents = new QWidget(dockScriptBrowser);
+    sizePolicy3.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    setSizePolicy(sizePolicy3);
+    setMinimumSize(QSize(200, 75));
+    setAcceptDrops(true);
+    setFeatures(QDockWidget::AllDockWidgetFeatures);
+    dockScriptBrowserContents = new QWidget(this);
     dockScriptBrowserContents->setObjectName(QString::fromUtf8("dockScriptBrowserContents"));
     dockScriptBrowserContents->setGeometry(QRect(2, 22, 196, 127));
     verticalLayout_9 = new QVBoxLayout(dockScriptBrowserContents);
@@ -138,7 +137,7 @@ ScriptBrowser::ScriptBrowser(MainWindow* parent)
 
     verticalLayout_9->addLayout(hlScriptControls);
 
-    dockScriptBrowser->setWidget(dockScriptBrowserContents);
+    setWidget(dockScriptBrowserContents);
 
     QObject::connect(btnNewScript, SIGNAL(clicked()), this, SLOT(addNewScript()));
     QObject::connect(btnEdit, SIGNAL(clicked()), this, SLOT(editSelectedScript()));
@@ -153,8 +152,8 @@ ScriptBrowser::ScriptBrowser(MainWindow* parent)
 */
 void ScriptBrowser::translateUi()
 {
-    dockScriptBrowser->setWindowTitle(QApplication::translate("MainWindow", "Script browser", 0, QApplication::UnicodeUTF8));
-    tvScriptList->headerItem()->setText(0, QApplication::translate("MainWindow", "Name", 0, QApplication::UnicodeUTF8));
+    setWindowTitle("Script browser");
+    tvScriptList->headerItem()->setText(0, "Name");
     const bool __sortingEnabled = tvScriptList->isSortingEnabled();
     tvScriptList->setSortingEnabled(false);
 
@@ -175,7 +174,6 @@ ScriptBrowser::~ScriptBrowser()
   delete tvScriptList;
   delete verticalLayout_9;
   delete dockScriptBrowserContents;
-  delete dockScriptBrowser;
 }
 
 /**
@@ -235,9 +233,12 @@ void ScriptBrowser::editSelectedScript()
   {
     QFile file(tmpFile);
     file.open(QIODevice::ReadOnly);
-    mainwindow->txtScriptEditor->setPlainText(QTextStream(&file).readAll());
-    mainwindow->txtScriptEditor->setDisabled(false);
-    mainwindow->fileName = inputFileName;
+    //mainwindow->txtScriptEditor->setPlainText(QTextStream(&file).readAll());
+    emit setEdirorText(QTextStream(&file).readAll());
+    //mainwindow->txtScriptEditor->setDisabled(false);
+    emit enableEditor(true);
+    //mainwindow->fileName = inputFileName;
+    emit setFileName(inputFileName);
 
     KIO::NetAccess::removeTempFile(tmpFile);
   }
@@ -262,12 +263,14 @@ void ScriptBrowser::launchSelectedScript()
     QString tmpFile;
     if(KIO::NetAccess::download(inputFileName, tmpFile, this))
     {
-      ScriptMonitor* aNewExecutionMonitor = new ScriptMonitor(mainwindow->tabGestion,"echo salut1\nsleep 2 \n echo salut2", tvScriptList->currentItem()->text(0).toStdString() );
-      mainwindow->horizontalLayout_4->addWidget( aNewExecutionMonitor);
+      //ScriptMonitor* aNewExecutionMonitor = new ScriptMonitor(mainwindow->tabGestion, tvScriptList->currentItem()->text(0) ); 
+      //mainwindow->horizontalLayout_4->addWidget( aNewExecutionMonitor);
       QFile file(tmpFile);
       file.open(QIODevice::ReadOnly);
       QString script = (QTextStream(&file).readAll());
-      aNewExecutionMonitor->launchScript(script.toStdString());
+      //aNewExecutionMonitor->launchScript(script.toStdString());
+      
+      emit launchScript(tvScriptList->currentItem()->text(0), script);
   
       KIO::NetAccess::removeTempFile(tmpFile);
     }
