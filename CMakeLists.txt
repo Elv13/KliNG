@@ -26,6 +26,7 @@
         src/interface/fileBrowser.cpp
         src/interface/logView.cpp
         src/interface/config.cpp
+        src/configSkeleton.h
       )
 
       kde4_add_executable(kling ${kling_SRCS})
