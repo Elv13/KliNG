@@ -52,7 +52,7 @@ using namespace std;
 
   @param[in] parent The parent widget (nothing)
 */
-ScriptMonitor::ScriptMonitor(QWidget* parent, std::string script, std::string scriptName) : QFrame(parent)
+ScriptMonitor::ScriptMonitor(QWidget* parent, QString scriptName) : QFrame(parent)
 {
 
     QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -75,7 +75,7 @@ ScriptMonitor::ScriptMonitor(QWidget* parent, std::string script, std::string sc
 
     lblTitle = new QLabel(this);
     lblTitle->setObjectName(QString::fromUtf8("lblTitle"));
-    lblTitle->setText("<b>"+ QString::fromStdString(scriptName) +"</b>");
+    lblTitle->setText("<b>"+ scriptName +"</b>");
 
     horizontalLayout->addWidget(lblTitle);
 

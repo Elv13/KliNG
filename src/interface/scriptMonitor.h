@@ -49,7 +49,7 @@ class ScriptMonitor : public QFrame
 {
   Q_OBJECT
   public:
-    ScriptMonitor(QWidget* parent, std::string script, std::string scriptName);
+    ScriptMonitor(QWidget* parent, QString scriptName);
     ~ScriptMonitor();
     void retranslateUi();
     QVBoxLayout *verticalLayout_2;
