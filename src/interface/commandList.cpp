@@ -27,7 +27,6 @@
 */
 
 #include "commandList.h"
-#include "../../mainwindow.h"
 #include <iostream>
 
 #include <QtGui/QDockWidget>
@@ -47,12 +46,11 @@ using namespace std;
   @todo Use double click to insert command
 */
 
-CommandList::CommandList(MainWindow* parent, QStringList* commandStringList)
+CommandList::CommandList(QWidget* parent, QStringList* commandStringList) : QDockWidget ( 0 )
 {
 
-    dockCommandList = new QDockWidget();
-    dockCommandList->setGeometry(QRect(0, 435, 200, 122));
-    dockCommandListContents = new QWidget(dockCommandList);
+    setGeometry(QRect(0, 435, 200, 122));
+    dockCommandListContents = new QWidget(this);
     dockCommandListContents->setObjectName(QString::fromUtf8("dockCommandListContents"));
     dockCommandListContents->setGeometry(QRect(2, 22, 196, 98));
     verticalLayout_5 = new QVBoxLayout(dockCommandListContents);
@@ -73,7 +71,7 @@ CommandList::CommandList(MainWindow* parent, QStringList* commandStringList)
     verticalLayout_5->addWidget(txtFindCommand);
     verticalLayout_5->addWidget(listCommand);
 
-    dockCommandList->setWidget(dockCommandListContents);
+    setWidget(dockCommandListContents);
     translateUi();
 
 }
@@ -87,7 +85,6 @@ CommandList::~CommandList()
  delete txtFindCommand;
  delete verticalLayout_5;
  delete dockCommandListContents;
- delete dockCommandList;
 }
 
 /**
@@ -95,7 +92,7 @@ CommandList::~CommandList()
 */
 void CommandList::translateUi()
 {
-  dockCommandList->setWindowTitle(QApplication::translate("MainWindow", "System command list", 0, QApplication::UnicodeUTF8));
+  setWindowTitle("System command list");
 }
 
 
