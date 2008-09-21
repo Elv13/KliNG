@@ -2,7 +2,6 @@
 #define DEF_CONFIG
 
 #include <KConfigDialog>
-#include <KConfigSkeleton>
 #include <KPageWidgetItem>
 #include <QWidget>
 #include <QLabel>
@@ -16,6 +15,9 @@
 #include <KIcon>
 #include <QTabWidget>
 #include <QGroupBox>
+#include <QGridLayout>
+#include <QListWidget>
+#include "../configSkeleton.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -24,10 +26,11 @@ class Config : public KConfigDialog
       Q_OBJECT
 
   public:
-    Config(QWidget* parent, KConfigSkeleton* aConfig);
+    Config(QWidget* parent, KlingConfigSkeleton* aConfig);
     ~Config(){}
     
   private:
+    KlingConfigSkeleton* configSkeleton;
     KPageWidgetItem* pwiGeneral;
     KPageWidgetItem* pwiAppearance;
     KPageWidgetItem* pwiPlugins;
@@ -44,9 +47,46 @@ class Config : public KConfigDialog
     QGroupBox* showInMonitor;
     QGroupBox* showInEditor;
     QGroupBox* showInWebBrowser;
+    QGroupBox* otherTerminalOpts;
+    QGridLayout* gridTerminal;
+    QGridLayout* gridMonitor;
+    QGridLayout* gridEditor;
+    QGridLayout* gridWebBrowser;
+    QGridLayout* gridTerminalOpts;
+    QCheckBox* ckbShowScriptBrowserTerminal;
+    QCheckBox* ckbShowScheduledTaskTerminal;
+    QCheckBox* ckbShowCommandListTerminal;
+    QCheckBox* ckbShowHistoryTerminal;
+    QCheckBox* ckbShowManPageTerminal;
+    QCheckBox* ckbEnableUIDefault;
+    QCheckBox* ckbFmShowHidden;
+    QCheckBox* ckbEnableCompleter;
+    QCheckBox* ckbShowScriptBrowserMonitor;
+    QCheckBox* ckbShowScheduledTaskMonitor;
+    QCheckBox* ckbShowCommandListMonitor;
+    QCheckBox* ckbShowHistoryMonitor;
+    QCheckBox* ckbShowManPageMonitor;
+    QCheckBox* ckbShowScriptBrowserEditor;
+    QCheckBox* ckbShowScheduledTaskEditor;
+    QCheckBox* ckbShowCommandListEditor;
+    QCheckBox* ckbShowHistoryEditor;
+    QCheckBox* ckbShowManPageEditor;
+    QCheckBox* ckbShowScriptBrowserWebBrowser;
+    QCheckBox* ckbShowScheduledTaskrWebBrowser;
+    QCheckBox* ckbShowCommandListrWebBrowser;
+    QCheckBox* ckbShowHistoryrWebBrowser;
+    QCheckBox* ckbShowManPagerWebBrowser;
     
-  /*private slots:
-    void openDir(QTableWidgetItem* item);
+    QListWidget* pluginList;
+    KPushButton* btnAddPlugin;
+    KPushButton* btnRemovePlugin;
+    KPushButton* btnInfoPlugin;
+    KPushButton* btnPluginConfig;
+    KPushButton* btnDownloadPlugin;
+    
+  private slots:
+    void saveConfig();
+    /*void openDir(QTableWidgetItem* item);
     void backToStandardMode_clicked();
     
   signals:
