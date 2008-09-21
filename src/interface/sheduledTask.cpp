@@ -27,7 +27,7 @@
 */
 
 #include "sheduledTask.h"
-#include "../../mainwindow.h"
+//#include "../../mainwindow.h"
 
 #include "newCronJob.h"
 #include "../cronparser.h"
@@ -48,7 +48,7 @@ using namespace std;
 
   @param[in] parent The parent window
 */
-SheduledTask::SheduledTask(MainWindow* parent)
+SheduledTask::SheduledTask(QWidget* parent) : QDockWidget ( 0 )
 {
   
 //**************************************************************
@@ -60,16 +60,15 @@ SheduledTask::SheduledTask(MainWindow* parent)
     QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed); //
     sizePolicy1.setHorizontalStretch(31); //
     sizePolicy1.setVerticalStretch(31); //
-    dockSheduledTask = new QDockWidget();
-    dockSheduledTask->setGeometry(QRect(0, 181, 200, 152));
+    setGeometry(QRect(0, 181, 200, 152));
     QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
     sizePolicy4.setHorizontalStretch(0);
     sizePolicy4.setVerticalStretch(0);
-    sizePolicy4.setHeightForWidth(dockSheduledTask->sizePolicy().hasHeightForWidth());
-    dockSheduledTask->setSizePolicy(sizePolicy4);
-    dockSheduledTask->setMaximumSize(QSize(16777215, 16777215));
-    dockSheduledTask->setBaseSize(QSize(0, 100));
-    dockSheduledTaskContents = new QWidget(dockSheduledTask);
+    sizePolicy4.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    setSizePolicy(sizePolicy4);
+    setMaximumSize(QSize(16777215, 16777215));
+    setBaseSize(QSize(0, 100));
+    dockSheduledTaskContents = new QWidget(this);
     dockSheduledTaskContents->setObjectName(QString::fromUtf8("dockSheduledTaskContents"));
     dockSheduledTaskContents->setGeometry(QRect(2, 22, 196, 128));
     verticalLayout_10 = new QVBoxLayout(dockSheduledTaskContents);
@@ -121,7 +120,7 @@ SheduledTask::SheduledTask(MainWindow* parent)
     fillTable();
 
 
-    dockSheduledTask->setWidget(dockSheduledTaskContents);
+    setWidget(dockSheduledTaskContents);
     QObject::connect(btnAddShTsk, SIGNAL(clicked()), this, SLOT(newCronJob()));
     translateUi();
 
@@ -139,7 +138,6 @@ SheduledTask::~SheduledTask()
   delete tlbvSheduledTask;
   delete verticalLayout_10;
   delete dockSheduledTaskContents;
-  delete dockSheduledTask;
 }
 
 /**
@@ -147,7 +145,7 @@ SheduledTask::~SheduledTask()
 */
 void SheduledTask::translateUi()
 {
-  dockSheduledTask->setWindowTitle(QApplication::translate("MainWindow", "Sheduled tasks", 0, QApplication::UnicodeUTF8));
+  setWindowTitle(QApplication::translate("MainWindow", "Sheduled tasks", 0, QApplication::UnicodeUTF8));
     tlbvSheduledTask->horizontalHeaderItem(0)->setText(QApplication::translate("MainWindow", "Date", 0, QApplication::UnicodeUTF8));
     tlbvSheduledTask->horizontalHeaderItem(1)->setText(QApplication::translate("MainWindow", "Command", 0, QApplication::UnicodeUTF8));
 }
