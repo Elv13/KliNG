@@ -29,6 +29,10 @@
       #ifndef MAINWINDOW_H
       #define MAINWINDOW_H
 
+      #define TERMINAL_MODE  0
+      #define MONITOR_MODE  1
+      #define EDITOR_MODE 2
+      #define WEB_BROWSER_MODE  3
 
       #include <iostream>
       #include <QtCore/QVariant>
@@ -60,8 +64,13 @@
       #include <QStringList>
       #include <QCompleter>
       #include "src/interface/history.h"
+      #include "src/interface/scriptBrowser.h"
+      #include "src/interface/sheduledTask.h"
+      #include "src/interface/commandList.h"
+      #include "src/interface/man.h"
       #include "src/interface/sideBar.h"
       #include "src/interface/term.h"
+      #include "src/configSkeleton.h"
 
       class MainWindow : public KXmlGuiWindow
       {
@@ -135,7 +144,12 @@
       QWebView *webDefaultPage; 
       QSqlDatabase* db;
       QTableWidget* lineNBSideBar;
+      KlingConfigSkeleton* klingConfigSkeleton;
       History* dockHistory;
+      ScriptBrowser* dockScriptBrowser;
+      SheduledTask* dockSheduledTask;
+      CommandList* dockCommandList;
+      Man* dockManual;
 
 
       
@@ -176,6 +190,9 @@
 // 	    void clearCmdOutput();
             void showLog();
             void showSettings();
+            void modeChanged(int index);
+            void setFileName(QString name);
+            void launchScript(QString name, QString content);
       };
 
       #endif
