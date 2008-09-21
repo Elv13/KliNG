@@ -47,12 +47,12 @@
 
   @param[in] mainWindowCL The main window command line
 */
-History::History(KLineEdit* mainWindowCL, QStringList* aStringList)
+History::History(KLineEdit* mainWindowCL, QStringList* aStringList) : QDockWidget ( 0 )
 {
     historyStringList = aStringList;
-    dockHistory = new QDockWidget();
-    dockHistory->setGeometry(QRect(0, 339, 200, 90));
-    dockHistoryContents = new QWidget(dockHistory);
+    //dockHistory = new QDockWidget();
+    setGeometry(QRect(0, 339, 200, 90));
+    dockHistoryContents = new QWidget(this);
     dockHistoryContents->setObjectName(QString::fromUtf8("dockHistoryContents"));
     dockHistoryContents->setGeometry(QRect(2, 22, 196, 66));
     vboxLayout = new QVBoxLayout(dockHistoryContents);
@@ -63,13 +63,13 @@ History::History(KLineEdit* mainWindowCL, QStringList* aStringList)
     listHistory->verticalScrollBar()->setValue(listHistory->verticalScrollBar()->maximum());
     
     
-    txtFindHistory = new KListWidgetSearchLine(dockHistory,listHistory);
+    txtFindHistory = new KListWidgetSearchLine(this,listHistory);
     txtFindHistory->setObjectName(QString::fromUtf8("txtFindHystory"));
     txtFindHistory->setProperty("showClearButton", QVariant(true));
     vboxLayout->addWidget(txtFindHistory);
     vboxLayout->addWidget(listHistory);
 
-    dockHistory->setWidget(dockHistoryContents);
+    setWidget(dockHistoryContents);
 
 
 
@@ -95,7 +95,7 @@ History::~History()
   delete listHistory;
   delete vboxLayout;
   delete dockHistoryContents;
-  delete dockHistory;
+  /*delete dockHistory;*/
 }
 
 /**
@@ -103,7 +103,7 @@ History::~History()
 */
 void History::translateUi()
 {
-    dockHistory->setWindowTitle(QApplication::translate("MainWindow", "History", 0, QApplication::UnicodeUTF8));
+    setWindowTitle(QApplication::translate("MainWindow", "History", 0, QApplication::UnicodeUTF8));
 
     const bool __sortingEnabled1 = listHistory->isSortingEnabled();
     listHistory->setSortingEnabled(false);
