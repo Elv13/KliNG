@@ -28,20 +28,27 @@
 
 #ifndef DEF_SHEDULEDTASK
 #define DEF_SHEDULEDTASK
+#include <QtGui/QDockWidget>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QWidget>
+#include <QtGui/QSpacerItem>
+#include <QtGui/QTableWidget>
+#include <KPushButton>
 
-#include "../../mainwindow.h"
+//#include "../../mainwindow.h"
 #include <QtGui/QDockWidget>
 
-class SheduledTask : public KXmlGuiWindow
+class SheduledTask : public QDockWidget
 {
 Q_OBJECT
   public:
-    SheduledTask(MainWindow* parent);
+    SheduledTask(QWidget* parent);
     ~SheduledTask();
     void fillTable();
     void translateUi();
 
-    QDockWidget *dockSheduledTask;
+    /*QDockWidget *dockSheduledTask;*/
     QWidget *dockSheduledTaskContents;
     QVBoxLayout *verticalLayout_10;
     QTableWidget *tlbvSheduledTask;
