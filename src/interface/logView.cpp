@@ -32,6 +32,7 @@
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
+#include <KPushButton>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QMainWindow>
@@ -40,6 +41,9 @@
 #include <QtGui/QTextBrowser>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
+#include <KStandardDirs>
+#include <KIcon>
+#include <QHeaderView>
 #include <kcombobox.h>
 #include <kpushbutton.h>
 #include <kseparator.h>
@@ -107,11 +111,29 @@ LogView::LogView(QWidget* parent) : KDialog( parent )
 
     horizontalLayout_3 = new QHBoxLayout();
     horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-    rtfViewer = new QTextBrowser(centralwidget);
+    
+    /*rtfViewer = new QTextBrowser(centralwidget);
     rtfViewer->setObjectName(QString::fromUtf8("rtfViewer"));
-
-    horizontalLayout_3->addWidget(rtfViewer);
-
+    horizontalLayout_3->addWidget(rtfViewer);*/
+    
+    tblViewer = new QTableWidget(this);
+    tblViewer->verticalHeader()->hide();
+    tblViewer->setColumnCount(3);
+    
+    QTableWidgetItem *__colItem = new QTableWidgetItem();
+    tblViewer->setHorizontalHeaderItem(0, __colItem);
+    tblViewer->horizontalHeaderItem(0)->setText("Name");
+    tblViewer->setColumnWidth(0,312); //FIXME
+    QTableWidgetItem *__colItem1 = new QTableWidgetItem();
+    tblViewer->setHorizontalHeaderItem(1, __colItem1);
+    tblViewer->horizontalHeaderItem(1)->setText("Date");
+    tblViewer->setColumnWidth(1,130);
+    QTableWidgetItem *__colItem2 = new QTableWidgetItem();
+    tblViewer->setHorizontalHeaderItem(2, __colItem2);
+    tblViewer->horizontalHeaderItem(2)->setText("Output");
+    tblViewer->setColumnWidth(2,80);
+    
+    horizontalLayout_3->addWidget(tblViewer);
 
     verticalLayout->addLayout(horizontalLayout_3);
 
@@ -123,23 +145,9 @@ LogView::LogView(QWidget* parent) : KDialog( parent )
 
     verticalLayout->addLayout(horizontalLayout_2);
 
-    QSqlQuery query;
-    query.exec("SELECT * FROM THISTORY");
-    QString strLine;
-    while (query.next())  {
-      //tm* dateTime;
-      //struct stat status_buf;
-      //stat(Name.toStdString().c_str(), &status_buf);
-      QDateTime aDateTime;
-      aDateTime.setTime_t(query.value(2).toString().toUInt());
-      //dateTime = gmtime(aDateTime.toTime_t());
-      QString date = aDateTime.toString("dd/MM/yyyy hh:mm:ss");
-      
-      strLine = query.value(1).toString() + " " + date;
-      rtfViewer->append(strLine);
-    }
+
     retranslateUi();
-    
+    fillTable(0,0);
     
     
     } // setupUi
@@ -167,4 +175,39 @@ void LogView::retranslateUi()
 LogView::~LogView()
 {
 
+}
+
+void LogView::fillTable(char kind, char level) {
+    unsigned int rowCount =0;
+    QSqlQuery query;
+    query.exec("SELECT * FROM THISTORY");
+    QString strLine;
+    KIcon icnEye(KStandardDirs::locate( "appdata", "pixmap/22x22/eye.png"));
+    while (query.next())  {
+      QTableWidgetItem* anItem = new QTableWidgetItem();
+      QTableWidgetItem* aDate = new QTableWidgetItem();
+      
+      QDateTime aDateTime;
+      aDateTime.setTime_t(query.value(2).toString().toUInt());
+      //dateTime = gmtime(aDateTime.toTime_t());
+      QString date = aDateTime.toString("dd/MM/yyyy hh:mm:ss");
+      
+      aDate->setText(date);
+      anItem->setText(query.value(1).toString());
+      
+      KPushButton* btnView = new KPushButton();
+      btnView->setText("View");
+      btnView->setIcon(icnEye);
+      btnView->setStyleSheet("margin:-5px;spacing:0px;height:25px;min-height:25px;max-height:25px;");
+      btnView->setMinimumSize(80, 25);
+      btnView->setMaximumSize(9999, 25);
+      
+      
+      tblViewer->setRowCount(++rowCount);
+      tblViewer->setItem(rowCount-1,0,anItem);
+      tblViewer->setItem(rowCount-1,1,aDate);
+      tblViewer->setCellWidget(rowCount-1, 2, btnView);
+      tblViewer->setRowHeight(rowCount-1, 20);
+      
+    }
 }
