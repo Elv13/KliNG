@@ -22,10 +22,18 @@
       <Action name="find" />
     </Menu>
     <Menu name="view" >
-      <Action name="clear" />
+      <Action name="viewScriptBrowser" />
+      <Action name="viewScheduledTask" />
+      <Action name="viewCommandList" />
+      <Action name="viewHistory" />
+      <Action name="viewManPage" />
     </Menu>
     <Menu name="tools" >
-      <Action name="clear" />
+      <Action name="showLog" />
+      <Action name="newCron" />
+      <Action name="newScript" />
+      <Separator/>
+      <Action name="rescanMan" />
     </Menu>
     <Menu name="settings" >
       <Action name="configure" />
