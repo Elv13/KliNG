@@ -29,6 +29,7 @@
 #ifndef DEF_MANPARSER
 #define DEF_MANPARSER
 
+#include <QThread>
 #include <iostream>
 
 class ManParser 
@@ -39,6 +40,22 @@ class ManParser
   private:
     static std::string parseLine(std::string line);
     static int unGz(std::string name);
+};
+
+class ManThread : public QThread {
+    Q_OBJECT
+
+    public:
+        ManThread(QObject *parent = 0) : QThread(parent) {
+
+        }
+        void run() {
+          ManParser::parseAllManPage();
+          emit over();
+        }
+    signals:
+        void over();
+
 };
 
 #endif
