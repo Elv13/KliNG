@@ -39,6 +39,7 @@
 #include <QtGui/QSpacerItem>
 #include <QtGui/QTextBrowser>
 #include <QtGui/QVBoxLayout>
+#include <QTableWidget>
 #include <QtGui/QWidget>
 #include <kcombobox.h>
 #include <kpushbutton.h>
@@ -54,6 +55,7 @@ public:
     void retranslateUi();
     
     QWidget *centralwidget;
+    QTableWidget* tblViewer;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *hlControl;
     KComboBox *cbbLog;
@@ -64,6 +66,9 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer;
     KPushButton *btnClose;
+    
+private slots:
+    void fillTable(char kind, char level);
   
 
 //private slots:
