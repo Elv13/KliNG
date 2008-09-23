@@ -17,6 +17,7 @@
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QListWidget>
+#include <QSpinBox>
 #include "../configSkeleton.h"
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +33,7 @@ class Config : public KConfigDialog
   private:
     KlingConfigSkeleton* configSkeleton;
     KPageWidgetItem* pwiGeneral;
+    KPageWidgetItem* pwiLogging;
     KPageWidgetItem* pwiAppearance;
     KPageWidgetItem* pwiPlugins;
     QTabWidget* twGeneral;
@@ -76,6 +78,13 @@ class Config : public KConfigDialog
     QCheckBox* ckbShowCommandListrWebBrowser;
     QCheckBox* ckbShowHistoryrWebBrowser;
     QCheckBox* ckbShowManPagerWebBrowser;
+    
+    QGridLayout* gridLogging;
+    QSpinBox* spinMb;
+    QLabel* lblMb;
+    QSpinBox* spinMaxOutputSize;
+    QLabel* lblMaxOutputSize;
+    QCheckBox* ckbAddToBash;
     
     QListWidget* pluginList;
     KPushButton* btnAddPlugin;
