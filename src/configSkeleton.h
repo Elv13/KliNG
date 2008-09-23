@@ -1,8 +1,8 @@
 #ifndef DEF_TERM2
 #define DEF_TERM2
- 
+
  #include <kconfigskeleton.h>
- 
+
  class KlingConfigSkeleton : public KConfigSkeleton
  {
    public:
@@ -17,7 +17,7 @@
        addItemBool("enableUIDefault", enableUIDefault, true);
        addItemBool("fmShowHidden", fmShowHidden, true);
        addItemBool("enableCompleter", enableCompleter, true);
-       
+
        setCurrentGroup("Monitor");
        addItemBool("enableMonitor", enableMonitor, true);
        addItemBool("showScriptBrowserMonitor", showScriptBrowserMonitor, true);
@@ -25,7 +25,7 @@
        addItemBool("showCommandListMonitor", showCommandListMonitor, false);
        addItemBool("showHistoryMonitor", showHistoryMonitor, false);
        addItemBool("showManPageMonitor", showManPageMonitor, false);
-       
+
        setCurrentGroup("Editor");
        addItemBool("enableEditor", enableEditor, true);
        addItemBool("showScriptBrowserEditor", showScriptBrowserEditor, true);
@@ -33,7 +33,7 @@
        addItemBool("showCommandListEditor", showCommandListEditor, true);
        addItemBool("showHistoryEditor", showHistoryEditor, false);
        addItemBool("showManPageEditor", showManPageEditor, true);
-       
+
        setCurrentGroup("WebBrowser");
        addItemBool("enableWebBrowser", enableWebBrowser, true);
        addItemBool("showScriptBrowserWebBrowser", showScriptBrowserWebBrowser, false);
@@ -42,10 +42,14 @@
        addItemBool("showHistoryrWebBrowser", showHistoryrWebBrowser, false);
        addItemBool("showManPagerWebBrowser", showManPagerWebBrowser, true);
 
+       setCurrentGroup("Logginf");
+       addItemInt("ammountToKeep", ammountToKeep,20);
+       addItemInt("maxOutputSize", maxOutputSize,15);
+
 
      }
 
-     
+
     bool enableTerminal;
     bool enableMonitor;
     bool enableEditor;
@@ -73,5 +77,8 @@
     bool showCommandListrWebBrowser;
     bool showHistoryrWebBrowser;
     bool showManPagerWebBrowser;
+    int ammountToKeep;
+    int maxOutputSize;
  };
 #endif
+
