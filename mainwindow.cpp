@@ -43,7 +43,10 @@
 #include "src/interface/logView.h"
 #include "src/interface/config.h"
 
-
+#include "src/interface/newCronJob.h"
+#include "src/interface/logView.h"
+#include "src/interface/addScript.h"
+#include "src/manParser.h"
 
 
 #include <KFileDialog>
@@ -54,6 +57,9 @@
 #include <KStandardDirs>
 #include <KConfigSkeleton>
 #include <KConfigDialog>
+#include <KMessageBox>
+#include <KStatusBar>
+#include <QFrame>
 
 #include <KApplication>
 #include <KAction>
@@ -651,7 +657,42 @@
 	  btnDbgSkipLine->setDisabled(true);
 	  btnDgbNextBP->setDisabled(true);
 	  btnStopDebug->setDisabled(true);
-
+          
+          
+    //Status bar stuff
+    statusJobRunning = new QLabel();
+    statusJobRunning->setText("0 running, 0 paused");
+    statusJobRunning->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum);
+    statusBar()->addWidget(statusJobRunning);
+    
+    QFrame* line_2 = new QFrame(this);
+    line_2->setObjectName(QString::fromUtf8("line_2"));
+    line_2->setFrameShape(QFrame::VLine);
+    line_2->setFrameShadow(QFrame::Sunken);
+    statusBar()->addWidget(line_2);
+    
+    statusCurrentDir = new QLabel();
+    statusCurrentDir->setText("/home/lepagee");
+    statusCurrentDir->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding);
+    statusBar()->addWidget(statusCurrentDir, 100);
+    
+    //statusBar()->addItem(new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    
+    /*QFrame* line_3 = new QFrame(this);
+    line_3->setObjectName(QString::fromUtf8("line_3"));
+    line_3->setFrameShape(QFrame::VLine);
+    line_3->setFrameShadow(QFrame::Sunken);
+    statusBar()->addWidget(line_3);*/
+    
+    statusTask = new QLabel();
+    statusBar()->setItemAlignment(2, Qt::AlignRight);
+    statusBar()->addWidget(statusTask);
+    
+    statusProgressBar = new QProgressBar();
+    statusProgressBar->setMaximumSize(100,9999);
+    statusProgressBar->setMinimumSize(100,0);
+    statusBar()->setItemAlignment(3, Qt::AlignRight);
+    statusBar()->addWidget(statusProgressBar);
 
     //QObject::connect(kpushbutton_4, SIGNAL(clicked()), frame, SLOT(hide()));
     QObject::connect(tabCategories, SIGNAL(currentChanged(int)), this, SLOT(modeChanged(int)));
@@ -888,6 +929,71 @@ void MainWindow::retranslateUi()
       actionCollection()->addAction("showLog", showLogAction);
       connect(showLogAction, SIGNAL(triggered(bool)),
       this, SLOT(showLog()));
+      
+      KAction* newCronAction = new KAction(this);
+      newCronAction->setText(i18n("New Cron Job"));
+      newCronAction->setIcon(KIcon("list-add"));
+      newCronAction->setShortcut(Qt::CTRL + Qt::Key_W);
+      actionCollection()->addAction("newCron", newCronAction);
+      connect(newCronAction, SIGNAL(triggered(bool)),
+      this, SLOT(newCronJob()));
+      
+      /*KAction* newScriptAction = new KAction(this);
+      newScriptAction->setText(i18n("New Script"));
+      newScriptAction->setIcon(KIcon("list-add"));
+      newScriptAction->setShortcut(Qt::CTRL + Qt::Key_W);
+      actionCollection()->addAction("newScript", newScriptAction);
+      connect(newScriptAction, SIGNAL(triggered(bool)),
+      this, SLOT(showLog()));*/
+      
+      KAction* rescanManAction = new KAction(this);
+      rescanManAction->setText(i18n("Rebuild Manual Database"));
+      rescanManAction->setIcon(KIcon("list-add"));
+      rescanManAction->setShortcut(Qt::CTRL + Qt::Key_W);
+      actionCollection()->addAction("rescanMan", rescanManAction);
+      connect(rescanManAction, SIGNAL(triggered(bool)),
+      this, SLOT(parseAllManPage()));
+      
+      viewScriptBrowser = new KAction(this);
+      viewScriptBrowser->setCheckable(true);
+      viewScriptBrowser->setText(i18n("Script Browser"));
+      viewScriptBrowser->setShortcut(Qt::CTRL + Qt::Key_W);
+      actionCollection()->addAction("viewScriptBrowser", viewScriptBrowser);
+      connect(viewScriptBrowser, SIGNAL(triggered(bool)),
+      this, SLOT(setViewScriptBrowser(bool)));
+      
+      viewScheduledTask = new KAction(this);
+      viewScheduledTask->setCheckable(true);
+      viewScheduledTask->setText(i18n("Scheduled Tasks"));
+      viewScheduledTask->setShortcut(Qt::CTRL + Qt::Key_W);
+      actionCollection()->addAction("viewScheduledTask", viewScheduledTask);
+      connect(viewScheduledTask, SIGNAL(triggered(bool)),
+      this, SLOT(setViewScheduledTask(bool)));
+
+      viewCommandList = new KAction(this);
+      viewCommandList->setCheckable(true);
+      viewCommandList->setText(i18n("Command List"));
+      viewCommandList->setShortcut(Qt::CTRL + Qt::Key_W);
+      actionCollection()->addAction("viewCommandList", viewCommandList);
+      connect(viewCommandList, SIGNAL(triggered(bool)),
+      this, SLOT(setViewCommandList(bool)));
+      
+      viewHistory = new KAction(this);
+      viewHistory->setCheckable(true);
+      viewHistory->setText(i18n("History"));
+      viewHistory->setShortcut(Qt::CTRL + Qt::Key_W);
+      actionCollection()->addAction("viewHistory", viewHistory);
+      connect(viewHistory, SIGNAL(triggered(bool)),
+      this, SLOT(setViewHistory(bool)));
+      
+      viewManPage = new KAction(this);
+      viewManPage->setCheckable(true);
+      viewManPage->setChecked(true);
+      viewManPage->setText(i18n("Man Page"));
+      viewManPage->setShortcut(Qt::CTRL + Qt::Key_W);
+      actionCollection()->addAction("viewManPage", viewManPage);
+      connect(viewManPage, SIGNAL(triggered(bool)),
+      this, SLOT(setViewManPage(bool)));
 
   
       KStandardAction::quit(kapp, SLOT(quit()),
@@ -1412,6 +1518,12 @@ void MainWindow::modeChanged(int index) {
     dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskTerminal);
     dockCommandList->setVisible(klingConfigSkeleton->showCommandListTerminal);
     dockManual->setVisible(klingConfigSkeleton->showManPageTerminal);
+    
+    viewManPage->setChecked(klingConfigSkeleton->showManPageTerminal);
+    viewHistory->setChecked(klingConfigSkeleton->showHistoryTerminal);
+    viewCommandList->setChecked(klingConfigSkeleton->showCommandListTerminal);
+    viewScheduledTask->setChecked(klingConfigSkeleton->showScheduledTaskTerminal);
+    viewScriptBrowser->setChecked(klingConfigSkeleton->showScriptBrowserTerminal);
   }
   else if (index == MONITOR_MODE) {
     dockHistory->setVisible(klingConfigSkeleton->showHistoryMonitor);
@@ -1419,6 +1531,12 @@ void MainWindow::modeChanged(int index) {
     dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskMonitor);
     dockCommandList->setVisible(klingConfigSkeleton->showCommandListMonitor);
     dockManual->setVisible(klingConfigSkeleton->showManPageMonitor);
+        
+    viewManPage->setChecked(klingConfigSkeleton->showManPageMonitor);
+    viewHistory->setChecked(klingConfigSkeleton->showHistoryMonitor);
+    viewCommandList->setChecked(klingConfigSkeleton->showCommandListMonitor);
+    viewScheduledTask->setChecked(klingConfigSkeleton->showScheduledTaskMonitor);
+    viewScriptBrowser->setChecked(klingConfigSkeleton->showScriptBrowserMonitor);
   }
   else if (index == EDITOR_MODE) {
     dockHistory->setVisible(klingConfigSkeleton->showHistoryEditor);
@@ -1426,6 +1544,12 @@ void MainWindow::modeChanged(int index) {
     dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskEditor);
     dockCommandList->setVisible(klingConfigSkeleton->showCommandListEditor);
     dockManual->setVisible(klingConfigSkeleton->showManPageEditor);
+        
+    viewManPage->setChecked(klingConfigSkeleton->showManPageEditor);
+    viewHistory->setChecked(klingConfigSkeleton->showHistoryEditor);
+    viewCommandList->setChecked(klingConfigSkeleton->showCommandListEditor);
+    viewScheduledTask->setChecked(klingConfigSkeleton->showScheduledTaskEditor);
+    viewScriptBrowser->setChecked(klingConfigSkeleton->showScriptBrowserEditor);
   }
   else if (index == WEB_BROWSER_MODE) {
     dockHistory->setVisible(klingConfigSkeleton->showHistoryrWebBrowser); //TODO typo
@@ -1433,6 +1557,12 @@ void MainWindow::modeChanged(int index) {
     dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskrWebBrowser);
     dockCommandList->setVisible(klingConfigSkeleton->showCommandListrWebBrowser);
     dockManual->setVisible(klingConfigSkeleton->showManPagerWebBrowser);
+        
+    viewManPage->setChecked(klingConfigSkeleton->showManPagerWebBrowser);
+    viewHistory->setChecked(klingConfigSkeleton->showHistoryrWebBrowser);
+    viewCommandList->setChecked(klingConfigSkeleton->showCommandListrWebBrowser);
+    viewScheduledTask->setChecked(klingConfigSkeleton->showScheduledTaskrWebBrowser);
+    viewScriptBrowser->setChecked(klingConfigSkeleton->showScriptBrowserWebBrowser);
   }
  
  }
@@ -1445,4 +1575,69 @@ void MainWindow::launchScript(QString name, QString content) {
   ScriptMonitor* aNewExecutionMonitor = new ScriptMonitor(tabGestion, name );
   horizontalLayout_4->addWidget( aNewExecutionMonitor);
   aNewExecutionMonitor->launchScript(content.toStdString());
+}
+
+
+void MainWindow::setViewScriptBrowser(bool value) {  
+  dockScriptBrowser->setVisible(value);
+    if (tabCategories->currentIndex() == TERMINAL_MODE) {
+    klingConfigSkeleton->showManPageTerminal;
+    klingConfigSkeleton->showHistoryTerminal;
+    klingConfigSkeleton->showCommandListTerminal;
+    klingConfigSkeleton->showScheduledTaskTerminal;
+    klingConfigSkeleton->showScriptBrowserTerminal;
+    }
+    else if (tabCategories->currentIndex() == MONITOR_MODE) {
+      
+    }
+    else if (tabCategories->currentIndex() == EDITOR_MODE) {
+      
+    }
+    else if (tabCategories->currentIndex() == WEB_BROWSER_MODE) {
+      
+    }
+}
+
+void MainWindow::setViewScheduledTask(bool value) {
+  dockSheduledTask->setVisible(value);
+}
+
+void MainWindow::setViewCommandList(bool value) {
+  dockCommandList->setVisible(value);
+}
+
+void MainWindow::setViewHistory(bool value) {
+  dockHistory->setVisible(value);
+}
+
+void MainWindow::setViewManPage(bool value) {
+  dockManual->setVisible(value);
+}
+
+void MainWindow::newCronJob() {
+  NewCronJob* aCronJob = new NewCronJob(0);
+  aCronJob->show();
+  dockSheduledTask->fillTable(); 
+}
+
+void MainWindow::parseAllManPage() {
+  int answer = KMessageBox::warningYesNo( 0, i18n( "Please confirm. \n Note that the scan may take up to 1 hours to complete. \n You can use your computer during the procedure." ), i18n( "Warning" ));
+
+  if (answer == KMessageBox::Yes) {
+    statusProgressBar->setMinimum(0);
+    statusProgressBar->setMaximum(0);
+    statusTask->setText("Clearing database");
+    QSqlQuery query;
+    query.exec("REMOVE * FROM TMAN_PAGE");
+    statusTask->setText("Scanning manual");
+    ManThread* aThread = new ManThread(this);
+    QObject::connect(aThread, SIGNAL(over()), this, SLOT(cleanStatusBarTask()));
+    aThread->start();
+  }
+}
+
+void MainWindow::cleanStatusBarTask() {
+  statusProgressBar->setRange(0,100);
+  statusProgressBar->setValue(0);
+  statusTask->setText("");
 }
