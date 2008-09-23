@@ -53,6 +53,7 @@
       #include <QtGui/QVBoxLayout>
       #include <QtGui/QWidget>
       #include <QtWebKit/QWebView> 
+      #include <QProgressBar>
       #include "kcombobox.h"
       #include "klineedit.h"
       #include "kpushbutton.h"
@@ -63,6 +64,7 @@
       #include <QSqlDatabase>
       #include <QStringList>
       #include <QCompleter>
+      #include <KAction>
       #include "src/interface/history.h"
       #include "src/interface/scriptBrowser.h"
       #include "src/interface/sheduledTask.h"
@@ -140,6 +142,10 @@
       QHBoxLayout *horizontalLayout_8;
       QStringList* commandStringList;
       QStringList* historyStringList;
+      QProgressBar* statusProgressBar;
+      QLabel* statusJobRunning;
+      QLabel* statusCurrentDir;
+      QLabel* statusTask;
       QCompleter *cmdLineCompleter;
       QWebView *webDefaultPage; 
       QSqlDatabase* db;
@@ -150,6 +156,12 @@
       SheduledTask* dockSheduledTask;
       CommandList* dockCommandList;
       Man* dockManual;
+      
+      KAction* viewManPage;
+      KAction* viewHistory;
+      KAction* viewCommandList;
+      KAction* viewScheduledTask;
+      KAction* viewScriptBrowser;
 
 
       
@@ -193,6 +205,16 @@
             void modeChanged(int index);
             void setFileName(QString name);
             void launchScript(QString name, QString content);
+            void newCronJob();
+            void parseAllManPage();
+            void cleanStatusBarTask();
+            
+            void setViewScriptBrowser(bool value);
+            void setViewScheduledTask(bool value);
+            void setViewCommandList(bool value);
+            void setViewHistory(bool value);
+            void setViewManPage(bool value);
+            
       };
 
       #endif
