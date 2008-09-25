@@ -34,6 +34,7 @@
 #include  <errno.h>
 #include  <sys/wait.h>
 #include  <sys/types.h>
+#include  <time.h>
 #include  <QString>
 #include <QScrollBar>
 
@@ -268,7 +269,7 @@ int Shell::execute(string command, bool needPostAnalyse, string toHighlight, boo
 // 	  mainwindow->pxmCmdInactive->load("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/gearI.png");
 // 	  mainwindow->cmdStatus->setPixmap(*mainwindow->pxmCmdInactive);
 // 	  mainwindow->txtCommand->setEnabled(true);
-	  emit isOver();
+	  emit isOver(QString::number(time(NULL)), key);
   
   
 	  if (close(to_cmd[1]) == -1)
@@ -302,7 +303,7 @@ bool Shell::executionExeptions(char* paramArray[], int paramNumber)
     {
       if (showGUI == true)  {
         emit showFileBrowser(QString(paramArray[1]), true);
-        emit isOver();
+        emit isOver(QString::number(time(NULL)), key);
       }
       else 
         exeption_cd(paramArray[1]);
@@ -317,7 +318,7 @@ bool Shell::executionExeptions(char* paramArray[], int paramNumber)
       if (showGUI == true) {
         isExeption = true;
         emit showFileBrowser(QString(paramArray[1]), false);
-        emit isOver();
+        emit isOver(QString::number(time(NULL)), key);
       }
       //int i =0;
       //while (paramArray[i] != NULL) i++;
@@ -365,7 +366,7 @@ void Shell::exeption_cd(char path[])
   }
   //mainwindow->rtfCmdOutput->verticalScrollBar()->setValue(mainwindow->rtfCmdOutput->verticalScrollBar()->maximum());
   //mainwindow->txtCommand->clear();
-  emit isOver();
+  emit isOver(QString::number(time(NULL)), key);
 }
 
 /**

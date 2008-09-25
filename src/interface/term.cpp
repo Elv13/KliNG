@@ -15,6 +15,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QScrollBar>
+#include <QtSql>
 #include <QPoint>
 
 
@@ -192,12 +193,13 @@ void Term::sendCommand() {
     txtCommand->setDisabled(true);
     kpushbutton_3->setDisabled(false);
     //Shell aShell(this);
-    aThread = new ShellThread(txtCommand->text(), 0, ckbShowGUI);
-    QObject::connect(aThread->aShell, SIGNAL(isOver()), this, SLOT(resetCmdInputLine()));
+    aThread = new ShellThread(txtCommand->text(), 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
+    QObject::connect(aThread->aShell, SIGNAL(isOver(QString, double)), this, SLOT(resetCmdInputLine()));
+    QObject::connect(aThread->aShell, SIGNAL(isOver(QString, double)), this, SLOT(updateDate(QString date, double key)));
     QObject::connect(aThread->aShell, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
     QObject::connect(aThread->aShell, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
     QObject::connect(aThread->aShell, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
-    dockHistory->addItem(txtCommand->text(), true);
+    //dockHistory->addItem(txtCommand->text(), true);
     //QSqlQuery query;
     //query.exec("insert into THISTORY (COMMAND, TIME) values ('"+ txtCommand->text() +"', 2)"); //TODO add corect time
     //aShell.analyseCommand((txtCommand->text().toStdString()));
@@ -270,4 +272,9 @@ void Term::showFileBrowser(QString path, bool setPath) {
 
 void Term::addToHistory(QString line) {
   dockHistory->addItem(line, true);
+}
+
+void Term::updateDate(QString date, double key) {
+  QSqlQuery query;
+  query.exec("update THISTORY SET TIME_END = '" + date + "' WHERE THISTORY_KEY = " + key); 
 }

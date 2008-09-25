@@ -92,6 +92,7 @@ private slots:
   void cmdInfoChanged(QString);
   void showFileBrowser(QString path, bool setPath);
   void addToHistory(QString line);
+  void updateDate(QString date, double key);
   
 signals:
   void cmdInfo(QString, int);

@@ -115,15 +115,22 @@ void History::translateUi()
   the comamnd indexer. It take execute path from the $PATH system variable
   @param[in] command The command to add
 */
-void History::addItem(QString command, bool insertDB)
+double History::addItem(QString command, bool insertDB)
 {
   if (insertDB == true) {
     QSqlQuery query;
-    query.exec("insert into THISTORY (COMMAND, DATE, TIME) values ('"+ command +"', '" + QString::number(time(NULL)) +"', 2)"); //TODO add corect time
+    query.exec("insert into THISTORY (COMMAND, DATE) values ('"+ command +"', '" + QString::number(time(NULL)) +"')"); 
+    //return query;
   }
   //THISTORY (THISTORY_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, DATE DATE, TIME double)
   listHistory->addItem(command);
   *historyStringList << command;
   //while (listHistory->item(listHistory->count() -1)->text() != command) {} //BUG Try to fix a bug, but it fail...
   listHistory->verticalScrollBar()->setValue(listHistory->verticalScrollBar()->maximum());
+
+  QSqlQuery query2;
+  query2.exec("SELECT THISTORY_KEY FROM THISTORY ORDER BY THISTORY_KEY DESC" ); //TODO add top 1
+  query2.next();
+  printf("\n %d \n",query2.value(0).toString().toStdString().c_str()); exit(33);
+  return query2.value(0).toDouble();
 }

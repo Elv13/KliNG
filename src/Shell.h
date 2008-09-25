@@ -50,6 +50,7 @@ class Shell : public QObject
 	static string getResult(string command);
 	static bool executeOnly(string command);
 	int fork_pid;
+	double key;
    private:
         bool showGUI;
    
@@ -65,7 +66,7 @@ class Shell : public QObject
 	//MainWindow* mainwindow;
   signals:
 	void newLine(QString line);
-	void isOver();
+	void isOver(QString time, double key);
 	void clearCmdOutput();
         void showFileBrowser(QString path, bool setPath);
 };
@@ -74,9 +75,10 @@ class ShellThread : public QThread {
     Q_OBJECT
 
     public:
-        ShellThread(QString command, QObject *parent = 0, QCheckBox* showGUI = 0) : QThread(parent) {
+        ShellThread(QString command, QObject *parent = 0, QCheckBox* showGUI = 0, double key = 0) : QThread(parent) {
 	  aCommand = command;
 	  aShell = new Shell(showGUI);
+	  aShell->key = key;
 	}
 	~ShellThread() {delete aShell;}
         void run() {
