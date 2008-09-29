@@ -27,17 +27,34 @@ Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandStringLis
     setGeometry(QRect(0, 0, 520, 609));
     verticalLayout_6 = new QVBoxLayout(this);
     verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
+    
+    hlCkbLayout = new QHBoxLayout();
+    verticalLayout_6->addLayout(hlCkbLayout);
+
+    ckbShowGUI = new QCheckBox;
+    ckbShowGUI->setText("Show command interfaces");
+    //ckbShowGUI->setChecked(true);
+    hlCkbLayout->addWidget(ckbShowGUI);
+    
+    ckbShowHiddenFile = new QCheckBox;
+    ckbShowHiddenFile->setText("Show hidden files");
+    ckbShowHiddenFile->setChecked(true);
+    hlCkbLayout->addWidget(ckbShowHiddenFile);
+    
+    QSpacerItem* horizontalSpacer = new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    hlCkbLayout->addItem(horizontalSpacer);
+    
     frame = new QFrame(this);
     frame->setObjectName(QString::fromUtf8("frame"));
-    frame->setMinimumSize(QSize(0, 20));
+    frame->setMinimumSize(QSize(0, 26));
     frame->setFrameShape(QFrame::StyledPanel);
     frame->setFrameShadow(QFrame::Plain);
-    frame->setMinimumSize(QSize(0, 26));
     frame->setMaximumSize(QSize(16777215, 26));
-    frame->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0px;padding:0px;border:0px;border-color:#808000;padding-top:-1px;spacing:0px;");
+    frame->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0px;padding:0px;border:0px;border-color:#808000;padding-top:0px;spacing:0px;");
     frame->hide();
     horizontalLayout_3 = new QHBoxLayout(frame);
     horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+    horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
     kpushbutton_4 = new KPushButton(frame);
     kpushbutton_4->setObjectName(QString::fromUtf8("kpushbutton_4"));
     kpushbutton_4->setMinimumSize(QSize(22, 22));
@@ -64,28 +81,14 @@ Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandStringLis
 
     kpushbutton_5 = new KPushButton(frame);
     kpushbutton_5->setObjectName(QString::fromUtf8("kpushbutton_5"));
-    kpushbutton_5->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;padding-right:5;padding-left:5;spacing:0;min-height:15px");
+    kpushbutton_5->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;padding-right:5;padding-left:5;spacing:0;min-height:15px;margin-right:5px;");
 
     horizontalLayout_3->addWidget(kpushbutton_5);
 
 
     verticalLayout_6->addWidget(frame);
     
-    hlCkbLayout = new QHBoxLayout();
-    verticalLayout_6->addLayout(hlCkbLayout);
-
-    ckbShowGUI = new QCheckBox;
-    ckbShowGUI->setText("Show command interfaces");
-    ckbShowGUI->setChecked(true);
-    hlCkbLayout->addWidget(ckbShowGUI);
     
-    ckbShowHiddenFile = new QCheckBox;
-    ckbShowHiddenFile->setText("Show hidden files");
-    ckbShowHiddenFile->setChecked(true);
-    hlCkbLayout->addWidget(ckbShowHiddenFile);
-    
-    QSpacerItem* horizontalSpacer = new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    hlCkbLayout->addItem(horizontalSpacer);
     
     completerSplitter = new QSplitter(this);
     completerSplitter->setOrientation(Qt::Vertical);
@@ -99,7 +102,7 @@ Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandStringLis
     rtfCmdOutput->setObjectName(QString::fromUtf8("rtfCmdOutput"));
     rtfCmdOutput->setAcceptRichText(false);
     rtfCmdOutput->setTextInteractionFlags(Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse);
-    rtfCmdOutput->hide(); //TODO remove this
+    //rtfCmdOutput->hide(); //TODO remove this
 
     //verticalLayout_6->addWidget(rtfCmdOutput);
     completerSplitter->addWidget(rtfCmdOutput);
@@ -108,6 +111,7 @@ Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandStringLis
     fileBrowser = new FileBrowser(this, rtfCmdOutput);
     //verticalLayout_6->addWidget(fileBrowser);
     completerSplitter->addWidget(fileBrowser);
+    fileBrowser->hide();
 
     hlCommand = new QHBoxLayout();
     hlCommand->setObjectName(QString::fromUtf8("hlCommand"));
@@ -125,6 +129,7 @@ Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandStringLis
     txtCommand = new KLineEdit(this);
     txtCommand->setObjectName(QString::fromUtf8("txtCommand"));
     txtCommand->setProperty("showClearButton", QVariant(true));
+    txtCommand->setAcceptDrops(true);
 
     hlCommand->addWidget(txtCommand);
 
@@ -163,8 +168,9 @@ Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandStringLis
     QObject::connect(klineedit_3, SIGNAL(returnPressed()), this, SLOT(searchCmdOutput()));
     QObject::connect(kpushbutton_5, SIGNAL(clicked()), this, SLOT(searchCmdOutput()));
     QObject::connect(txtCommand, SIGNAL(returnPressed()), this, SLOT(sendCommand()));
-    QObject::connect(txtCommand, SIGNAL(textChanged(QString)), this, SLOT(cmdInfoChanged(QString)));
-    QObject::connect(txtCommand, SIGNAL(textChanged(QString)), this, SLOT(resizeCompleter()));
+    QObject::connect(txtCommand, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)));
+    QObject::connect(this, SIGNAL(showCompleter(QString)), this, SLOT(cmdInfoChanged(QString)));
+    QObject::connect(this, SIGNAL(showCompleter(QString)), this, SLOT(resizeCompleter()));
     QObject::connect(this, SIGNAL(cmdInfo(QString,int)), completer, SLOT(updateCommand(QString,int)));
     QObject::connect(this, SIGNAL(cmdInfo(QString,int)), completer, SLOT(updateHistory(QString,int)));
     QObject::connect(this, SIGNAL(cmdInfo(QString,int)), completer, SLOT(updateFile(QString,int)));
@@ -194,17 +200,11 @@ void Term::sendCommand() {
     kpushbutton_3->setDisabled(false);
     //Shell aShell(this);
     aThread = new ShellThread(txtCommand->text(), 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
-    QObject::connect(aThread->aShell, SIGNAL(isOver(QString, double)), this, SLOT(resetCmdInputLine()));
-    QObject::connect(aThread->aShell, SIGNAL(isOver(QString, double)), this, SLOT(updateDate(QString date, double key)));
+    QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
+    QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
     QObject::connect(aThread->aShell, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
     QObject::connect(aThread->aShell, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
     QObject::connect(aThread->aShell, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
-    //dockHistory->addItem(txtCommand->text(), true);
-    //QSqlQuery query;
-    //query.exec("insert into THISTORY (COMMAND, TIME) values ('"+ txtCommand->text() +"', 2)"); //TODO add corect time
-    //aShell.analyseCommand((txtCommand->text().toStdString()));
-    //ThreadExec aThread(this);
-    //QObject::disconnect(aThread->aShell, SIGNAL(isOver()), this, SLOT(resetCmdInputLine()));
     aThread->start();
     //aPid = aThread->aShell->fork_pid;
     QObject::connect(kpushbutton_3, SIGNAL(clicked()), this, SLOT(killPros()));
@@ -274,7 +274,15 @@ void Term::addToHistory(QString line) {
   dockHistory->addItem(line, true);
 }
 
-void Term::updateDate(QString date, double key) {
+void Term::updateDate(QString date, QString key) {
   QSqlQuery query;
-  query.exec("update THISTORY SET TIME_END = '" + date + "' WHERE THISTORY_KEY = " + key); 
+  //exit(33);
+  query.exec("update THISTORY SET TIME_END = '" + date.trimmed() + "' WHERE THISTORY_KEY = " + key); 
+}
+
+void Term::textChanged(QString text) {
+  if (text.size() != 0)
+    emit showCompleter(text);
+  else 
+    completer->hide();
 }
