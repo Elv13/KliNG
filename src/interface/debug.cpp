@@ -1,3 +1,5 @@
+
+
 /**     @file debug.cpp
 
 	This file is part of the Kling project
@@ -19,7 +21,7 @@
 	Boston, MA 02111-1307, USA.
 	___________________
 
-        Will be used by the script debugger, actuallt totally useless
+        Display environement and local variables
 
         @author Emmanuel Lepage Vallée
         @date 14 May 2008
@@ -27,12 +29,16 @@
 */
 
 #include "debug.h"
-#include "../../mainwindow.h"
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
-#include <QtGui/QTableView>
+#include <QTableWidgetItem>
+#include <QHeaderView>
+#include <stdio.h>
+#include <sys/types.h>
+#include <getopt.h>
+
 
 
 /**
@@ -40,12 +46,12 @@
 
   @param[in] parent The parent window
 */
-Debug::Debug(MainWindow* parent)
+Debug::Debug(QWidget* parent) : QDockWidget ( 0 )
 {
-    dockDebug = new QDockWidget();
-    dockDebug->setObjectName(QString::fromUtf8("dockDebug"));
-    dockDebug->setGeometry(QRect(0, 563, 200, 90));
-    dockDebugContents = new QWidget(dockDebug);
+    //dockDebug = new QDockWidget();
+    setObjectName(QString::fromUtf8("dockDebug"));
+    setGeometry(QRect(0, 563, 200, 90));
+    dockDebugContents = new QWidget(this);
     dockDebugContents->setObjectName(QString::fromUtf8("dockDebugContents"));
     dockDebugContents->setGeometry(QRect(2, 22, 196, 66));
     verticalLayout_12 = new QVBoxLayout(dockDebugContents);
@@ -60,10 +66,32 @@ Debug::Debug(MainWindow* parent)
     tbldebug->setHorizontalHeaderItem(1, __colItem5);
     tbldebug->setObjectName(QString::fromUtf8("tbldebug"));
     tbldebug->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    tbldebug->verticalHeader()->hide();
 
     verticalLayout_12->addWidget(tbldebug);
 
-    dockDebug->setWidget(dockDebugContents);
+    setWidget(dockDebugContents);
+    
+    unsigned int rowCount =0;
+    extern char **environ;
+    char **env;
+    for (env = environ; *env != NULL; ++env) {
+      tbldebug->setRowCount(++rowCount);
+      tbldebug->setRowHeight((rowCount-1), 20);
+      puts (*env);
+      QString anEnvVar = *env;
+      
+      QTableWidgetItem* anEnvVarName = new QTableWidgetItem();
+      anEnvVarName->setText(anEnvVar.left(anEnvVar.indexOf("=")).insert(0,"$"));
+      anEnvVarName->setToolTip(anEnvVar.left(anEnvVar.indexOf("=")).insert(0,"$"));
+      tbldebug->setItem(rowCount-1,0,anEnvVarName);
+      
+      QTableWidgetItem* anEnvVarValue = new QTableWidgetItem();
+      anEnvVarValue->setText(anEnvVar.right(anEnvVar.count() - anEnvVar.indexOf("=") -1));
+      anEnvVarValue->setToolTip(anEnvVar.right(anEnvVar.count() - anEnvVar.indexOf("=")-1));
+      tbldebug->setItem(rowCount-1,1,anEnvVarValue);
+      
+    }
 
     translateUi();
 }
@@ -76,7 +104,6 @@ Debug::~Debug()
   delete tbldebug;
   delete verticalLayout_12;
   delete dockDebugContents;
-  delete dockDebug;
 }
 
 /**
@@ -84,8 +111,8 @@ Debug::~Debug()
 */
 void Debug::translateUi()
 {
-    dockDebug->setWindowTitle(QApplication::translate("MainWindow", "Debug", 0, QApplication::UnicodeUTF8));
-    tbldebug->horizontalHeaderItem(0)->setText(QApplication::translate("MainWindow", "Variable", 0, QApplication::UnicodeUTF8));
-    tbldebug->horizontalHeaderItem(1)->setText(QApplication::translate("MainWindow", "Value", 0, QApplication::UnicodeUTF8));
+    setWindowTitle("Variables");
+    tbldebug->horizontalHeaderItem(0)->setText("Variable");
+    tbldebug->horizontalHeaderItem(1)->setText("Value");
 }
 
