@@ -27,6 +27,9 @@
         src/interface/logView.cpp
         src/interface/config.cpp
         src/configSkeleton.h
+        src/interface/outputViewer.cpp
+        src/interface/debugTerm.cpp
+        src/interface/scriptEditor.cpp
       )
 
       kde4_add_executable(kling ${kling_SRCS})
@@ -78,4 +81,10 @@
                      
 
                      
-      DESTINATION ${DATA_INSTALL_DIR}/kling/pixmap/22x22/oxygen )
+      DESTINATION ${DATA_INSTALL_DIR}/kling/outpt_dump )
+      
+        install( FILES 
+                     pixmap/22x22/oxygen/arrow-right.png
+
+                     
+      DESTINATION ${DATA_INSTALL_DIR}/kling/outpt_dump )
