@@ -46,6 +46,7 @@
 #include <KApplication>
 #include <KIO/NetAccess>
 #include <KMessageBox>
+#include <KStandardDirs>
 
 
 /**
@@ -224,9 +225,9 @@ void ScriptBrowser::fillTree()
 */
 void ScriptBrowser::editSelectedScript()
 {
-  std::string tmpPath =Shell::getResult("echo $HOME/.kling/script/");
-  tmpPath = tmpPath.substr(0, tmpPath.size() -1);
-  QString inputFileName = QString::fromStdString(tmpPath) + tvScriptList->currentItem()->text(0) + ".sh";
+
+  
+  QString inputFileName = KStandardDirs::locateLocal("appdata", "/script/") + tvScriptList->currentItem()->text(0);
   QString tmpFile;
   if(KIO::NetAccess::download(inputFileName, tmpFile,
   this))
