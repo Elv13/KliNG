@@ -27,6 +27,7 @@
       <Action name="viewCommandList" />
       <Action name="viewHistory" />
       <Action name="viewManPage" />
+      <Action name="viewDebug" />
     </Menu>
     <Menu name="tools" >
       <Action name="showLog" />

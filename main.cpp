@@ -35,47 +35,40 @@ Boston, MA 02111-1307, USA.
 #include <iostream>
 
 #include "mainwindow.h"
-#include "src/Shell.h"
+//#include "src/Shell.h"
 #include "src/interface/setup.h"
+#include "src/configSkeleton.h"
 
-int main (int argc, char *argv[])
-{
-  KAboutData aboutData( "kling", "kling",
-  ki18n("Kling"), "0.0.9",
-  ki18n("A complete environemnt to develop, manage and execute Unix scripts"),
-  KAboutData::License_GPL,
-  ki18n("Copyright (c) 2008 Emmanuel Lepage Vallee") );
-  KCmdLineArgs::init( argc, argv, &aboutData );
+  int main (int argc, char *argv[]) {
+    KAboutData aboutData( "kling", "kling",
+    ki18n("Kling"), "0.0.9",
+    ki18n("A complete environemnt to develop, manage and execute Unix scripts"),
+    KAboutData::License_GPL,
+    ki18n("Copyright (c) 2008 Emmanuel Lepage Vallee") );
+    KCmdLineArgs::init( argc, argv, &aboutData );
 
-  KCmdLineOptions options; 
-  options.add("+[file]", ki18n("Document to open")); 
-  KCmdLineArgs::addCmdLineOptions(options); 
+    KCmdLineOptions options; 
+    options.add("+[file]", ki18n("Document to open")); 
+    KCmdLineArgs::addCmdLineOptions(options); 
+    KApplication app;
+    KlingConfigSkeleton* klingConfigSkeleton = new  KlingConfigSkeleton();
+    klingConfigSkeleton->readConfig();
+    
+    if (klingConfigSkeleton->isConfigured == false) {
+      klingConfigSkeleton->isConfigured = true;
+      klingConfigSkeleton->writeConfig();
+      Setup* setup = new Setup();
+      setup->show();
+    }
+    else {
+      MainWindow* window = new MainWindow(0, klingConfigSkeleton);
+      window->show();
+    }
 
-  KApplication app;
-
-  //TODO When Kling will be using kconfig, remove this and use KConfig instead of these cheap line. Until that, it works just fine
-  std::string confPath = Shell::getResult("echo $HOME").substr(0, Shell::getResult("echo $HOME").size() -1) + "/.kling/conf.txt";
-  if (Shell::getResult("cat " + confPath) == "") 
-  {
-    //QFile::copy(KStandardDirs::locate( "appdata", "kling.db" ),KStandardDirs::saveLocation("appdata"));
-    std::string confDir = "mkdir " + Shell::getResult("echo $HOME").substr(0, Shell::getResult("echo $HOME").size() -1) + "/.kling";
-    system(confDir.c_str());
-    confPath = "echo configured >> " +confPath;
-    system(confPath.c_str());
-    Setup* setup = new Setup();
-    setup->show();
+    /*KCmdLineArgs *args = KCmdLineArgs::parsedArgs(); //PASDEMOI
+    if(args->count())
+    {
+    window->openFile(args->url(0).url()); 
+    }*/
+    return app.exec();
   }
-  else
-  {
-
-  MainWindow* window = new MainWindow();
-  window->show();
-  }
-
-  /*KCmdLineArgs *args = KCmdLineArgs::parsedArgs(); //PASDEMOI
-  if(args->count())
-  {
-  window->openFile(args->url(0).url()); 
-  }*/
-  return app.exec();
-}

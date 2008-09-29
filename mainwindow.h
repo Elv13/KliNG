@@ -26,62 +26,63 @@
         @version 0.0.9
 */
 
-      #ifndef MAINWINDOW_H
-      #define MAINWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-      #define TERMINAL_MODE  0
-      #define MONITOR_MODE  1
-      #define EDITOR_MODE 2
-      #define WEB_BROWSER_MODE  3
+#define TERMINAL_MODE  0
+#define MONITOR_MODE  1
+#define EDITOR_MODE 2
+#define WEB_BROWSER_MODE  3
 
-      #include <iostream>
-      #include <QtCore/QVariant>
-      #include <QtGui/QAction>
-      #include <QtGui/QApplication>
-      #include <QtGui/QButtonGroup>
-      #include <QtGui/QFrame>
-      #include <QtGui/QGraphicsView>
-      #include <QtGui/QHBoxLayout>
-      #include <QtGui/QLabel>
-      #include <QtGui/QScrollArea>
-      #include <QtGui/QSpacerItem>
-      #include <QtGui/QTabWidget>
-      #include <QtGui/QTableView>
-      #include <QtGui/QTableWidget>
-      #include <QtGui/QTextBrowser>
-      #include <QtGui/QTextEdit>
-      #include <QtGui/QVBoxLayout>
-      #include <QtGui/QWidget>
-      #include <QtWebKit/QWebView> 
-      #include <QProgressBar>
-      #include "kcombobox.h"
-      #include "klineedit.h"
-      #include "kpushbutton.h"
-      #include "ktabwidget.h"
-      #include "ktextedit.h"
-      #include <kicon.h>
-      #include <KXmlGuiWindow>
-      #include <QSqlDatabase>
-      #include <QStringList>
-      #include <QCompleter>
-      #include <KAction>
-      #include "src/interface/history.h"
-      #include "src/interface/scriptBrowser.h"
-      #include "src/interface/sheduledTask.h"
-      #include "src/interface/commandList.h"
-      #include "src/interface/man.h"
-      #include "src/interface/sideBar.h"
-      #include "src/interface/term.h"
-      #include "src/configSkeleton.h"
+#include <iostream>
+#include <QtCore/QVariant>
+#include <QtGui/QAction>
+#include <QtGui/QApplication>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QFrame>
+#include <QtGui/QGraphicsView>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QLabel>
+#include <QtGui/QScrollArea>
+#include <QtGui/QSpacerItem>
+#include <QtGui/QTabWidget>
+#include <QtGui/QTableView>
+#include <QtGui/QTableWidget>
+#include <QtGui/QTextBrowser>
+#include <QtGui/QTextEdit>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QWidget>
+#include <QtWebKit/QWebView> 
+#include <QProgressBar>
+#include "kcombobox.h"
+#include "klineedit.h"
+#include "kpushbutton.h"
+#include "ktabwidget.h"
+#include "ktextedit.h"
+#include <kicon.h>
+#include <KXmlGuiWindow>
+#include <QSqlDatabase>
+#include <QStringList>
+#include <QCompleter>
+#include <KAction>
+#include "src/interface/history.h"
+#include "src/interface/scriptBrowser.h"
+#include "src/interface/sheduledTask.h"
+#include "src/interface/commandList.h"
+#include "src/interface/man.h"
+#include "src/interface/debug.h"
+#include "src/interface/sideBar.h"
+#include "src/interface/term.h"
+#include "src/interface/debugTerm.h"
+#include "src/configSkeleton.h"
 
-      class MainWindow : public KXmlGuiWindow
-      {
-      Q_OBJECT
+  class MainWindow : public KXmlGuiWindow {
+    Q_OBJECT
 
-      public:
+    public:
       void retranslateUi();
       void setupActions();
-      MainWindow(QWidget *parent=0);
+      MainWindow(QWidget *parent=0, KlingConfigSkeleton* configuration = 0);
       ~MainWindow();
       QWidget *centralwidget;
       QVBoxLayout *verticalLayout_11;//
@@ -89,7 +90,6 @@
       QWidget *tabGestion;//
       QVBoxLayout *horizontalLayout_4;
       Term *tabShell;//
-      //TABSHELL WIDGER WERE HERE
       QWidget *tabEditor;//
       QVBoxLayout *verticalLayout_7;
       QHBoxLayout *hlControl2;
@@ -152,69 +152,64 @@
       QTableWidget* lineNBSideBar;
       KlingConfigSkeleton* klingConfigSkeleton;
       History* dockHistory;
+      Debug* dockDebug;
       ScriptBrowser* dockScriptBrowser;
       SheduledTask* dockSheduledTask;
       CommandList* dockCommandList;
       Man* dockManual;
+      
+      DebugTerm* aDebugTerm; //TODO when the editor will be isolated, add this to scriptEditor.h
       
       KAction* viewManPage;
       KAction* viewHistory;
       KAction* viewCommandList;
       KAction* viewScheduledTask;
       KAction* viewScriptBrowser;
+      KAction* viewDebug;
 
-
-      
       QString fileName;
       void openFile(const QString &inputFileName);
 
-      private:
-	    std::string* commandArray;
-	    bool isDebugging;
-	    int currentLine;
-	    int lineNumber;
-	    int sbLineNB2;
-	    SideBar* firstSBItem;
-	    SideBar* lastSBItem;
-	    SideBar* sbCurrentLine;
+    private:
+      void sendCommand(QString command);
+      std::string* commandArray;
+      bool isDebugging;
+      int currentLine;
+      int lineNumber;
+      int sbLineNB2;
+      SideBar* firstSBItem;
+      SideBar* lastSBItem;
+      SideBar* sbCurrentLine;
 
-      private slots:
-	    //void newFile();
-	    void loadWebPage();
-	    void openFile();
-	    void saveFile();
-	    void saveFileAs();
-	    void find();
-	    void saveFileAs(const QString &outputFileName);
-	    //void sendCommand();
-	    //void seNewLine();
-	    //void searchCmdOutput();
-	    void searchEdit();
-	    void startDebugging();
-	    void stopDebugging();
-	    void dbgNextLine();
-	    void dbgSkipLine();
-	    void dbgGoToNextBP();
-	    void commentLine();
-	    void uncommentLine();
-// 	    void updateCmdOutput(QString line);
-// 	    void resetCmdInputLine();
-// 	    void clearCmdOutput();
-            void showLog();
-            void showSettings();
-            void modeChanged(int index);
-            void setFileName(QString name);
-            void launchScript(QString name, QString content);
-            void newCronJob();
-            void parseAllManPage();
-            void cleanStatusBarTask();
-            
-            void setViewScriptBrowser(bool value);
-            void setViewScheduledTask(bool value);
-            void setViewCommandList(bool value);
-            void setViewHistory(bool value);
-            void setViewManPage(bool value);
-            
-      };
-
-      #endif
+    private slots:
+      void loadWebPage();
+      void openFile();
+      void saveFile();
+      void saveFileAs();
+      void find();
+      void saveFileAs(const QString &outputFileName);
+      void searchEdit();
+      void startDebugging();
+      void stopDebugging();
+      void dbgNextLine();
+      void dbgSkipLine();
+      void dbgGoToNextBP();
+      void commentLine();
+      void uncommentLine();
+      void showLog();
+      void showSettings();
+      void modeChanged(int index);
+      void setFileName(QString name);
+      void launchScript(QString name, QString content);
+      void newCronJob();
+      void parseAllManPage();
+      void cleanStatusBarTask();
+      
+      void setViewScriptBrowser(bool value);
+      void setViewScheduledTask(bool value);
+      void setViewCommandList(bool value);
+      void setViewHistory(bool value);
+      void setViewManPage(bool value);
+      void setViewDebug(bool value);
+  };
+#endif
