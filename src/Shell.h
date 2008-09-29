@@ -50,7 +50,7 @@ class Shell : public QObject
 	static string getResult(string command);
 	static bool executeOnly(string command);
 	int fork_pid;
-	double key;
+	QString key;
    private:
         bool showGUI;
    
@@ -60,13 +60,14 @@ class Shell : public QObject
 	void exeption_cd(char path[]);
 	int execute(string command, bool needPostAnalyse, string toHighlight, bool showAllLine);
 	string highLight(string line, string toHighlight);
-	void ajustSerialCode(string &line);
+	string ajustSerialCode(string &line);
 	string replaceColorCode(string line, string code, string color, string bgcolor);
 	char** parseCommand(string command, int &paramNumber);
+        void saveOutput(QString* output);
 	//MainWindow* mainwindow;
   signals:
 	void newLine(QString line);
-	void isOver(QString time, double key);
+	void isOver(QString time, QString key);
 	void clearCmdOutput();
         void showFileBrowser(QString path, bool setPath);
 };
@@ -75,7 +76,7 @@ class ShellThread : public QThread {
     Q_OBJECT
 
     public:
-        ShellThread(QString command, QObject *parent = 0, QCheckBox* showGUI = 0, double key = 0) : QThread(parent) {
+        ShellThread(QString command, QObject *parent = 0, QCheckBox* showGUI = 0, QString key = 0) : QThread(parent) {
 	  aCommand = command;
 	  aShell = new Shell(showGUI);
 	  aShell->key = key;
