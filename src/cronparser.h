@@ -32,19 +32,18 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-class CronParser
-{
-public:
-	vector<string> parseUserJob();
-	void addJob(NewCronJob* gui);
-	static string makeReadable(string command);
-	static string getCommand(string line);
+  using namespace std;
+  class CronParser {
+    public:
+      vector<string> parseUserJob();
+      void addJob(NewCronJob* gui);
+      static string makeReadable(string command);
+      static string getCommand(string line);
 
-private:
-	string display(char* parsedJob[3]);
-	
-};
+    private:
+      string display(char* parsedJob[3]);
+          
+  };
 
 #endif
 
