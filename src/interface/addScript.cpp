@@ -47,6 +47,8 @@
 #include "ktextedit.h"
 #include "ktitlewidget.h"
 #include "kicon.h"
+#include <KStandardDirs>
+#include <KSaveFile>
 
 
 /**
@@ -256,16 +258,27 @@ void AddScript::addAScript()
 {
   //TODO This function need to be rewriten, it is buggy, cheap and ugly.
   QSqlQuery query;
-  query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text() +"','" + txtDes->toPlainText() + "')");
-  std::string creatDir = "mkdir " + Shell::getResult("echo $HOME") ;
-  while (creatDir[creatDir.size()-1] == 0x0A) creatDir = creatDir.substr(0, (creatDir.size()-1));
-  creatDir += "/.kling";
-  std::cout << creatDir <<std::endl;
-  system(creatDir.c_str());
-  creatDir += "/script/";
-  system(creatDir.c_str());
-  creatDir = creatDir.replace(0,5,"echo") + txtName->text().toStdString() + ".sh";
-  creatDir = creatDir.insert(5, txtDes->toPlainText().toStdString()+ " >> ") ;
-  std::cout << creatDir <<std::endl;
-  system(creatDir.c_str());
+  
+  if (txtName->text().right(3) == ".sh") { //TODO fix this duplicated code
+    query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text() +"','" + txtDes->toPlainText() + "')");
+    KSaveFile file(KStandardDirs::locateLocal("appdata", "/script/") + txtName->text().trimmed());
+    file.open();
+    QByteArray outputByteArray;
+    outputByteArray.append(txtDes->toPlainText() );
+    file.write(outputByteArray);
+    file.finalize();
+    file.close();
+  }
+  else {
+    KSaveFile file(KStandardDirs::locateLocal("appdata", "/script/") + txtName->text().trimmed() + ".sh");
+    query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text().trimmed() +".sh','" + txtDes->toPlainText() + "')");
+    file.open();
+    QByteArray outputByteArray;
+    outputByteArray.append(txtDes->toPlainText() );
+    file.write(outputByteArray);
+    file.finalize();
+    file.close();
+  }
+
+
 }
