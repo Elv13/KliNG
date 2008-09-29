@@ -78,6 +78,10 @@ class Config : public KConfigDialog
     QCheckBox* ckbShowCommandListrWebBrowser;
     QCheckBox* ckbShowHistoryrWebBrowser;
     QCheckBox* ckbShowManPagerWebBrowser;
+    QCheckBox* ckbShowDebugTerminal;
+    QCheckBox* ckbShowDebugMonitor;
+    QCheckBox* ckbShowDebugEditor;
+    QCheckBox* ckbShowDebugWebBrowser;
     
     QGridLayout* gridLogging;
     QSpinBox* spinMb;
