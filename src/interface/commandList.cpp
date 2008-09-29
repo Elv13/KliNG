@@ -63,6 +63,7 @@ CommandList::CommandList(QWidget* parent, QStringList* commandStringList) : QDoc
     listCommand = new KListWidget(dockCommandListContents);
     listCommand->setObjectName(QString::fromUtf8("listCommand"));
     listCommand->setSortingEnabled(true);
+    listCommand->setDragDropMode(QAbstractItemView::DragOnly);
     indexCommand(commandStringList);
 
     txtFindCommand = new KListWidgetSearchLine(dockCommandListContents,listCommand);
