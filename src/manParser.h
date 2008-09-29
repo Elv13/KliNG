@@ -32,30 +32,26 @@
 #include <QThread>
 #include <iostream>
 
-class ManParser 
-{
-  public:
-    static void parseAllManPage();
-    static std::string parseManPage(std::string name);
-  private:
-    static std::string parseLine(std::string line);
-    static int unGz(std::string name);
-};
+  class ManParser {
+    public:
+      static void parseAllManPage();
+      static std::string parseManPage(std::string name);
+    private:
+      static std::string parseLine(std::string line);
+      static int unGz(std::string name);
+  };
 
-class ManThread : public QThread {
+  class ManThread : public QThread {
     Q_OBJECT
 
     public:
-        ManThread(QObject *parent = 0) : QThread(parent) {
-
-        }
-        void run() {
-          ManParser::parseAllManPage();
-          emit over();
-        }
+      ManThread(QObject *parent = 0) : QThread(parent) {}
+      void run() {
+        ManParser::parseAllManPage();
+        emit over();
+      }
     signals:
-        void over();
-
-};
+      void over();
+  };
 
 #endif
