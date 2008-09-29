@@ -37,6 +37,11 @@
 #include  <time.h>
 #include  <QString>
 #include <QScrollBar>
+#include <KStandardDirs>
+#include <KSaveFile>
+#include <QColor>
+#include <QBrush>
+#include <QPalette>
 
 #include <QThread>
 
@@ -49,10 +54,15 @@ using namespace std;
 */
 Shell::Shell(QCheckBox* showGUI)
 {
-  if (showGUI->isChecked() == true) 
-    this->showGUI = true;
-  else
+  if (showGUI != 0) {
+    if (showGUI->isChecked() == true) 
+      this->showGUI = true;
+    else
+      this->showGUI = false;
+  }
+  else {
     this->showGUI = false;
+  }
   // mainwindow = parent;
 }
 
@@ -129,6 +139,7 @@ int Shell::execute(string command, bool needPostAnalyse, string toHighlight, boo
 	int findStart;
 	int j = 0;
 	int paramNumber;
+        QString commandOutput;
 
 
 	char **paramArray = parseCommand(command, paramNumber);
@@ -195,6 +206,7 @@ int Shell::execute(string command, bool needPostAnalyse, string toHighlight, boo
 	  
 	  do 
 	  { //TODO sa c'est cheap aussi, enlever ce brake et faire un while
+                  string closeFont;
 		  nr = read(from_cmd[0], bufferR, sizeof bufferR);
 		  if (nr == -1)
 			  fatal_error("read(bufferR)");
@@ -211,7 +223,7 @@ int Shell::execute(string command, bool needPostAnalyse, string toHighlight, boo
 			  
 			      if (line.find("[") != -1)
 			      {
-				ajustSerialCode(line);
+				closeFont = ajustSerialCode(line);
 			      }
 				
 			      if (needPostAnalyse == false)
@@ -223,6 +235,7 @@ int Shell::execute(string command, bool needPostAnalyse, string toHighlight, boo
 				  //mainwindow->rtfCmdOutput->verticalScrollBar()->setValue(mainwindow->rtfCmdOutput->verticalScrollBar()->maximum());
 				  //mainwindow->rtfCmdOutput->repaint(); //Cut performances by 90%, if someone find a better way, tell it!
 				  emit newLine(QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line));
+                                  commandOutput += QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line + "<br>" + closeFont + "\n");
 			      }
 			      else
 			      {
@@ -232,10 +245,12 @@ int Shell::execute(string command, bool needPostAnalyse, string toHighlight, boo
 				  if (line.find(toHighlight) != -1)
 				  {
 				    emit newLine(QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight))));
+                                    commandOutput += QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight)) + "<br>" + closeFont + "\n");
 				  }
 				  else
 				  {
 				    emit newLine(QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line));
+                                    commandOutput += QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line + "<br>" + closeFont + "\n");
 				  }
 
 				  //mainwindow->rtfCmdOutput->textCursor().movePosition(QTextCursor::End);
@@ -247,6 +262,7 @@ int Shell::execute(string command, bool needPostAnalyse, string toHighlight, boo
 				  if (line.find(toHighlight) != -1)
 				  {
 				    emit newLine(QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight))));
+                                    commandOutput += QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight)) + "<br>" + closeFont + "\n");
 				    //mainwindow->rtfCmdOutput->verticalScrollBar()->setValue(mainwindow->rtfCmdOutput->verticalScrollBar()->maximum());
 				    //mainwindow->rtfCmdOutput->repaint(); //Cut performances by 90%, if someone find a better way, tell it!
 				  }
@@ -270,6 +286,7 @@ int Shell::execute(string command, bool needPostAnalyse, string toHighlight, boo
 // 	  mainwindow->cmdStatus->setPixmap(*mainwindow->pxmCmdInactive);
 // 	  mainwindow->txtCommand->setEnabled(true);
 	  emit isOver(QString::number(time(NULL)), key);
+          saveOutput(&commandOutput);
   
   
 	  if (close(to_cmd[1]) == -1)
@@ -450,37 +467,50 @@ string Shell::highLight(string line, string toHighlight)
 
   @param[in] line the stdOut line
 */
-void Shell::ajustSerialCode(string &line)
+string Shell::ajustSerialCode(string &line)
 {
+  QPalette aPalette;
+  string defaultColor = aPalette.text().color().name ().toStdString();
+  int i =0;
   //Text color
-  while (line.find("[01;34m") != -1) line = replaceColorCode(line, "[01;34m", "blue", "");
-  while (line.find("[00m") != -1) line = replaceColorCode(line, "[00m", "black", "");
-  while (line.find("[01;35m") != -1) line = replaceColorCode(line, "[01;35m", "#FF00FF", "");
-  while (line.find("[01;31m") != -1) line = replaceColorCode(line, "[01;31m", "green", "");
-  while (line.find("[01;32m") != -1) line = replaceColorCode(line, "[01;32m", "#00FF00", "");
-  while (line.find("[01;36m") != -1) line = replaceColorCode(line, "[01;36m", "cyan", "");
+  while (line.find("[01;34m") != -1) { line = replaceColorCode(line, "[01;34m", "blue", ""); i++; }
+  while (line.find("[00m") != -1) { line = replaceColorCode(line, "[00m", defaultColor, ""); i++; }//TODO may be a bug
+  //while (line.find("[00m") != -1) line = replaceColorCode(line, "[00m", "black", "");
+  while (line.find("[01;35m") != -1) { line = replaceColorCode(line, "[01;35m", "#FF00FF", ""); i++; }
+  while (line.find("[01;31m") != -1) { line = replaceColorCode(line, "[01;31m", "green", ""); i++; }
+  while (line.find("[01;32m") != -1) { line = replaceColorCode(line, "[01;32m", "#00FF00", ""); i++; }
+  while (line.find("[01;36m") != -1) { line = replaceColorCode(line, "[01;36m", "cyan", ""); i++; }
   //Background color
-  while (line.find("[00;34m") != -1) line = replaceColorCode(line, "[00;34m", "black", "blue");
-  while (line.find("[00m") != -1) line = replaceColorCode(line, "[00m", "white", "black");
-  while (line.find("[00;35m") != -1) line = replaceColorCode(line, "[00;35m", "black", "#FF00FF");
-  while (line.find("[00;31m") != -1) line = replaceColorCode(line, "[00;31m", "black", "green");
-  while (line.find("[30;42") != -1) line = replaceColorCode(line, "[30;42", "black", "green");
-  while (line.find("[00;32m") != -1) line = replaceColorCode(line, "[00;32m", "black", "#00FF00");
-  while (line.find("[40;33m") != -1) line = replaceColorCode(line, "[40;33m", "yellow", "black");
-  while (line.find("[37;41m") != -1) line = replaceColorCode(line, "[37;41m", "white", "red");
-  while (line.find("[40;33;01m") != -1) line = replaceColorCode(line, "[40;33;01m", "yellow", "black");
-  while (line.find("[34;42m") != -1) line = replaceColorCode(line, "[34;42m", "#5C5CFF", "#00FF00");
+  while (line.find("[00;34m") != -1) { line = replaceColorCode(line, "[00;34m", "black", "blue"); i++; }
+  while (line.find("[00m") != -1) { line = replaceColorCode(line, "[00m", "white", "black"); i++; }
+  while (line.find("[00;35m") != -1) { line = replaceColorCode(line, "[00;35m", "black", "#FF00FF"); i++; }
+  while (line.find("[00;31m") != -1) { line = replaceColorCode(line, "[00;31m", "black", "green"); i++; }
+  while (line.find("[30;42") != -1) { line = replaceColorCode(line, "[30;42", "black", "green"); i++; }
+  while (line.find("[00;32m") != -1) { line = replaceColorCode(line, "[00;32m", "black", "#00FF00"); i++; }
+  while (line.find("[40;33m") != -1) { line = replaceColorCode(line, "[40;33m", "yellow", "black"); i++; }
+  while (line.find("[37;41m") != -1) { line = replaceColorCode(line, "[37;41m", "white", "red"); i++; }
+  while (line.find("[40;33;01m") != -1) { line = replaceColorCode(line, "[40;33;01m", "yellow", "black"); i++; }
+  while (line.find("[34;42m") != -1) { line = replaceColorCode(line, "[34;42m", "#5C5CFF", "#00FF00"); i++; }
   //Other (duplicated and outdated) color combinaisons 
-  while (line.find("[32m") != -1) line = replaceColorCode(line, "[32m", "#00CD00", "");
-  while (line.find("[33;01m") != -1) line = replaceColorCode(line, "[33;01m", "yellow", ""); //bold
-  while (line.find("[31;01m") != -1) line = replaceColorCode(line, "[31;01m", "red", ""); //bold
-  while (line.find("[34;01m") != -1) line = replaceColorCode(line, "[34;01m", "#5C5CFF", ""); //bold //directory
-  while (line.find("[32;01m") != -1) line = replaceColorCode(line, "[32;01m", "#00FF00", "");
-  while (line.find("[39;49;00m") != -1) line = replaceColorCode(line, "[39;49;00m", "black", "");
-  while (line.find("[0m") != -1) line = replaceColorCode(line, "[0m", "black", "");
+  while (line.find("[32m") != -1) { line = replaceColorCode(line, "[32m", "#00CD00", ""); i++; }
+  while (line.find("[33;01m") != -1) { line = replaceColorCode(line, "[33;01m", "yellow", "");  i++; }//bold
+  while (line.find("[31;01m") != -1) { line = replaceColorCode(line, "[31;01m", "red", "");  i++; }//bold
+  while (line.find("[34;01m") != -1) { line = replaceColorCode(line, "[34;01m", "#5C5CFF", ""); i++; } //bold //directory
+  while (line.find("[32;01m") != -1) { line = replaceColorCode(line, "[32;01m", "#00FF00", ""); i++; }
+  while (line.find("[39;49;00m") != -1) { line = replaceColorCode(line, "[39;49;00m", defaultColor, ""); i++; } //TODO may be a bug
+  //while (line.find("[39;49;00m") != -1) line = replaceColorCode(line, "[39;49;00m", "black", "");
+  while (line.find("[0m") != -1) { line = replaceColorCode(line, "[0m", defaultColor, ""); i++; }//TODO may be a bug
+  //while (line.find("[0m") != -1) line = replaceColorCode(line, "[0m", "black", "");
   /*#5C5CFFwhile (line.find("[01;36m") != -1) line = replaceColorCode(line, "", "", "");
   while (line.find("[01;36m") != -1) line = replaceColorCode(line, "", "", "");  
   while (line.find("[01;36m") != -1) line = replaceColorCode(line, "", "", "");*/
+  
+  string toReturn;
+  
+  for (int j =0; j < i; j++) 
+    toReturn += "</font>";
+    
+  return toReturn;
 
 }
 
@@ -597,3 +627,17 @@ bool Shell::executeOnly(string command)
   }
   return true; //TODO When the status will be impleted, return failure or success
 }
+
+void Shell::saveOutput(QString* output) {
+  KSaveFile file(KStandardDirs::locateLocal("appdata", "/output/") + key);
+  file.open();
+
+  QByteArray outputByteArray;
+  outputByteArray.append(*output);
+  file.write(outputByteArray);
+  file.finalize();
+  file.close();
+
+  //fileName = outputFileName;
+}
+      
