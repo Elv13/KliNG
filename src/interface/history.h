@@ -44,7 +44,7 @@ class History  : public QDockWidget
     History(KLineEdit* mainWindowCL, QStringList* aStringList);
     ~History();
     void translateUi();
-    double addItem(QString command, bool insertDB);
+    QString addItem(QString command, bool insertDB);
 
     //QDockWidget *dockHistory;
     QWidget *dockHistoryContents;
