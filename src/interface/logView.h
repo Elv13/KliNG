@@ -69,31 +69,30 @@ public:
     
 private slots:
     void fillTable(char kind, char level);
+    void showOutput(uint id);
   
 
 //private slots:
 
 };
 
-/*class LogView : KDialog
+class OutputViewerButton : public KPushButton
 {
   Q_OBJECT
 public:
-    LogView(QWidget* parent);  
-    ~LogView();
-    void retranslateUi();
+    OutputViewerButton(QWidget* parent =0) : KPushButton( parent ) {
+      QObject::connect(this, SIGNAL(clicked()), this, SLOT(launched()));
+    }
+    //~OutputViewerButton() {}
 
-    QWidget *centralwidget;
-    QVBoxLayout *verticalLayout;
-    QHBoxLayout *hlControl;
-    KComboBox *cbbLog;
-    QSlider *sldLenght;
-    KSeparator *kseparator;
-    QHBoxLayout *horizontalLayout_3;
-    QTextBrowser *rtfViewer;
-    QHBoxLayout *horizontalLayout_2;
-    QSpacerItem *horizontalSpacer;
-    KPushButton *btnClose;
-};*/
+  uint id;
+  
+private slots:
+  void launched() { emit clicked(id); }
+  
+signals:
+  void clicked(uint);
+
+};
 
 #endif
