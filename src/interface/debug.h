@@ -29,16 +29,15 @@
 #ifndef DEF_DEBUG
 #define DEF_DEBUG
 
-#include "../../mainwindow.h"
 #include <QtGui/QDockWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
-#include <QtGui/QTableView>
+#include <QtGui/QTableWidget>
 
-class Debug : public KXmlGuiWindow
+class Debug : public QDockWidget
 {
   public:
-    Debug(MainWindow* parent);
+    Debug(QWidget* parent);
     ~Debug();
     void translateUi();
 
