@@ -65,9 +65,9 @@ SheduledTask::SheduledTask(QWidget* parent) : QDockWidget ( 0 )
     sizePolicy4.setHorizontalStretch(0);
     sizePolicy4.setVerticalStretch(0);
     sizePolicy4.setHeightForWidth(sizePolicy().hasHeightForWidth());
-    setSizePolicy(sizePolicy4);
-    setMaximumSize(QSize(16777215, 16777215));
-    setBaseSize(QSize(0, 100));
+    //setSizePolicy(sizePolicy4);
+    //setMaximumSize(QSize(16777215, 16777215));
+    //setBaseSize(QSize(0, 100));
     dockSheduledTaskContents = new QWidget(this);
     dockSheduledTaskContents->setObjectName(QString::fromUtf8("dockSheduledTaskContents"));
     dockSheduledTaskContents->setGeometry(QRect(2, 22, 196, 128));
