@@ -28,6 +28,7 @@
 */
 
 #include "logView.h"
+#include "outputViewer.h"
 
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -63,11 +64,11 @@ LogView::LogView(QWidget* parent) : KDialog( parent )
     setButtons( KDialog::Ok );
     if (objectName().isEmpty())
         setObjectName(QString::fromUtf8("logView"));
-    resize(568, 523);
+    resize(674, 523);
     setMinimumSize(QSize(568, 0));
     centralwidget = new QWidget(this);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-    centralwidget->setGeometry(QRect(0, 0, 568, 523));
+    centralwidget->setGeometry(QRect(0, 0, 674, 674));
     verticalLayout = new QVBoxLayout(centralwidget);
     verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
     setMainWidget(centralwidget);
@@ -118,7 +119,7 @@ LogView::LogView(QWidget* parent) : KDialog( parent )
     
     tblViewer = new QTableWidget(this);
     tblViewer->verticalHeader()->hide();
-    tblViewer->setColumnCount(3);
+    tblViewer->setColumnCount(4);
     
     QTableWidgetItem *__colItem = new QTableWidgetItem();
     tblViewer->setHorizontalHeaderItem(0, __colItem);
@@ -126,12 +127,16 @@ LogView::LogView(QWidget* parent) : KDialog( parent )
     tblViewer->setColumnWidth(0,312); //FIXME
     QTableWidgetItem *__colItem1 = new QTableWidgetItem();
     tblViewer->setHorizontalHeaderItem(1, __colItem1);
-    tblViewer->horizontalHeaderItem(1)->setText("Date");
+    tblViewer->horizontalHeaderItem(1)->setText("Start");
     tblViewer->setColumnWidth(1,130);
+    QTableWidgetItem *__colItem4 = new QTableWidgetItem();
+    tblViewer->setHorizontalHeaderItem(2, __colItem4);
+    tblViewer->horizontalHeaderItem(2)->setText("End");
+    tblViewer->setColumnWidth(2,130);
     QTableWidgetItem *__colItem2 = new QTableWidgetItem();
-    tblViewer->setHorizontalHeaderItem(2, __colItem2);
-    tblViewer->horizontalHeaderItem(2)->setText("Output");
-    tblViewer->setColumnWidth(2,80);
+    tblViewer->setHorizontalHeaderItem(3, __colItem2);
+    tblViewer->horizontalHeaderItem(3)->setText("Output");
+    tblViewer->setColumnWidth(3,80);
     
     horizontalLayout_3->addWidget(tblViewer);
 
@@ -185,29 +190,45 @@ void LogView::fillTable(char kind, char level) {
     KIcon icnEye(KStandardDirs::locate( "appdata", "pixmap/22x22/eye.png"));
     while (query.next())  {
       QTableWidgetItem* anItem = new QTableWidgetItem();
-      QTableWidgetItem* aDate = new QTableWidgetItem();
+      QTableWidgetItem* aDateStart = new QTableWidgetItem();
+      QTableWidgetItem* aDateEnd = new QTableWidgetItem();
       
       QDateTime aDateTime;
       aDateTime.setTime_t(query.value(2).toString().toUInt());
       //dateTime = gmtime(aDateTime.toTime_t());
       QString date = aDateTime.toString("dd/MM/yyyy hh:mm:ss");
       
-      aDate->setText(date);
+      aDateStart->setText(date);
       anItem->setText(query.value(1).toString());
       
-      KPushButton* btnView = new KPushButton();
+      QDateTime aDateTime2;
+      aDateTime2.setTime_t(query.value(3).toString().toUInt());
+      //dateTime = gmtime(aDateTime.toTime_t());
+      QString date2 = aDateTime2.toString("dd/MM/yyyy hh:mm:ss");
+      
+      aDateEnd->setText(date2);
+      
+      OutputViewerButton* btnView = new OutputViewerButton(0);
       btnView->setText("View");
       btnView->setIcon(icnEye);
       btnView->setStyleSheet("margin:-5px;spacing:0px;height:25px;min-height:25px;max-height:25px;");
       btnView->setMinimumSize(80, 25);
       btnView->setMaximumSize(9999, 25);
+      btnView->id = query.value(0).toInt();
+      QObject::connect(btnView, SIGNAL(clicked(uint)), this, SLOT(showOutput(uint)));
       
       
       tblViewer->setRowCount(++rowCount);
       tblViewer->setItem(rowCount-1,0,anItem);
-      tblViewer->setItem(rowCount-1,1,aDate);
-      tblViewer->setCellWidget(rowCount-1, 2, btnView);
+      tblViewer->setItem(rowCount-1,1,aDateStart);
+      tblViewer->setItem(rowCount-1,2,aDateEnd);
+      tblViewer->setCellWidget(rowCount-1, 3, btnView);
       tblViewer->setRowHeight(rowCount-1, 20);
       
     }
+}
+
+void LogView::showOutput(uint id) {
+  OutputViewer* anOutputViewer = new OutputViewer(this, id);
+  anOutputViewer->show();
 }
