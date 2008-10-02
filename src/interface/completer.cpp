@@ -26,6 +26,8 @@ Completer::Completer(QWidget* parent, QStringList* slCommandList, QStringList* s
     //setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     filteredFile.isEmpty = true;
     //resize(564, 229);
+    
+    setMaximumSize(9999,170);
 
     icnFolder = new KIcon("folder");
     icnFile = new KIcon("text-x-generic");
