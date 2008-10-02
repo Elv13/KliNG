@@ -551,7 +551,7 @@
     addDockWidget(Qt::RightDockWidgetArea, dockManual);
 
     historyStringList = new QStringList();
-    dockHistory = new History(0, historyStringList); 
+    dockHistory = new History(0, historyStringList, klingConfigSkeleton); 
     addDockWidget(Qt::LeftDockWidgetArea, dockHistory);
     tabShell = new Term (dockHistory ,this, commandStringList, historyStringList);
 
@@ -1002,7 +1002,7 @@
   }
 
   void MainWindow::showLog() {
-    LogView *dialog = new LogView( this );
+    LogView *dialog = new LogView( this, klingConfigSkeleton);
     dialog->show();
   }
 

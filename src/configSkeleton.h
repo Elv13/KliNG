@@ -2,6 +2,7 @@
 #define DEF_TERM2
 
  #include <kconfigskeleton.h>
+#include <QStringList>
 
  class KlingConfigSkeleton : public KConfigSkeleton
  {
@@ -49,13 +50,13 @@
        addItemBool("showManPagerWebBrowser", showManPagerWebBrowser, true);
        addItemBool("showDebugWebBrowser", showDebugWebBrowser, false);
        
-       setCurrentGroup("Logginf");
+       setCurrentGroup("Logging");
        addItemInt("ammountToKeep", ammountToKeep,20);
        addItemInt("maxOutputSize", maxOutputSize,15);
+       addItemBool("keepOutput", keepOutput,true);
+       addItemBool("appendToBashHistory", appendToBashHistory, true);
+       addItemStringList("logExcludeList", logExcludeList, QStringList() << "ls" << "dir" << "cd" << "pwd");
 
-       setCurrentGroup("Logginf");
-       addItemInt("ammountToKeep", ammountToKeep,20);
-       addItemInt("maxOutputSize", maxOutputSize,15);
 
 
      }
@@ -94,6 +95,9 @@
     bool showDebugWebBrowser;
     int ammountToKeep;
     int maxOutputSize;
+    QStringList logExcludeList;
+    bool keepOutput;
+    bool appendToBashHistory;
  };
 #endif
 

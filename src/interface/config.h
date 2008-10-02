@@ -33,6 +33,7 @@ class Config : public KConfigDialog
   private:
     KlingConfigSkeleton* configSkeleton;
     KPageWidgetItem* pwiGeneral;
+    KPageWidgetItem* pwiMode;
     KPageWidgetItem* pwiLogging;
     KPageWidgetItem* pwiAppearance;
     KPageWidgetItem* pwiPlugins;
@@ -89,6 +90,13 @@ class Config : public KConfigDialog
     QSpinBox* spinMaxOutputSize;
     QLabel* lblMaxOutputSize;
     QCheckBox* ckbAddToBash;
+    KPushButton* btnCleanLog;
+    KPushButton* btnClearHistory;
+    QLabel* lblExclude;
+    QListWidget* lstExclude;
+    QCheckBox* ckbEnableLogging;
+    KPushButton* btnAddExcludedCommand;
+    KPushButton* btnRemoveExcludedCommand;
     
     QListWidget* pluginList;
     KPushButton* btnAddPlugin;
@@ -99,6 +107,7 @@ class Config : public KConfigDialog
     
   private slots:
     void saveConfig();
+    void addLogExclude();
     /*void openDir(QTableWidgetItem* item);
     void backToStandardMode_clicked();
     

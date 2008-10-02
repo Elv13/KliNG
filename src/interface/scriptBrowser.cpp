@@ -117,17 +117,21 @@ ScriptBrowser::ScriptBrowser(QWidget* parent) : QDockWidget ( 0 )
 
     btnEdit = new KPushButton(dockScriptBrowserContents);
     btnEdit->setObjectName(QString::fromUtf8("btnEdit"));
-    btnEdit->setMinimumSize(QSize(55, 31));
-    btnEdit->setMaximumSize(QSize(55, 31));
-    btnEdit->setText("Edit");
+    //btnEdit->setMinimumSize(QSize(55, 31));
+    //btnEdit->setMaximumSize(QSize(55, 31));
+    //btnEdit->setText("Edit");
+    btnEdit->setIcon(KIcon("draw-freehand"));
+    btnEdit->setToolTip("Edit");
 
     hlScriptControls->addWidget(btnEdit);
 
     btnLaunch  = new KPushButton(dockScriptBrowserContents);
+    btnLaunch->setIcon(KIcon("fork"));
     btnLaunch->setObjectName(QString::fromUtf8("btLaunch"));
-    btnLaunch->setMinimumSize(QSize(55, 31));
-    btnLaunch->setMaximumSize(QSize(55, 31));
-    btnLaunch->setText("Launch");
+    //btnLaunch->setMinimumSize(QSize(65, 31));
+    //btnLaunch->setMaximumSize(QSize(65, 31));
+    //btnLaunch->setText("Launch");
+    btnLaunch->setToolTip("Launch");
 
     hlScriptControls->addWidget(btnLaunch);
 

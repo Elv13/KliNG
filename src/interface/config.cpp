@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSpacerItem>
+#include <QInputDialog>
 
 Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigDialog(parent, "settings", aConfigSkeleton) {
   configSkeleton = aConfigSkeleton;
@@ -15,6 +16,10 @@ Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigD
    //KConfigDialog *dialog = new KConfigDialog(this, "settings", someSettings);
    resize(600,500);
    //dialog->setFaceType(KPageDialog::IconList);
+   pwiGeneral = addPage(new QLabel("test2"), i18n("General") );
+   pwiGeneral->setIcon( KIcon( "configure" ) );
+
+
    QWidget* generalCentralWidget = new QWidget();
    QVBoxLayout *generalLayout = new QVBoxLayout;
    generalCentralWidget->setLayout(generalLayout);
@@ -250,34 +255,70 @@ Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigD
   
    generalLayout->addWidget(twGeneral);
    
-   pwiGeneral = addPage(generalCentralWidget, i18n("General") );
-   pwiGeneral->setIcon( KIcon( "fork" ) );
+   pwiMode = addPage(generalCentralWidget, i18n("Mode") );
+   pwiMode->setIcon( KIcon( "fork" ) );
    
     QWidget* loggingCentralWidget = new QWidget();
     gridLogging = new QGridLayout();
     loggingCentralWidget->setLayout(gridLogging);
+
+    ckbEnableLogging = new QCheckBox();
+    ckbEnableLogging->setText("Enable output logging");
+    gridLogging->addWidget(ckbEnableLogging,0,0);
     
     lblMb = new QLabel();
     lblMb->setText("Amount of data to keep: ");
-    gridLogging->addWidget(lblMb,0,0);
+    gridLogging->addWidget(lblMb,1,0);
     
     spinMb = new QSpinBox();
     spinMb->setSuffix("mb");
     spinMb->setValue(aConfigSkeleton->ammountToKeep);
-    gridLogging->addWidget(spinMb,0,1);
+    gridLogging->addWidget(spinMb,1,1);
     
     lblMaxOutputSize = new QLabel();
     lblMaxOutputSize->setText("Keep command output smaller than: ");
-    gridLogging->addWidget(lblMaxOutputSize,1,0);
+    gridLogging->addWidget(lblMaxOutputSize,2,0);
     
     spinMaxOutputSize = new QSpinBox();
     spinMaxOutputSize->setValue(aConfigSkeleton->maxOutputSize);
     spinMaxOutputSize->setSuffix("kb");
-    gridLogging->addWidget(spinMaxOutputSize,1,1);
+    gridLogging->addWidget(spinMaxOutputSize,2,1);
 
     ckbAddToBash = new QCheckBox();
     ckbAddToBash->setText("Append to bash history");
-    gridLogging->addWidget(ckbAddToBash,2,0);
+    gridLogging->addWidget(ckbAddToBash,3,0);
+
+    btnCleanLog = new KPushButton();
+    btnCleanLog->setText("Clear log now");
+    gridLogging->addWidget(btnCleanLog,4,0);
+
+    btnClearHistory = new KPushButton();
+    btnClearHistory->setText("Clear history now");
+    gridLogging->addWidget(btnClearHistory,4,1);
+
+    lblExclude = new QLabel();
+    lblExclude->setText("Exclude from advanced logging:");
+    gridLogging->addWidget(lblExclude, 5,0);
+
+    lstExclude = new QListWidget();
+    lstExclude->addItems(aConfigSkeleton->logExcludeList);
+    gridLogging->addWidget(lstExclude,6,0,1,2);
+
+    QHBoxLayout* anHLayout = new QHBoxLayout();
+    btnAddExcludedCommand = new KPushButton();
+    btnAddExcludedCommand->setText("Add");
+    btnAddExcludedCommand->setIcon(KIcon("list-add"));
+    anHLayout->addWidget(btnAddExcludedCommand);
+
+    btnRemoveExcludedCommand = new KPushButton();
+    btnRemoveExcludedCommand->setText("Remove");
+    btnRemoveExcludedCommand->setIcon(KIcon("list-remove"));
+    anHLayout->addWidget(btnRemoveExcludedCommand);
+
+    anHLayout->addItem(new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum));
+
+    gridLogging->addLayout(anHLayout,7,0,1,2);
+
     
     gridLogging->addItem(new QSpacerItem(38, 30, QSizePolicy::Minimum, QSizePolicy::Expanding),3,0);
    
@@ -299,18 +340,23 @@ Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigD
    pluginLayout->addLayout(pluginButtonLayout);
     btnAddPlugin = new KPushButton();
     btnAddPlugin->setText("Add");
+    btnAddPlugin->setIcon(KIcon("list-add"));
     pluginButtonLayout->addWidget(btnAddPlugin);
     btnRemovePlugin = new KPushButton();
     btnRemovePlugin->setText("Remove");
+    btnRemovePlugin->setIcon(KIcon("edit-delete"));
     pluginButtonLayout->addWidget(btnRemovePlugin);
     btnInfoPlugin = new KPushButton();
     btnInfoPlugin->setText("Information");
+    btnInfoPlugin->setIcon(KIcon("help-about"));
     pluginButtonLayout->addWidget(btnInfoPlugin);
     btnPluginConfig = new KPushButton();
     btnPluginConfig->setText("Configure");
+    btnPluginConfig->setIcon(KIcon("configure"));
     pluginButtonLayout->addWidget(btnPluginConfig);
     btnDownloadPlugin = new KPushButton();
     btnDownloadPlugin->setText("Download new");
+    btnDownloadPlugin->setIcon(KIcon("document-open-remote"));
     pluginButtonLayout->addWidget(btnDownloadPlugin);
     
     pluginButtonLayout->addItem(new QSpacerItem(38, 30, QSizePolicy::Minimum, QSizePolicy::Expanding));
@@ -318,11 +364,15 @@ Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigD
    pwiPlugins = addPage(pluginCentralWidget, i18n("Plugins") );
    pwiPlugins->setIcon( KIcon( "vcs_add" ) );
 
+
+
+
    /*connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));
    connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/
    //show();
    
    connect( this, SIGNAL( okClicked() ), this, SLOT( saveConfig() ) );
+   connect( btnAddExcludedCommand, SIGNAL( pressed() ), this, SLOT( addLogExclude() ) );
 
 }
 
@@ -360,3 +410,12 @@ void Config::saveConfig() {
     configSkeleton->ammountToKeep = spinMb->value();
 }
 
+void Config::addLogExclude() {
+     bool ok;
+     QString text = QInputDialog::getText(this, "Exclude a command", "Exclude the following command from advance logging", QLineEdit::Normal, "", &ok);
+     if (ok && !text.isEmpty()) {
+	configSkeleton->logExcludeList << text;
+	configSkeleton->writeConfig();
+	lstExclude->addItem(text);
+     }
+}

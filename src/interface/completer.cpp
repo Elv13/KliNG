@@ -108,6 +108,7 @@ Completer::Completer(QWidget* parent, QStringList* slCommandList, QStringList* s
 
     btnClose = new KPushButton(this);
     btnClose->setText("Close");
+    btnClose->setIcon(KIcon("dialog-close"));
 
     horizontalLayout->addWidget(btnClose);
 
@@ -269,6 +270,7 @@ void Completer::chkOther_checked(int state) {
 }
 
 void Completer::updateCommand(QString name, int index=0) {
+  tvCompletion->topLevelItem(0)->setHidden(false);
   /*if (name.size() == 0) {
     this->hide();
   }*/

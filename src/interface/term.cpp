@@ -72,8 +72,9 @@ Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandStringLis
 
     horizontalLayout_3->addWidget(label);
 
-    klineedit_3 = new QLineEdit(frame);
+    klineedit_3 = new KLineEdit(frame);
     klineedit_3->setObjectName(QString::fromUtf8("klineedit_3"));
+    klineedit_3->setClearButtonShown(true);
     klineedit_3->setProperty("showClearButton", QVariant(true));
     klineedit_3->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0px;padding:0px;border:1px;border-style:solid;border-color:#808000;spacing:0px;height:15px;min-height:15px;");
 

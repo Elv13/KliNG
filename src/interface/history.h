@@ -29,6 +29,8 @@
 #ifndef DEF_HISTORY
 #define DEF_HISTORY
 
+#include "../configSkeleton.h"
+
 #include <QtGui/QDockWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
@@ -41,7 +43,7 @@
 class History  : public QDockWidget
 {
   public:
-    History(KLineEdit* mainWindowCL, QStringList* aStringList);
+    History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton);
     ~History();
     void translateUi();
     QString addItem(QString command, bool insertDB);
@@ -52,5 +54,9 @@ class History  : public QDockWidget
     KListWidget *listHistory;
     QStringList* historyStringList;
     KListWidgetSearchLine *txtFindHistory;
+    KlingConfigSkeleton* config;
+  private:
+    QString getCommand(QString command);
+
 };
 #endif

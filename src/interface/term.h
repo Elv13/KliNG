@@ -61,7 +61,7 @@ class Term : public QWidget
     QHBoxLayout *horizontalLayout_3;
     KPushButton *kpushbutton_4;
     QLabel *label;
-    QLineEdit *klineedit_3; //TODO when KDE bug #162071 will be fixed (reported by me) use KLineEdit instead of QLineEdit
+    KLineEdit *klineedit_3; //TODO when KDE bug #162071 will be fixed (reported by me) use KLineEdit instead of QLineEdit
     KPushButton *kpushbutton_5;
     QLabel* cmdStatus;
     QPixmap* pxmCmdInactive;

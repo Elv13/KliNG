@@ -45,15 +45,18 @@
 #include <kpushbutton.h>
 #include <kseparator.h>
 #include <kdialog.h>
+#include <QString>
+#include "../configSkeleton.h"
 
 class LogView : public KDialog
 {
   Q_OBJECT
 public:
-    LogView(QWidget* parent);  
+    LogView(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton);  
     ~LogView();
     void retranslateUi();
     
+    KlingConfigSkeleton* config;
     QWidget *centralwidget;
     QTableWidget* tblViewer;
     QVBoxLayout *verticalLayout;
@@ -66,6 +69,9 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer;
     KPushButton *btnClose;
+
+private:
+    QString getCommand(QString command);
     
 private slots:
     void fillTable(char kind, char level);

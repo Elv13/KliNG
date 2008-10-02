@@ -59,8 +59,8 @@ QT_BEGIN_NAMESPACE
 /**
   LogView constructor
 */
-LogView::LogView(QWidget* parent) : KDialog( parent )
-{
+LogView::LogView(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KDialog( parent ) {
+    config = aConfigSkeleton;
     setButtons( KDialog::Ok );
     if (objectName().isEmpty())
         setObjectName(QString::fromUtf8("logView"));
@@ -189,46 +189,58 @@ void LogView::fillTable(char kind, char level) {
     QString strLine;
     KIcon icnEye(KStandardDirs::locate( "appdata", "pixmap/22x22/eye.png"));
     while (query.next())  {
-      QTableWidgetItem* anItem = new QTableWidgetItem();
-      QTableWidgetItem* aDateStart = new QTableWidgetItem();
-      QTableWidgetItem* aDateEnd = new QTableWidgetItem();
-      
-      QDateTime aDateTime;
-      aDateTime.setTime_t(query.value(2).toString().toUInt());
-      //dateTime = gmtime(aDateTime.toTime_t());
-      QString date = aDateTime.toString("dd/MM/yyyy hh:mm:ss");
-      
-      aDateStart->setText(date);
-      anItem->setText(query.value(1).toString());
-      
-      QDateTime aDateTime2;
-      aDateTime2.setTime_t(query.value(3).toString().toUInt());
-      //dateTime = gmtime(aDateTime.toTime_t());
-      QString date2 = aDateTime2.toString("dd/MM/yyyy hh:mm:ss");
-      
-      aDateEnd->setText(date2);
-      
-      OutputViewerButton* btnView = new OutputViewerButton(0);
-      btnView->setText("View");
-      btnView->setIcon(icnEye);
-      btnView->setStyleSheet("margin:-5px;spacing:0px;height:25px;min-height:25px;max-height:25px;");
-      btnView->setMinimumSize(80, 25);
-      btnView->setMaximumSize(9999, 25);
-      btnView->id = query.value(0).toInt();
-      QObject::connect(btnView, SIGNAL(clicked(uint)), this, SLOT(showOutput(uint)));
-      
-      
-      tblViewer->setRowCount(++rowCount);
-      tblViewer->setItem(rowCount-1,0,anItem);
-      tblViewer->setItem(rowCount-1,1,aDateStart);
-      tblViewer->setItem(rowCount-1,2,aDateEnd);
-      tblViewer->setCellWidget(rowCount-1, 3, btnView);
-      tblViewer->setRowHeight(rowCount-1, 20);
-      
+      if (config->logExcludeList.indexOf(getCommand(query.value(1).toString())) == -1) {
+	QTableWidgetItem* anItem = new QTableWidgetItem();
+	QTableWidgetItem* aDateStart = new QTableWidgetItem();
+	QTableWidgetItem* aDateEnd = new QTableWidgetItem();
+	
+	QDateTime aDateTime;
+	aDateTime.setTime_t(query.value(2).toString().toUInt());
+	//dateTime = gmtime(aDateTime.toTime_t());
+	QString date = aDateTime.toString("dd/MM/yyyy hh:mm:ss");
+	
+	aDateStart->setText(date);
+	anItem->setText(query.value(1).toString());
+	
+	QDateTime aDateTime2;
+	aDateTime2.setTime_t(query.value(3).toString().toUInt());
+	//dateTime = gmtime(aDateTime.toTime_t());
+	QString date2 = aDateTime2.toString("dd/MM/yyyy hh:mm:ss");
+	
+	aDateEnd->setText(date2);
+	
+	OutputViewerButton* btnView = new OutputViewerButton(0);
+	btnView->setText("View");
+	btnView->setIcon(icnEye);
+	btnView->setStyleSheet("margin:-5px;spacing:0px;height:25px;min-height:25px;max-height:25px;");
+	btnView->setMinimumSize(80, 25);
+	btnView->setMaximumSize(9999, 25);
+	btnView->id = query.value(0).toInt();
+	if (KStandardDirs::exists(KStandardDirs::locateLocal("appdata", "/output/"+QString::number(query.value(0).toInt()))) == false)
+	  btnView->setDisabled(true);
+	QObject::connect(btnView, SIGNAL(clicked(uint)), this, SLOT(showOutput(uint)));
+	
+	
+	tblViewer->setRowCount(++rowCount);
+	tblViewer->setItem(rowCount-1,0,anItem);
+	tblViewer->setItem(rowCount-1,1,aDateStart);
+	tblViewer->setItem(rowCount-1,2,aDateEnd);
+	tblViewer->setCellWidget(rowCount-1, 3, btnView);
+	tblViewer->setRowHeight(rowCount-1, 20);
+      }
     }
 }
 
 void LogView::showOutput(uint id) {
   OutputViewer* anOutputViewer = new OutputViewer(this, id);
   anOutputViewer->show();
+}
+
+QString LogView::getCommand(QString command) {
+  if (command.trimmed().indexOf(" ") == -1) {
+    return command;
+  }
+  else {
+    return command.trimmed().mid(0, command.trimmed().indexOf(" "));
+  }
 }

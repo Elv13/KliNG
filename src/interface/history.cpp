@@ -47,8 +47,8 @@
 
   @param[in] mainWindowCL The main window command line
 */
-History::History(KLineEdit* mainWindowCL, QStringList* aStringList) : QDockWidget ( 0 )
-{
+History::History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton) : QDockWidget ( 0 ) {
+    config = aConfigSkeleton;
     historyStringList = aStringList;
     //dockHistory = new QDockWidget();
     setGeometry(QRect(0, 435, 200, 122));
@@ -136,4 +136,13 @@ QString History::addItem(QString command, bool insertDB)
   //THISTORY (THISTORY_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, DATE DATE, TIME double)
 
   return NULL;
+}
+
+QString History::getCommand(QString command) {
+  if (command.trimmed().indexOf(" ") == -1) {
+    return command;
+  }
+  else {
+    return command.trimmed().mid(0, command.trimmed().indexOf(" "));
+  }
 }

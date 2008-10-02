@@ -629,14 +629,16 @@ bool Shell::executeOnly(string command)
 }
 
 void Shell::saveOutput(QString* output) {
-  KSaveFile file(KStandardDirs::locateLocal("appdata", "/output/") + key);
-  file.open();
+  if ((output->trimmed().isEmpty() == false) && (output->trimmed() != "<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\"><br>")) {
+    KSaveFile file(KStandardDirs::locateLocal("appdata", "/output/") + key);
+    file.open();
 
-  QByteArray outputByteArray;
-  outputByteArray.append(*output);
-  file.write(outputByteArray);
-  file.finalize();
-  file.close();
+    QByteArray outputByteArray;
+    outputByteArray.append(*output);
+    file.write(outputByteArray);
+    file.finalize();
+    file.close();
+  }
 
   //fileName = outputFileName;
 }
