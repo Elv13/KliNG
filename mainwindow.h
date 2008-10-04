@@ -71,9 +71,8 @@
 #include "src/interface/commandList.h"
 #include "src/interface/man.h"
 #include "src/interface/debug.h"
-#include "src/interface/sideBar.h"
 #include "src/interface/term.h"
-#include "src/interface/debugTerm.h"
+#include "src/interface/scriptEditor.h"
 #include "src/configSkeleton.h"
 
   class MainWindow : public KXmlGuiWindow {
@@ -89,42 +88,8 @@
       QTabWidget *tabCategories;//
       QWidget *tabGestion;//
       QVBoxLayout *horizontalLayout_4;
-      Term *tabShell;//
-      QWidget *tabEditor;//
-      QVBoxLayout *verticalLayout_7;
-      QHBoxLayout *hlControl2;
-      KPushButton *btnPrevious;
-      KPushButton *bntNext;
-      QFrame *line;
-      KPushButton *btnSave;
-      KPushButton *btnPrint;
-      QFrame *line_2;
-      KPushButton *btnComment;
-      KPushButton *btnUncomment;
-      KPushButton *btnCopy;
-      KPushButton *btnCut;
-      KPushButton *btnPaste;
-      QFrame *line_3;
-      KPushButton *btnDebug;
-      KPushButton *btnStopDebug;
-      KPushButton *btnDbgNextLine;
-      KPushButton *btnDbgSkipLine;
-      KPushButton *btnDgbNextBP;
-      QSpacerItem *horizontalSpacer;
-      QScrollArea *scrollArea;
-      QWidget *scrollAreaWidgetContents_2;
-      QVBoxLayout *verticalLayout_13;
-      QHBoxLayout *textEditLayout;
-      QFrame *frame_3;
-      QSpacerItem *verticalSpacer_12;
-      QVBoxLayout *verticalLayout_29;
-      KTextEdit *txtScriptEditor;
-      QFrame *frame_2;
-      QHBoxLayout *horizontalLayout_5;
-      KPushButton *kpushbutton_6;
-      QLabel *label_2;
-      KLineEdit *klineedit_4;
-      KPushButton *kpushbutton_7;
+      Term *tabShell;
+      ScriptEditor* tabEditor;
       QWidget *tabWebBrowser;
       QVBoxLayout *verticalLayout_8;
       QHBoxLayout *hlBrowserControl;
@@ -149,7 +114,6 @@
       QCompleter *cmdLineCompleter;
       QWebView *webDefaultPage; 
       QSqlDatabase* db;
-      QTableWidget* lineNBSideBar;
       KlingConfigSkeleton* klingConfigSkeleton;
       History* dockHistory;
       Debug* dockDebug;
@@ -158,8 +122,6 @@
       CommandList* dockCommandList;
       Man* dockManual;
       
-      DebugTerm* aDebugTerm; //TODO when the editor will be isolated, add this to scriptEditor.h
-      
       KAction* viewManPage;
       KAction* viewHistory;
       KAction* viewCommandList;
@@ -167,39 +129,14 @@
       KAction* viewScriptBrowser;
       KAction* viewDebug;
 
-      QString fileName;
-      void openFile(const QString &inputFileName);
-
-    private:
-      void sendCommand(QString command);
-      std::string* commandArray;
-      bool isDebugging;
-      int currentLine;
-      int lineNumber;
-      int sbLineNB2;
-      SideBar* firstSBItem;
-      SideBar* lastSBItem;
-      SideBar* sbCurrentLine;
 
     private slots:
       void loadWebPage();
-      void openFile();
-      void saveFile();
-      void saveFileAs();
       void find();
-      void saveFileAs(const QString &outputFileName);
       void searchEdit();
-      void startDebugging();
-      void stopDebugging();
-      void dbgNextLine();
-      void dbgSkipLine();
-      void dbgGoToNextBP();
-      void commentLine();
-      void uncommentLine();
       void showLog();
       void showSettings();
       void modeChanged(int index);
-      void setFileName(QString name);
       void launchScript(QString name, QString content);
       void newCronJob();
       void parseAllManPage();
