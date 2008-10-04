@@ -1,102 +1,438 @@
 #include "../../mainwindow.h"
 #include "../Shell.h"
 #include "debugTerm.h"
+#include "scriptEditor.h"
+#include <KStandardDirs>
+#include <KIcon>
+#include <KSaveFile>
+#include <KFileDialog>
+#include <QTextStream>
+#include <KIO/NetAccess>
+#include <KMessageBox>
+// count
 
+  ScriptEditor::ScriptEditor(QWidget* parent) : QWidget(parent) {
+    isDebugging = false;
+    verticalLayout_7 = new QVBoxLayout(this);
+    verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
+    hlControl2 = new QHBoxLayout();
+    hlControl2->setObjectName(QString::fromUtf8("hlControl2"));
+    
+    btnPrevious = new KPushButton(this);
+    btnPrevious->setObjectName(QString::fromUtf8("btnPrevious"));
+    btnPrevious->setMinimumSize(QSize(31, 31));
+    btnPrevious->setMaximumSize(QSize(31, 31));
+    KIcon icnEditUndo("edit-undo");
+    btnPrevious->setIcon(icnEditUndo);
+    hlControl2->addWidget(btnPrevious);
+
+    bntNext = new KPushButton(this);
+    bntNext->setObjectName(QString::fromUtf8("bntNext"));
+    bntNext->setMinimumSize(QSize(31, 31));
+    bntNext->setMaximumSize(QSize(31, 31));
+    KIcon icnEditRedo("edit-redo");
+    bntNext->setIcon(icnEditRedo);
+    hlControl2->addWidget(bntNext);
+
+    line = new QFrame(this);
+    line->setObjectName(QString::fromUtf8("line"));
+    line->setFrameShape(QFrame::VLine);
+    line->setFrameShadow(QFrame::Sunken);
+    hlControl2->addWidget(line);
+
+    btnSave = new KPushButton(this);
+    btnSave->setObjectName(QString::fromUtf8("btnSave"));
+    btnSave->setMinimumSize(QSize(31, 31));
+    btnSave->setMaximumSize(QSize(31, 31));
+    KIcon icnDocSave("document-save");
+    btnSave->setIcon(icnDocSave);
+    hlControl2->addWidget(btnSave);
+
+    btnPrint = new KPushButton(this);
+    btnPrint->setObjectName(QString::fromUtf8("btnPrint"));
+    btnPrint->setMinimumSize(QSize(31, 31));
+    btnPrint->setMaximumSize(QSize(31, 31));
+    KIcon icnDocPrint("document-print");
+    btnPrint->setIcon(icnDocPrint);
+    hlControl2->addWidget(btnPrint);
+
+    line_2 = new QFrame(this);
+    line_2->setObjectName(QString::fromUtf8("line_2"));
+    line_2->setFrameShape(QFrame::VLine);
+    line_2->setFrameShadow(QFrame::Sunken);
+    hlControl2->addWidget(line_2);
+
+    btnComment = new KPushButton(this);
+    btnComment->setObjectName(QString::fromUtf8("btnComment"));
+    btnComment->setMinimumSize(QSize(31, 31));
+    btnComment->setMaximumSize(QSize(31, 31));
+    KIcon icon5(KStandardDirs::locate( "appdata", "pixmap/22x22/comment.png"));
+    btnComment->setIcon(icon5);
+    btnComment->setIconSize(QSize(12, 12));
+    hlControl2->addWidget(btnComment);
+
+    btnUncomment = new KPushButton(this);
+    btnUncomment->setObjectName(QString::fromUtf8("btnUncomment"));
+    btnUncomment->setMinimumSize(QSize(31, 31));
+    btnUncomment->setMaximumSize(QSize(31, 31));
+    KIcon icon6(KStandardDirs::locate( "appdata", "pixmap/22x22/uncomment.png"));
+    btnUncomment->setIcon(icon6);
+    btnUncomment->setIconSize(QSize(14, 14));
+    hlControl2->addWidget(btnUncomment);
+
+    btnCopy = new KPushButton(this);
+    btnCopy->setObjectName(QString::fromUtf8("btnCopy"));
+    btnCopy->setMinimumSize(QSize(31, 31));
+    btnCopy->setMaximumSize(QSize(31, 31));
+    KIcon icnEditCopy("edit-copy");
+    btnCopy->setIcon(icnEditCopy);
+    hlControl2->addWidget(btnCopy);
+
+    btnCut = new KPushButton(this);
+    btnCut->setObjectName(QString::fromUtf8("btnCut"));
+    btnCut->setMinimumSize(QSize(31, 31));
+    btnCut->setMaximumSize(QSize(31, 31));
+    KIcon icnEditCut("edit-cut");
+    btnCut->setIcon(icnEditCut);
+    hlControl2->addWidget(btnCut);
+
+    btnPaste = new KPushButton(this);
+    btnPaste->setObjectName(QString::fromUtf8("btnPaste"));
+    btnPaste->setMinimumSize(QSize(31, 31));
+    btnPaste->setMaximumSize(QSize(31, 31));
+    KIcon icnEditPaste("edit-paste");
+    btnPaste->setIcon(icnEditPaste);
+    hlControl2->addWidget(btnPaste);
+
+    line_3 = new QFrame(this);
+    line_3->setObjectName(QString::fromUtf8("line_3"));
+    line_3->setFrameShape(QFrame::VLine);
+    line_3->setFrameShadow(QFrame::Sunken);
+    hlControl2->addWidget(line_3);
+
+    btnDebug = new KPushButton(this);
+    btnDebug->setObjectName(QString::fromUtf8("btnDebug"));
+    btnDebug->setMinimumSize(QSize(31, 31));
+    btnDebug->setMaximumSize(QSize(31, 31));
+    KIcon icnArrowRight("arrow-right");
+    btnDebug->setIcon(icnArrowRight);
+    hlControl2->addWidget(btnDebug);
+
+    btnStopDebug = new KPushButton(this);
+    btnStopDebug->setObjectName(QString::fromUtf8("btnStopDebug"));
+    btnStopDebug->setMinimumSize(QSize(31, 31));
+    btnStopDebug->setMaximumSize(QSize(31, 31));
+    btnStopDebug->setIcon(KIcon("window-close"));
+    hlControl2->addWidget(btnStopDebug);
+
+    btnDbgNextLine = new KPushButton(this);
+    btnDbgNextLine->setObjectName(QString::fromUtf8("btnDbgNextLine"));
+    btnDbgNextLine->setMinimumSize(QSize(31, 31));
+    btnDbgNextLine->setMaximumSize(QSize(31, 31));
+    KIcon icon11(KStandardDirs::locate( "appdata", "pixmap/22x22/nextline.png"));
+    btnDbgNextLine->setIcon(icon11);
+    btnDbgNextLine->setIconSize(QSize(16, 16));
+    hlControl2->addWidget(btnDbgNextLine);
+
+    btnDbgSkipLine = new KPushButton(this);
+    btnDbgSkipLine->setObjectName(QString::fromUtf8("btnDbgSkipLine"));
+    btnDbgSkipLine->setMinimumSize(QSize(31, 31));
+    btnDbgSkipLine->setMaximumSize(QSize(31, 31));
+    KIcon icon12(KStandardDirs::locate( "appdata", "pixmap/22x22/skipline.png"));
+    btnDbgSkipLine->setIcon(icon12);
+    btnDbgSkipLine->setIconSize(QSize(16, 16));
+    hlControl2->addWidget(btnDbgSkipLine);
+
+    btnDgbNextBP = new KPushButton(this);
+    btnDgbNextBP->setObjectName(QString::fromUtf8("btnDgbNextBP"));
+    btnDgbNextBP->setMinimumSize(QSize(31, 31));
+    btnDgbNextBP->setMaximumSize(QSize(31, 31));
+    KIcon icon13(KStandardDirs::locate( "appdata", "pixmap/22x22/run.png"));
+    btnDgbNextBP->setIcon(icon13);
+    btnDgbNextBP->setIconSize(QSize(16, 16));
+    hlControl2->addWidget(btnDgbNextBP);
+
+    horizontalSpacer = new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    hlControl2->addItem(horizontalSpacer);
+
+    verticalLayout_7->addLayout(hlControl2);
+
+    scrollArea = new QScrollArea(this);
+    scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+    scrollArea->setStyleSheet(QString::fromUtf8("margin-left: 0px;\n"
+"margin-right: 0px;\n"
+"margin-top: 0px;\n"
+"margin-bottom: 0px;\n"
+"border-left: 0px;\n"
+"border-right: 0px;\n"
+"border-top: 0px;\n"
+"border-bottom: 0px;\n"
+"padding-left: 0px;\n"
+"padding-right: 0px;\n"
+"padding-top: 0px;\n"
+"padding-bottom: 0px;"));
+    scrollArea->setFrameShape(QFrame::StyledPanel);
+    scrollArea->setWidgetResizable(true);
+    scrollAreaWidgetContents_2 = new QWidget();
+    scrollAreaWidgetContents_2->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_2"));
+    scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 493, 1010));
+    verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents_2);
+    verticalLayout_13->setObjectName(QString::fromUtf8("verticalLayout_13"));
+    textEditLayout = new QHBoxLayout();
+    textEditLayout->setSpacing(0);
+    textEditLayout->setObjectName(QString::fromUtf8("textEditLayout"));
+
+    QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    
+    lineNBSideBar = new QTableWidget(0);
+    textEditLayout->addWidget(lineNBSideBar);
+    lineNBSideBar->setSizePolicy(sizePolicy);
+    lineNBSideBar->setMaximumWidth(35);
+    lineNBSideBar->setMinimumWidth(35);
+    
+    firstSBItem = new SideBar(1, NULL,lineNBSideBar );
+    lastSBItem = firstSBItem;
+    if (lineNBSideBar->columnCount() < 1)
+        lineNBSideBar->setColumnCount(1);
+        
+    //lineNBSideBar->resize( 35, txtScriptEditor->height() );
+    lineNBSideBar->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //lineNBSideBar->setRowCount(50);
+    lineNBSideBar->setRowHeight (0, 20 );
+    lineNBSideBar->setColumnWidth(0, 35);
+    lineNBSideBar->setCellWidget ( 0, 0, firstSBItem );
+    lineNBSideBar->verticalHeader()->hide();
+    lineNBSideBar->horizontalHeader()->hide();
+    
+    QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    sizePolicy2.setHorizontalStretch(0);
+    sizePolicy2.setVerticalStretch(0);
+
+    txtScriptEditor = new KTextEdit(scrollAreaWidgetContents_2);
+    txtScriptEditor->setSizePolicy(sizePolicy2);
+    txtScriptEditor->setDisabled(true);
+    txtScriptEditor->setFontPointSize ( 14 );
+    txtScriptEditor->setObjectName(QString::fromUtf8("txtScriptEditor"));
+    txtScriptEditor->setMinimumSize(QSize(0, 1000));
+    txtScriptEditor->setStyleSheet(QString::fromUtf8("margin-left: 0px;\n"
+"margin-right: 0px;\n"
+"margin-top: 0px;\n"
+"margin-bottom: 0px;\n"
+"padding-left: 0px;\n"
+"margin-left: 0px;"));
+    txtScriptEditor->setFrameShape(QFrame::StyledPanel);
+    txtScriptEditor->setLineWidth(1);
+    txtScriptEditor->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    txtScriptEditor->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    txtScriptEditor->setLineWrapMode(QTextEdit::NoWrap);
+    txtScriptEditor->setLineWrapColumnOrWidth(100);
+    txtScriptEditor->setAcceptRichText(true);
+    textEditLayout->addWidget(txtScriptEditor);
+
+    verticalLayout_13->addLayout(textEditLayout);
+
+    scrollArea->setWidget(scrollAreaWidgetContents_2);
+
+    verticalLayout_7->addWidget(scrollArea);
+
+    frame_2 = new QFrame(this);
+    frame_2->setObjectName(QString::fromUtf8("frame_2"));
+    frame_2->setMinimumSize(QSize(0, 26));
+    frame_2->setMaximumSize(QSize(16777215, 26));
+    frame_2->setStyleSheet(QString::fromUtf8(""));
+    frame_2->setFrameShape(QFrame::StyledPanel);
+    frame_2->setFrameShadow(QFrame::Raised);
+    frame_2->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:0;border-color:#808000;padding-top:1;spacing:0;");
+    frame_2->hide();
+    horizontalLayout_5 = new QHBoxLayout(frame_2);
+    horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+    kpushbutton_6 = new KPushButton(frame_2);
+    kpushbutton_6->setObjectName(QString::fromUtf8("kpushbutton_6"));
+    kpushbutton_6->setMinimumSize(QSize(22, 22));
+    kpushbutton_6->setMaximumSize(QSize(22, 22));
+    kpushbutton_6->setStyleSheet(QString::fromUtf8("background-color:  rgb(230, 255, 105);\n"
+"border-style: outset;"));
+    kpushbutton_6->setIcon(KIcon("window-close"));
+    horizontalLayout_5->addWidget(kpushbutton_6);
+
+    label_2 = new QLabel(frame_2);
+    label_2->setObjectName(QString::fromUtf8("label_2"));
+    horizontalLayout_5->addWidget(label_2);
+
+    klineedit_4 = new KLineEdit(frame_2);
+    klineedit_4->setObjectName(QString::fromUtf8("klineedit_4"));
+    klineedit_4->setProperty("showClearButton", QVariant(true));
+    klineedit_4->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;");
+    horizontalLayout_5->addWidget(klineedit_4);
+
+    kpushbutton_7 = new KPushButton(frame_2);
+    kpushbutton_7->setObjectName(QString::fromUtf8("kpushbutton_7"));
+    kpushbutton_7->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;padding-right:5;padding-left:5;");
+    horizontalLayout_5->addWidget(kpushbutton_7);
+
+    verticalLayout_7->addWidget(frame_2);
+    
+    QObject::connect(kpushbutton_6, SIGNAL(clicked()), frame_2, SLOT(hide()));
+    QObject::connect(btnSave, SIGNAL(clicked()), this, SLOT(saveFile()));
+    QObject::connect(btnCopy, SIGNAL(clicked()), txtScriptEditor, SLOT(copy()));
+    QObject::connect(btnPaste, SIGNAL(clicked()), txtScriptEditor, SLOT(paste()));
+    QObject::connect(btnCut, SIGNAL(clicked()), txtScriptEditor, SLOT(cut()));
+    QObject::connect(bntNext, SIGNAL(clicked()), txtScriptEditor, SLOT(redo()));
+    QObject::connect(btnPrevious, SIGNAL(clicked()), txtScriptEditor, SLOT(undo()));
+    QObject::connect(btnPaste, SIGNAL(clicked()), this, SLOT(seNewLine()));
+    QObject::connect(klineedit_4, SIGNAL(returnPressed()), this, SLOT(searchEdit()));
+    QObject::connect(kpushbutton_7, SIGNAL(clicked()), this, SLOT(searchEdit()));
+    QObject::connect(btnDebug, SIGNAL(clicked()), this, SLOT(startDebugging()));
+    QObject::connect(btnStopDebug, SIGNAL(clicked()), this, SLOT(stopDebugging()));
+    QObject::connect(btnDbgNextLine, SIGNAL(clicked()), this, SLOT(dbgNextLine()));
+    QObject::connect(btnDbgSkipLine, SIGNAL(clicked()), this, SLOT(dbgSkipLine()));
+    QObject::connect(btnDgbNextBP, SIGNAL(clicked()), this, SLOT(dbgGoToNextBP()));
+    QObject::connect(btnComment, SIGNAL(clicked()), this, SLOT(commentLine()));
+    QObject::connect(btnUncomment, SIGNAL(clicked()), this, SLOT(uncommentLine()));
+    QObject::connect(txtScriptEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
+    
+
+    //sizePolicy.setHeightForWidth(->sizePolicy().hasHeightForWidth());
+    
+
+
+    /*for (int j =1; j < ((txtScriptEditor->height()) /20); j++) {
+      lineNBSideBar->setRowCount(j+1);
+      lineNBSideBar->setRowHeight (j, 20 );
+      lastSBItem = new SideBar(2, lastSBItem, lineNBSideBar);
+      lineNBSideBar->setCellWidget ( j, 0,lastSBItem);
+    }*/
+    
+
+    btnDbgNextLine->setDisabled(true);
+    btnDbgSkipLine->setDisabled(true);
+    btnDgbNextBP->setDisabled(true);
+    btnStopDebug->setDisabled(true);
+    
+    label_2->setText(QApplication::translate("MainWindow", "Filter:", 0, QApplication::UnicodeUTF8));
+    kpushbutton_7->setText(QApplication::translate("MainWindow", "search", 0, QApplication::UnicodeUTF8));
+  }
 
 /**
   Launch a debugging session
 */
-    void MainWindow::startDebugging()
-    {
-      isDebugging = true;
-      txtScriptEditor->setReadOnly(true);
-          btnDbgNextLine->setDisabled(false);
-          btnDbgSkipLine->setDisabled(false);
-          btnDgbNextBP->setDisabled(false);
-          btnStopDebug->setDisabled(false);
-          btnDebug->setDisabled(true);
-          btnPaste->setDisabled(true);
-          btnCopy->setDisabled(true);
-          btnCut->setDisabled(true);
-          btnComment->setDisabled(true);
-          btnUncomment->setDisabled(true);
-          
-      
-      aDebugTerm = new DebugTerm(0);
-      aDebugTerm->show();
+  void ScriptEditor::startDebugging() {
+    isDebugging = true;
+    txtScriptEditor->setReadOnly(true);
+        btnDbgNextLine->setDisabled(false);
+        btnDbgSkipLine->setDisabled(false);
+        btnDgbNextBP->setDisabled(false);
+        btnStopDebug->setDisabled(false);
+        btnDebug->setDisabled(true);
+        btnPaste->setDisabled(true);
+        btnCopy->setDisabled(true);
+        btnCut->setDisabled(true);
+        btnComment->setDisabled(true);
+        btnUncomment->setDisabled(true);
+        
+    
+    aDebugTerm = new DebugTerm(0);
+    aDebugTerm->show();
 
-      int i =0;
+    QString script = txtScriptEditor->toPlainText().toAscii();
+    int i = countLine(txtScriptEditor->toPlainText().toAscii());
 
-      string script = txtScriptEditor->toPlainText().trimmed().toStdString();
-      script = script + "\n";
+    cout << i << endl;
+    commandArray = new string[i];
 
-      for (int j = 0; j <= script.size(); j++) //Count the script line
-      {
-            if ((script[j] == 0x0A) && (script[j+1] != 0x0A)) i++;
-      } 
-
-      cout << i << endl;
-      commandArray = new string[i];
-
-      int j =0;
-      int k =0;
-      
-      while (script != "")
-      {
-            if ((script[j] == 0x0A) || (j == (script.size()-1)))
-            {
-              char* command = new char[j];
-              commandArray[k] = script.substr(0,j);
-              script = script.substr((j+1), (script.size() - j -1));
-              j = 0;
-              k++;
-              while (script[0] == 0x0A)
-              {
-                    script = script.substr(1, (script.size() -1));
-              }
-        }
-        else
-        {
-          j++;
-        }
+    int j =0;
+    int k =0;
+    
+    while (script != "") {
+      if ((script[j] == 0x0A) || (j == (script.size()-1))) {
+        char* command = new char[j];
+        commandArray[k] = script.mid(0,j).trimmed().toStdString();
+        script = script.mid((j+1), (script.size() - j -1));
+        j = 0;
+        k++;
+        while (script[0] == 0x0A)
+          script = script.mid(1, (script.size() -1));
       }
-      
-      sbCurrentLine = firstSBItem;
-      currentLine = 0;
-      lineNumber = i;
-      cout << "Debbug state: " << sbCurrentLine->debugState << endl;
-      while ((currentLine < lineNumber) && (sbCurrentLine->debugState == false))
-      {
-            cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
-            if (sbCurrentLine->previousSBItem != NULL) sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
-            sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-            sendCommand(commandArray[currentLine].c_str());
-            sbCurrentLine = sbCurrentLine->nextSBItem;
-            currentLine++;
-      }
-      if (currentLine == i)
-      {
-            isDebugging = false;
-            txtScriptEditor->setReadOnly(false);
-            btnDbgNextLine->setDisabled(true);
-            btnDbgSkipLine->setDisabled(true);
-            btnDgbNextBP->setDisabled(true);
-            btnStopDebug->setDisabled(true);
-            btnDebug->setDisabled(false);
-            btnPaste->setDisabled(false);
-            btnCopy->setDisabled(false);
-            btnCut->setDisabled(false);
-            btnComment->setDisabled(false);
-            btnUncomment->setDisabled(false);
-            //delete aDebugTerm;
-      }
+      else
+        j++;
     }
+    
+    sbCurrentLine = firstSBItem;
+    currentLine = 0;
+    lineNumber = i;
+    cout << "Debbug state: " << sbCurrentLine->debugState << endl;
+    while ((currentLine < lineNumber) && (sbCurrentLine->debugState == false)) {
+      cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
+      if (sbCurrentLine->previousSBItem != NULL) sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
+      sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
+      sendCommand(commandArray[currentLine].c_str());
+      sbCurrentLine = sbCurrentLine->nextSBItem;
+      currentLine++;
+    }
+    if (currentLine == i) {
+      isDebugging = false;
+      txtScriptEditor->setReadOnly(false);
+      btnDbgNextLine->setDisabled(true);
+      btnDbgSkipLine->setDisabled(true);
+      btnDgbNextBP->setDisabled(true);
+      btnStopDebug->setDisabled(true);
+      btnDebug->setDisabled(false);
+      btnPaste->setDisabled(false);
+      btnCopy->setDisabled(false);
+      btnCut->setDisabled(false);
+      btnComment->setDisabled(false);
+      btnUncomment->setDisabled(false);
+    }
+  }
 
 /**
   End the debugging session manually
 */
-    void MainWindow::stopDebugging()
-    {
+  void ScriptEditor::stopDebugging() {
+    isDebugging = false;
+    txtScriptEditor->setReadOnly(false);
+    btnDbgNextLine->setDisabled(true);
+    btnDbgSkipLine->setDisabled(true);
+    btnDgbNextBP->setDisabled(true);
+    btnStopDebug->setDisabled(true);
+    btnDebug->setDisabled(false);
+    btnPaste->setDisabled(false);
+    btnCopy->setDisabled(false);
+    btnCut->setDisabled(false);
+    btnComment->setDisabled(false);
+    btnUncomment->setDisabled(false);
+    //delete aDebugTerm;
+  }
+
+
+/**
+  Function called when you press on the btnNextLine button. Execute the next line.
+*/
+  void ScriptEditor::dbgNextLine() {
+    if (currentLine != (lineNumber +1 )) {
+      //cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
+      if (sbCurrentLine->previousSBItem != NULL) {
+        if (sbCurrentLine->previousSBItem->debugState == true) 
+          sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnBP);
+        else
+          sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
+      }
+
+      if (sbCurrentLine->debugState == true) 
+        sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrowBP);
+      else
+        sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
+
+      if (commandArray[currentLine] != "")
+        sendCommand(commandArray[currentLine].c_str());
+      
+      sbCurrentLine = sbCurrentLine->nextSBItem;
+      currentLine++;
+    }
+    else {
       isDebugging = false;
       txtScriptEditor->setReadOnly(false);
       btnDbgNextLine->setDisabled(true);
@@ -111,234 +447,287 @@
       btnUncomment->setDisabled(false);
       //delete aDebugTerm;
     }
-
-
-/**
-  Function called when you press on the btnNextLine button. Execute the next line.
-*/
-    void MainWindow::dbgNextLine()
-    {
-      if (currentLine != (lineNumber +1 ))
-      {
-                cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
-            if (sbCurrentLine->previousSBItem != NULL)
-            {
-              if (sbCurrentLine->previousSBItem->debugState == true) 
-                  {
-                    sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnBP);
-                  }
-                  else
-                  {
-                    sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
-                  }
-            }
-
-            
-            if (sbCurrentLine->debugState == true) 
-                {
-                  sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrowBP);
-                }
-                else
-                {
-                  sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-                }
-
-
-            sendCommand(commandArray[currentLine].c_str());
-            sbCurrentLine = sbCurrentLine->nextSBItem;
-            currentLine++;
-      }
-      else
-      {
-            isDebugging = false;
-            txtScriptEditor->setReadOnly(false);
-            btnDbgNextLine->setDisabled(true);
-            btnDbgSkipLine->setDisabled(true);
-            btnDgbNextBP->setDisabled(true);
-            btnStopDebug->setDisabled(true);
-            btnDebug->setDisabled(false);
-            btnPaste->setDisabled(false);
-            btnCopy->setDisabled(false);
-            btnCut->setDisabled(false);
-            btnComment->setDisabled(false);
-            btnUncomment->setDisabled(false);
-            //delete aDebugTerm;
-      }
-    }
+  }
 
 /**
   Function called when you press on the btnSkipLine button. Execute the line after the next one.
 */
-    void MainWindow::dbgSkipLine()
-    {
-      sbCurrentLine = sbCurrentLine->nextSBItem;
-          currentLine++;
-      if (currentLine != (lineNumber +1 ))
-      {
-                cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
-            if (sbCurrentLine->previousSBItem != NULL)
-            {
-              if (sbCurrentLine->previousSBItem->debugState == true) 
-                  {
-                    sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnBP);
-                  }
-                  else
-                  {
-                    sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
-                  }
-            }
-
-            if (sbCurrentLine->previousSBItem->previousSBItem != NULL)
-            {
-              if (sbCurrentLine->previousSBItem->previousSBItem->debugState == true) 
-                  {
-                    sbCurrentLine->previousSBItem->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnBP);
-                  }
-                  else
-                  {
-                    sbCurrentLine->previousSBItem->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
-                  }
-            }
-
-            
-            if (sbCurrentLine->debugState == true) 
-                {
-                  sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrowBP);
-                }
-                else
-                {
-                  sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-                }
-
-
-            sendCommand(commandArray[currentLine].c_str());
-            sbCurrentLine = sbCurrentLine->nextSBItem;
-            currentLine++;
+  void ScriptEditor::dbgSkipLine() {
+    sbCurrentLine = sbCurrentLine->nextSBItem;
+    currentLine++;
+    if (currentLine != (lineNumber +1 )) {
+      cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
+      if (sbCurrentLine->previousSBItem != NULL) {
+        if (sbCurrentLine->previousSBItem->debugState == true) 
+          sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnBP);
+        else 
+          sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
       }
+
+      if (sbCurrentLine->previousSBItem->previousSBItem != NULL) {
+        if (sbCurrentLine->previousSBItem->previousSBItem->debugState == true) 
+          sbCurrentLine->previousSBItem->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnBP);
+        else
+          sbCurrentLine->previousSBItem->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
+      }
+        
+      if (sbCurrentLine->debugState == true) 
+        sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrowBP);
       else
-      {
-            isDebugging = false;
-            txtScriptEditor->setReadOnly(false);
-            btnDbgNextLine->setDisabled(true);
-            btnDbgSkipLine->setDisabled(true);
-            btnDgbNextBP->setDisabled(true);
-            btnStopDebug->setDisabled(true);
-            btnDebug->setDisabled(false);
-            btnPaste->setDisabled(false);
-            btnCopy->setDisabled(false);
-            btnCut->setDisabled(false);
-            btnComment->setDisabled(false);
-            btnUncomment->setDisabled(false);
-            //delete aDebugTerm;
-      }
+        sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
+
+      sendCommand(commandArray[currentLine].c_str());
+      sbCurrentLine = sbCurrentLine->nextSBItem;
+      currentLine++;
     }
+    else {
+      isDebugging = false;
+      txtScriptEditor->setReadOnly(false);
+      btnDbgNextLine->setDisabled(true);
+      btnDbgSkipLine->setDisabled(true);
+      btnDgbNextBP->setDisabled(true);
+      btnStopDebug->setDisabled(true);
+      btnDebug->setDisabled(false);
+      btnPaste->setDisabled(false);
+      btnCopy->setDisabled(false);
+      btnCut->setDisabled(false);
+      btnComment->setDisabled(false);
+      btnUncomment->setDisabled(false);
+      //delete aDebugTerm;
+    }
+  }
 
 /**
   Function called when you press on the btnToNextBP button. Execute all command until it find an other breakpoint
 */
-    void MainWindow::dbgGoToNextBP()
-    {
-          cout << "je suis vivant" << endl;
-          while ((currentLine < lineNumber) && (sbCurrentLine->debugState == false))
-      {
-            cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
-            if (sbCurrentLine->previousSBItem != NULL) sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
-            sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-            sendCommand(commandArray[currentLine].c_str());
-            sbCurrentLine = sbCurrentLine->nextSBItem;
-            currentLine++;
-      }
-      if (currentLine == lineNumber)
-      {
-            isDebugging = false;
-            txtScriptEditor->setReadOnly(false);
-            btnDbgNextLine->setDisabled(true);
-            btnDbgSkipLine->setDisabled(true);
-            btnDgbNextBP->setDisabled(true);
-            btnStopDebug->setDisabled(true);
-            btnDebug->setDisabled(false);
-            btnPaste->setDisabled(false);
-            btnCopy->setDisabled(false);
-            btnCut->setDisabled(false);
-            btnComment->setDisabled(false);
-            btnUncomment->setDisabled(false);
-            //delete aDebugTerm;
-      }
+  void ScriptEditor::dbgGoToNextBP() {
+    cout << "je suis vivant" << endl;
+    while ((currentLine < lineNumber) && (sbCurrentLine->debugState == false)) {
+      cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
+      if (sbCurrentLine->previousSBItem != NULL) sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
+      sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
+      sendCommand(commandArray[currentLine].c_str());
+      sbCurrentLine = sbCurrentLine->nextSBItem;
+      currentLine++;
     }
+    if (currentLine == lineNumber) {
+      isDebugging = false;
+      txtScriptEditor->setReadOnly(false);
+      btnDbgNextLine->setDisabled(true);
+      btnDbgSkipLine->setDisabled(true);
+      btnDgbNextBP->setDisabled(true);
+      btnStopDebug->setDisabled(true);
+      btnDebug->setDisabled(false);
+      btnPaste->setDisabled(false);
+      btnCopy->setDisabled(false);
+      btnCut->setDisabled(false);
+      btnComment->setDisabled(false);
+      btnUncomment->setDisabled(false);
+      //delete aDebugTerm;
+    }
+  }
 
 
 /**
   Function called when you press on the btnComment button. Add a # at position 0 of the line
 */
-    void MainWindow::commentLine()
-    {
-      if (txtScriptEditor->textCursor().hasSelection())
-      {
-            string aScript = txtScriptEditor->toPlainText().toStdString().substr(txtScriptEditor->textCursor().selectionStart(), (txtScriptEditor->textCursor().selectionEnd() - txtScriptEditor->textCursor().selectionStart()));
-            string commentedScript;
-            while (aScript.find("\n") != -1)
-            {
-              commentedScript += "#" + aScript.substr(0, aScript.find("\n"))+ "\n";
-              aScript = aScript.substr(aScript.find("\n")+1, (aScript.size() - aScript.find("\n") -1));
-            cout << commentedScript << endl;
-            }
-            commentedScript += "#" + aScript;
-            
-            cout << commentedScript << endl;
-            txtScriptEditor->textCursor().removeSelectedText();
-            txtScriptEditor->textCursor().insertText(commentedScript.c_str());
+  void ScriptEditor::commentLine() {
+    if (txtScriptEditor->textCursor().hasSelection()) {
+      string aScript = txtScriptEditor->toPlainText().toStdString().substr(txtScriptEditor->textCursor().selectionStart(), (txtScriptEditor->textCursor().selectionEnd() - txtScriptEditor->textCursor().selectionStart()));
+      string commentedScript;
+      while (aScript.find("\n") != -1) {
+        commentedScript += "#" + aScript.substr(0, aScript.find("\n"))+ "\n";
+        aScript = aScript.substr(aScript.find("\n")+1, (aScript.size() - aScript.find("\n") -1));
+        cout << commentedScript << endl;
       }
-      else
-      {
-            txtScriptEditor->insertPlainText("#");
-      }
-      txtScriptEditor->setFontPointSize ( 14 );
+      commentedScript += "#" + aScript;
+      
+      cout << commentedScript << endl;
+      txtScriptEditor->textCursor().removeSelectedText();
+      txtScriptEditor->textCursor().insertText(commentedScript.c_str());
     }
+    else 
+      txtScriptEditor->insertPlainText("#");
+    txtScriptEditor->setFontPointSize ( 14 );
+  }
 
 /**
   Function called when you press on the btnUncomment button. Remove a # at position 0 of the line
 */
-    void MainWindow::uncommentLine()
-    {
-      if (txtScriptEditor->textCursor().hasSelection())
-      {
-            string aScript = txtScriptEditor->toPlainText().toStdString().substr(txtScriptEditor->textCursor().selectionStart(), (txtScriptEditor->textCursor().selectionEnd() - txtScriptEditor->textCursor().selectionStart()));
-            string commentedScript;
-            while (aScript.find("\n") != -1)
-            {
-              if (aScript[aScript.find("\n")+1] == '#')
-              {
-                commentedScript += aScript.substr(1, aScript.find("\n"));
-                aScript = aScript.substr(aScript.find("\n")+1, (aScript.size() - aScript.find("\n") -1));
-                cout << commentedScript << endl;
-              }
-              else
-              {
-                commentedScript += aScript.substr(0, aScript.find("\n")+1);
-                aScript = aScript.substr(aScript.find("\n")+1, (aScript.size() - aScript.find("\n")-1));
-                cout << commentedScript << endl;
-              }
-            }
-
-            if (aScript[0] == '#') commentedScript += aScript.substr(1, (aScript.size() -1));
-            else commentedScript += aScript.substr(0, (aScript.size()));
-            
-            txtScriptEditor->textCursor().removeSelectedText();
-            txtScriptEditor->textCursor().insertText(commentedScript.c_str());
+  void ScriptEditor::uncommentLine() {
+    if (txtScriptEditor->textCursor().hasSelection()) {
+      string aScript = txtScriptEditor->toPlainText().toStdString().substr(txtScriptEditor->textCursor().selectionStart(), (txtScriptEditor->textCursor().selectionEnd() - txtScriptEditor->textCursor().selectionStart()));
+      string commentedScript;
+      while (aScript.find("\n") != -1) {
+        if (aScript[aScript.find("\n")+1] == '#') {
+          commentedScript += aScript.substr(1, aScript.find("\n"));
+          aScript = aScript.substr(aScript.find("\n")+1, (aScript.size() - aScript.find("\n") -1));
+          cout << commentedScript << endl;
+        }
+        else {
+          commentedScript += aScript.substr(0, aScript.find("\n")+1);
+          aScript = aScript.substr(aScript.find("\n")+1, (aScript.size() - aScript.find("\n")-1));
+          cout << commentedScript << endl;
+        }
       }
-      /*else //TODO make it work again
-      {
-            //txtScriptEditor->insertPlainText("#");
-      }*/
-      txtScriptEditor->setFontPointSize ( 14 );
+
+      if (aScript[0] == '#') 
+        commentedScript += aScript.substr(1, (aScript.size() -1));
+      else 
+        commentedScript += aScript.substr(0, (aScript.size()));
+      
+      txtScriptEditor->textCursor().removeSelectedText();
+      txtScriptEditor->textCursor().insertText(commentedScript.c_str());
     }
+    /*else //TODO make it work again
+    {
+          //txtScriptEditor->insertPlainText("#");
+    }*/
+    txtScriptEditor->setFontPointSize ( 14 );
+  }
     
-    void MainWindow::sendCommand(QString command) {
-      ShellThread* aThread = new ShellThread(command);
-      //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
-      //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
-      QObject::connect(aThread->aShell, SIGNAL(newLine(QString)), aDebugTerm->rtfDegubTerm, SLOT(append(QString)));
-      //QObject::connect(aThread->aShell, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
-      //QObject::connect(aThread->aShell, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
-      aThread->start();
+  void ScriptEditor::sendCommand(QString command) {
+    ShellThread* aThread = new ShellThread(command);
+    //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
+    //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
+    QObject::connect(aThread->aShell, SIGNAL(newLine(QString)), aDebugTerm->rtfDegubTerm, SLOT(append(QString)));
+    //QObject::connect(aThread->aShell, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
+    //QObject::connect(aThread->aShell, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
+    aThread->start();
+  }
+  
+  void ScriptEditor::saveFileAs(const QString &outputFileName) {
+    KSaveFile file(outputFileName);
+    file.open();
+
+    QByteArray outputByteArray;
+    outputByteArray.append(txtScriptEditor->toPlainText());
+    file.write(outputByteArray);
+    file.finalize();
+    file.close();
+
+    fileName = outputFileName;
+  }
+
+/**
+  Default KDE file saving funtion
+*/
+  void ScriptEditor::saveFileAs() {
+    saveFileAs(KFileDialog::getSaveFileName());
+  }
+
+/**
+  Default KDE file saving funtion
+*/
+  void ScriptEditor::saveFile() {
+    if(!fileName.isEmpty())
+      saveFileAs(fileName);
+    else
+      saveFileAs();
+  }
+
+/**
+  Default KDE file opening funtion
+*/
+  void ScriptEditor::openFile() {
+    openFile(KFileDialog::getOpenFileName());
+  }
+
+/**
+  Default KDE file opening funtion
+*/
+  void ScriptEditor::openFile(const QString &inputFileName) {
+    QString tmpFile;
+    if(KIO::NetAccess::download(inputFileName, tmpFile, this)) {
+      QFile file(tmpFile);
+      file.open(QIODevice::ReadOnly);
+      txtScriptEditor->setPlainText(QTextStream(&file).readAll());
+      fileName = inputFileName;
+
+      KIO::NetAccess::removeTempFile(tmpFile);
     }
+    else {
+      KMessageBox::error(this,
+      KIO::NetAccess::lastErrorString());
+    }
+  }
+  
+  void ScriptEditor::setFileName(QString name) {
+    fileName = name;
+  }
+  
+  void ScriptEditor::setText(QString script) {
+    txtScriptEditor->setPlainText(script.trimmed());
+    int lineCount = countLine(script.trimmed());
+    updateLineCount(lineCount);
+  }
+  
+  int ScriptEditor::countLine(QString script) {
+    int i =0;
+
+    script += "\n";
+
+    for (int j = 0; j <= script.size(); j++) { //Count the script line
+          if ((script[j] == 0x0A) && (script[j+1] != 0x0A)) 
+            i++;
+    } 
+    return i;
+  }
+  
+  
+ void ScriptEditor::textChanged() {
+   EditorThread* aThread = new EditorThread(this, txtScriptEditor->toPlainText());
+   QObject::connect(aThread, SIGNAL(lineCount(int)), this, SLOT(updateLineCount(int)));
+   aThread->run();
+ }
+ 
+ void ScriptEditor::updateLineCount(int lineCount) {
+   if (lineCount != currentLineCount) {
+    currentLineCount=lineCount;
+      /*SideBar* anSBItem = firstSBItem->nextSBItem;
+      SideBar* anSBItem2 = firstSBItem->nextSBItem;
+      while (anSBItem != NULL) { //TODO I don't know if Qt really have a garbage collector or I am just crazy, every time I do a delete, it crash
+        anSBItem2 = anSBItem;
+        anSBItem->nextSBItem;
+        //delete anSBItem2;
+      }*/
+      lastSBItem = firstSBItem;
+      lineNBSideBar->setRowCount(1);
+      lineNBSideBar->setRowHeight (0, 20 );
+      lineNBSideBar->clear();   
+      lineNBSideBar->setCellWidget ( 0, 0, new SideBar(firstSBItem));
+      if (lineCount > 10000) {
+        lineNBSideBar->setMaximumWidth(75);
+        lineNBSideBar->setMinimumWidth(75);
+        lineNBSideBar->setColumnWidth(0, 75);
+      }
+      else if (lineCount > 1000) {
+        lineNBSideBar->setMaximumWidth(65);
+        lineNBSideBar->setMinimumWidth(65);
+        lineNBSideBar->setColumnWidth(0, 65);
+      }
+      else if (lineCount > 100) {
+        lineNBSideBar->setMaximumWidth(55);
+        lineNBSideBar->setMinimumWidth(55);
+        lineNBSideBar->setColumnWidth(0, 55);
+      }
+      else if (lineCount > 10) {
+        lineNBSideBar->setMaximumWidth(45);
+        lineNBSideBar->setMinimumWidth(45);
+        lineNBSideBar->setColumnWidth(0, 45);
+      }
+      else {
+        lineNBSideBar->setMaximumWidth(35);
+        lineNBSideBar->setMinimumWidth(35);
+        lineNBSideBar->setColumnWidth(0, 35);
+      }
+
+      for (int j =1; j < lineCount; j++) {
+          lineNBSideBar->setRowCount(j+1);
+          lineNBSideBar->setRowHeight (j, 20 );
+          lastSBItem = new SideBar(2, lastSBItem, lineNBSideBar);
+          lineNBSideBar->setCellWidget ( j, 0,lastSBItem); //TODO flags do not work, send a Qt bugs (feature request) to check when widget inherit QTableWidgetItem to follow flags
+          lastSBItem->setFlags(Qt::NoItemFlags);
+      }
+   }
+ }
