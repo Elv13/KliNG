@@ -32,6 +32,7 @@
 
 #include "/home/lepagee/dev/tp3-prog_sess2/mainwindow.h"
 #include <QtGui/QHBoxLayout>
+#include <QTableWidgetItem>
 #include <QtGui/QWidget>
 #include <QtGui/QLabel>
 #include <QtGui/QFrame>
@@ -40,13 +41,14 @@
 
 QT_BEGIN_NAMESPACE
 
-class SideBar : public QWidget
+class SideBar : public QWidget, public QTableWidgetItem
 {
       Q_OBJECT
 
   public:
     SideBar(unsigned int absLineNB, SideBar* previousItem, QWidget* parent);
-    ~SideBar();
+    SideBar(SideBar* toClone);
+    //~SideBar();
 
     int relLineNumber;
     int absLineNumber;
