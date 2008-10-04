@@ -135,7 +135,7 @@
       std::cout << "ERROR while opening the database, get ready for a crash" << std::endl;
 
 
-    isDebugging = false;
+    
     centralwidget = new QWidget;
     setCentralWidget(centralwidget);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
@@ -163,252 +163,7 @@
     horizontalLayout_4->addItem(horizontalSpacer26);
 
     KIcon icon("window-close");
-    tabEditor = new QWidget();
-    tabEditor->setObjectName(QString::fromUtf8("tabEditor"));
-    tabEditor->setGeometry(QRect(0, 0, 520, 609));
-    verticalLayout_7 = new QVBoxLayout(tabEditor);
-    verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
-    hlControl2 = new QHBoxLayout();
-    hlControl2->setObjectName(QString::fromUtf8("hlControl2"));
-    btnPrevious = new KPushButton(tabEditor);
-    btnPrevious->setObjectName(QString::fromUtf8("btnPrevious"));
-    btnPrevious->setMinimumSize(QSize(31, 31));
-    btnPrevious->setMaximumSize(QSize(31, 31));
-    KIcon icnEditUndo("edit-undo");
-    btnPrevious->setIcon(icnEditUndo);
-    hlControl2->addWidget(btnPrevious);
-
-    bntNext = new KPushButton(tabEditor);
-    bntNext->setObjectName(QString::fromUtf8("bntNext"));
-    bntNext->setMinimumSize(QSize(31, 31));
-    bntNext->setMaximumSize(QSize(31, 31));
-    KIcon icnEditRedo("edit-redo");
-    bntNext->setIcon(icnEditRedo);
-    hlControl2->addWidget(bntNext);
-
-    line = new QFrame(tabEditor);
-    line->setObjectName(QString::fromUtf8("line"));
-    line->setFrameShape(QFrame::VLine);
-    line->setFrameShadow(QFrame::Sunken);
-    hlControl2->addWidget(line);
-
-    btnSave = new KPushButton(tabEditor);
-    btnSave->setObjectName(QString::fromUtf8("btnSave"));
-    btnSave->setMinimumSize(QSize(31, 31));
-    btnSave->setMaximumSize(QSize(31, 31));
-    KIcon icnDocSave("document-save");
-    btnSave->setIcon(icnDocSave);
-    hlControl2->addWidget(btnSave);
-
-    btnPrint = new KPushButton(tabEditor);
-    btnPrint->setObjectName(QString::fromUtf8("btnPrint"));
-    btnPrint->setMinimumSize(QSize(31, 31));
-    btnPrint->setMaximumSize(QSize(31, 31));
-    KIcon icnDocPrint("document-print");
-    btnPrint->setIcon(icnDocPrint);
-    hlControl2->addWidget(btnPrint);
-
-    line_2 = new QFrame(tabEditor);
-    line_2->setObjectName(QString::fromUtf8("line_2"));
-    line_2->setFrameShape(QFrame::VLine);
-    line_2->setFrameShadow(QFrame::Sunken);
-    hlControl2->addWidget(line_2);
-
-    btnComment = new KPushButton(tabEditor);
-    btnComment->setObjectName(QString::fromUtf8("btnComment"));
-    btnComment->setMinimumSize(QSize(31, 31));
-    btnComment->setMaximumSize(QSize(31, 31));
-    KIcon icon5(KStandardDirs::locate( "appdata", "pixmap/22x22/comment.png"));
-    btnComment->setIcon(icon5);
-    btnComment->setIconSize(QSize(12, 12));
-    hlControl2->addWidget(btnComment);
-
-    btnUncomment = new KPushButton(tabEditor);
-    btnUncomment->setObjectName(QString::fromUtf8("btnUncomment"));
-    btnUncomment->setMinimumSize(QSize(31, 31));
-    btnUncomment->setMaximumSize(QSize(31, 31));
-    KIcon icon6(KStandardDirs::locate( "appdata", "pixmap/22x22/uncomment.png"));
-    btnUncomment->setIcon(icon6);
-    btnUncomment->setIconSize(QSize(14, 14));
-    hlControl2->addWidget(btnUncomment);
-
-    btnCopy = new KPushButton(tabEditor);
-    btnCopy->setObjectName(QString::fromUtf8("btnCopy"));
-    btnCopy->setMinimumSize(QSize(31, 31));
-    btnCopy->setMaximumSize(QSize(31, 31));
-    KIcon icnEditCopy("edit-copy");
-    btnCopy->setIcon(icnEditCopy);
-    hlControl2->addWidget(btnCopy);
-
-    btnCut = new KPushButton(tabEditor);
-    btnCut->setObjectName(QString::fromUtf8("btnCut"));
-    btnCut->setMinimumSize(QSize(31, 31));
-    btnCut->setMaximumSize(QSize(31, 31));
-    KIcon icnEditCut("edit-cut");
-    btnCut->setIcon(icnEditCut);
-    hlControl2->addWidget(btnCut);
-
-    btnPaste = new KPushButton(tabEditor);
-    btnPaste->setObjectName(QString::fromUtf8("btnPaste"));
-    btnPaste->setMinimumSize(QSize(31, 31));
-    btnPaste->setMaximumSize(QSize(31, 31));
-    KIcon icnEditPaste("edit-paste");
-    btnPaste->setIcon(icnEditPaste);
-    hlControl2->addWidget(btnPaste);
-
-    line_3 = new QFrame(tabEditor);
-    line_3->setObjectName(QString::fromUtf8("line_3"));
-    line_3->setFrameShape(QFrame::VLine);
-    line_3->setFrameShadow(QFrame::Sunken);
-    hlControl2->addWidget(line_3);
-
-    btnDebug = new KPushButton(tabEditor);
-    btnDebug->setObjectName(QString::fromUtf8("btnDebug"));
-    btnDebug->setMinimumSize(QSize(31, 31));
-    btnDebug->setMaximumSize(QSize(31, 31));
-    KIcon icnArrowRight("arrow-right");
-    btnDebug->setIcon(icnArrowRight);
-    hlControl2->addWidget(btnDebug);
-
-    btnStopDebug = new KPushButton(tabEditor);
-    btnStopDebug->setObjectName(QString::fromUtf8("btnStopDebug"));
-    btnStopDebug->setMinimumSize(QSize(31, 31));
-    btnStopDebug->setMaximumSize(QSize(31, 31));
-    btnStopDebug->setIcon(icon);
-    hlControl2->addWidget(btnStopDebug);
-
-    btnDbgNextLine = new KPushButton(tabEditor);
-    btnDbgNextLine->setObjectName(QString::fromUtf8("btnDbgNextLine"));
-    btnDbgNextLine->setMinimumSize(QSize(31, 31));
-    btnDbgNextLine->setMaximumSize(QSize(31, 31));
-    KIcon icon11(KStandardDirs::locate( "appdata", "pixmap/22x22/nextline.png"));
-    btnDbgNextLine->setIcon(icon11);
-    btnDbgNextLine->setIconSize(QSize(16, 16));
-    hlControl2->addWidget(btnDbgNextLine);
-
-    btnDbgSkipLine = new KPushButton(tabEditor);
-    btnDbgSkipLine->setObjectName(QString::fromUtf8("btnDbgSkipLine"));
-    btnDbgSkipLine->setMinimumSize(QSize(31, 31));
-    btnDbgSkipLine->setMaximumSize(QSize(31, 31));
-    KIcon icon12(KStandardDirs::locate( "appdata", "pixmap/22x22/skipline.png"));
-    btnDbgSkipLine->setIcon(icon12);
-    btnDbgSkipLine->setIconSize(QSize(16, 16));
-    hlControl2->addWidget(btnDbgSkipLine);
-
-    btnDgbNextBP = new KPushButton(tabEditor);
-    btnDgbNextBP->setObjectName(QString::fromUtf8("btnDgbNextBP"));
-    btnDgbNextBP->setMinimumSize(QSize(31, 31));
-    btnDgbNextBP->setMaximumSize(QSize(31, 31));
-    KIcon icon13(KStandardDirs::locate( "appdata", "pixmap/22x22/run.png"));
-    btnDgbNextBP->setIcon(icon13);
-    btnDgbNextBP->setIconSize(QSize(16, 16));
-    hlControl2->addWidget(btnDgbNextBP);
-
-    horizontalSpacer = new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-    hlControl2->addItem(horizontalSpacer);
-
-    verticalLayout_7->addLayout(hlControl2);
-
-    scrollArea = new QScrollArea(tabEditor);
-    scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
-    scrollArea->setStyleSheet(QString::fromUtf8("margin-left: 0px;\n"
-"margin-right: 0px;\n"
-"margin-top: 0px;\n"
-"margin-bottom: 0px;\n"
-"border-left: 0px;\n"
-"border-right: 0px;\n"
-"border-top: 0px;\n"
-"border-bottom: 0px;\n"
-"padding-left: 0px;\n"
-"padding-right: 0px;\n"
-"padding-top: 0px;\n"
-"padding-bottom: 0px;"));
-    scrollArea->setFrameShape(QFrame::StyledPanel);
-    scrollArea->setWidgetResizable(true);
-    scrollAreaWidgetContents_2 = new QWidget();
-    scrollAreaWidgetContents_2->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_2"));
-    scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 493, 1010));
-    verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents_2);
-    verticalLayout_13->setObjectName(QString::fromUtf8("verticalLayout_13"));
-    textEditLayout = new QHBoxLayout();
-    textEditLayout->setSpacing(0);
-    textEditLayout->setObjectName(QString::fromUtf8("textEditLayout"));
-    frame_3 = new QFrame(scrollAreaWidgetContents_2);
-    frame_3->setObjectName(QString::fromUtf8("frame_3"));
-    QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    sizePolicy.setHorizontalStretch(0);
-    sizePolicy.setVerticalStretch(0);
-    sizePolicy.setHeightForWidth(frame_3->sizePolicy().hasHeightForWidth());
-    frame_3->setSizePolicy(sizePolicy);
-    frame_3->setMinimumSize(QSize(35, 0));
-    frame_3->setStyleSheet(QString::fromUtf8("margin:0;padding:0;border:0;spacing:0;padding-top:5"));
-    frame_3->setFrameShape(QFrame::StyledPanel);
-    frame_3->setLineWidth(0);
-    textEditLayout->addWidget(frame_3);
-
-    txtScriptEditor = new KTextEdit(scrollAreaWidgetContents_2);
-    txtScriptEditor->setDisabled(true);
-    txtScriptEditor->setFontPointSize ( 14 );
-    txtScriptEditor->setObjectName(QString::fromUtf8("txtScriptEditor"));
-    txtScriptEditor->setMinimumSize(QSize(0, 1000));
-    txtScriptEditor->setStyleSheet(QString::fromUtf8("margin-left: 0px;\n"
-"margin-right: 0px;\n"
-"margin-top: 0px;\n"
-"margin-bottom: 0px;\n"
-"padding-left: 0px;\n"
-"margin-left: 0px;"));
-    txtScriptEditor->setFrameShape(QFrame::StyledPanel);
-    txtScriptEditor->setLineWidth(1);
-    txtScriptEditor->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    txtScriptEditor->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    txtScriptEditor->setLineWrapMode(QTextEdit::NoWrap);
-    txtScriptEditor->setLineWrapColumnOrWidth(100);
-    txtScriptEditor->setAcceptRichText(true);
-    textEditLayout->addWidget(txtScriptEditor);
-
-    verticalLayout_13->addLayout(textEditLayout);
-
-    scrollArea->setWidget(scrollAreaWidgetContents_2);
-
-    verticalLayout_7->addWidget(scrollArea);
-
-    frame_2 = new QFrame(tabEditor);
-    frame_2->setObjectName(QString::fromUtf8("frame_2"));
-    frame_2->setMinimumSize(QSize(0, 26));
-    frame_2->setMaximumSize(QSize(16777215, 26));
-    frame_2->setStyleSheet(QString::fromUtf8(""));
-    frame_2->setFrameShape(QFrame::StyledPanel);
-    frame_2->setFrameShadow(QFrame::Raised);
-    frame_2->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:0;border-color:#808000;padding-top:1;spacing:0;");
-    frame_2->hide();
-    horizontalLayout_5 = new QHBoxLayout(frame_2);
-    horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-    kpushbutton_6 = new KPushButton(frame_2);
-    kpushbutton_6->setObjectName(QString::fromUtf8("kpushbutton_6"));
-    kpushbutton_6->setMinimumSize(QSize(22, 22));
-    kpushbutton_6->setMaximumSize(QSize(22, 22));
-    kpushbutton_6->setStyleSheet(QString::fromUtf8("background-color:  rgb(230, 255, 105);\n"
-"border-style: outset;"));
-    kpushbutton_6->setIcon(icon);
-    horizontalLayout_5->addWidget(kpushbutton_6);
-
-    label_2 = new QLabel(frame_2);
-    label_2->setObjectName(QString::fromUtf8("label_2"));
-    horizontalLayout_5->addWidget(label_2);
-
-    klineedit_4 = new KLineEdit(frame_2);
-    klineedit_4->setObjectName(QString::fromUtf8("klineedit_4"));
-    klineedit_4->setProperty("showClearButton", QVariant(true));
-    klineedit_4->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;");
-    horizontalLayout_5->addWidget(klineedit_4);
-
-    kpushbutton_7 = new KPushButton(frame_2);
-    kpushbutton_7->setObjectName(QString::fromUtf8("kpushbutton_7"));
-    kpushbutton_7->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;padding-right:5;padding-left:5;");
-    horizontalLayout_5->addWidget(kpushbutton_7);
-
-    verticalLayout_7->addWidget(frame_2);
+    tabEditor = new ScriptEditor(0);
 
     tabWebBrowser = new QWidget();
     tabWebBrowser->setObjectName(QString::fromUtf8("tabWebBrowser"));
@@ -560,33 +315,7 @@
     tabCategories->addTab(tabEditor, QString());
     tabCategories->addTab(tabWebBrowser, QString());
 
-    lineNBSideBar = new QTableWidget(frame_3);
 
-    firstSBItem = new SideBar(1, NULL,lineNBSideBar );
-    lastSBItem = firstSBItem;
-    if (lineNBSideBar->columnCount() < 1)
-        lineNBSideBar->setColumnCount(1);
-        
-    lineNBSideBar->resize ( 35, txtScriptEditor->height() );
-    lineNBSideBar->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    lineNBSideBar->setRowCount(50);
-    lineNBSideBar->setRowHeight (0, 20 );
-    lineNBSideBar->setColumnWidth(0, 35);
-    lineNBSideBar->setCellWidget ( 0, 0, firstSBItem );
-    lineNBSideBar->verticalHeader()->hide();
-    lineNBSideBar->horizontalHeader()->hide();
-
-    for (int j =1; j < ((txtScriptEditor->height()) /20); j++) {
-      lineNBSideBar->setRowHeight (j, 20 );
-      lastSBItem = new SideBar(2, lastSBItem, lineNBSideBar);
-      lineNBSideBar->setCellWidget ( j, 0,lastSBItem);
-    }
-    
-
-    btnDbgNextLine->setDisabled(true);
-    btnDbgSkipLine->setDisabled(true);
-    btnDgbNextBP->setDisabled(true);
-    btnStopDebug->setDisabled(true);
           
           
     //Status bar stuff
@@ -617,14 +346,14 @@
     statusBar()->addWidget(statusProgressBar);
 
     QObject::connect(tabCategories, SIGNAL(currentChanged(int)), this, SLOT(modeChanged(int)));
-    QObject::connect(kpushbutton_6, SIGNAL(clicked()), frame_2, SLOT(hide()));
-    QObject::connect(btnSave, SIGNAL(clicked()), this, SLOT(saveFile()));
+    /*QObject::connect(kpushbutton_6, SIGNAL(clicked()), frame_2, SLOT(hide()));
+    QObject::connect(btnSave, SIGNAL(clicked()), this, SLOT(saveFile()));*/
     QObject::connect(btnBack, SIGNAL(clicked()), webDefaultPage, SLOT(back()));
     QObject::connect(btnNext, SIGNAL(clicked()), webDefaultPage, SLOT(forward()));
     QObject::connect(btnReload, SIGNAL(clicked()), webDefaultPage, SLOT(reload()));
     QObject::connect(btnStop, SIGNAL(clicked()), webDefaultPage, SLOT(stop()));
     QObject::connect(cbbUrl, SIGNAL(returnPressed()), this, SLOT(loadWebPage()));
-    QObject::connect(btnCopy, SIGNAL(clicked()), txtScriptEditor, SLOT(copy()));
+    /*QObject::connect(btnCopy, SIGNAL(clicked()), txtScriptEditor, SLOT(copy()));
     QObject::connect(btnPaste, SIGNAL(clicked()), txtScriptEditor, SLOT(paste()));
     QObject::connect(btnCut, SIGNAL(clicked()), txtScriptEditor, SLOT(cut()));
     QObject::connect(bntNext, SIGNAL(clicked()), txtScriptEditor, SLOT(redo()));
@@ -638,10 +367,10 @@
     QObject::connect(btnDbgSkipLine, SIGNAL(clicked()), this, SLOT(dbgSkipLine()));
     QObject::connect(btnDgbNextBP, SIGNAL(clicked()), this, SLOT(dbgGoToNextBP()));
     QObject::connect(btnComment, SIGNAL(clicked()), this, SLOT(commentLine()));
-    QObject::connect(btnUncomment, SIGNAL(clicked()), this, SLOT(uncommentLine()));
-    QObject::connect(dockScriptBrowser, SIGNAL(enableEditor(bool)), txtScriptEditor, SLOT(setEnabled(bool)));
-    QObject::connect(dockScriptBrowser, SIGNAL(setFileName(QString)), this, SLOT(setFileName(QString)));
-    QObject::connect(dockScriptBrowser, SIGNAL(setEdirorText(QString)), txtScriptEditor, SLOT(setPlainText(QString)));
+    QObject::connect(btnUncomment, SIGNAL(clicked()), this, SLOT(uncommentLine()));*/
+    QObject::connect(dockScriptBrowser, SIGNAL(enableEditor(bool)), tabEditor->txtScriptEditor, SLOT(setEnabled(bool)));
+    QObject::connect(dockScriptBrowser, SIGNAL(setFileName(QString)), tabEditor, SLOT(setFileName(QString)));
+    QObject::connect(dockScriptBrowser, SIGNAL(setEdirorText(QString)), tabEditor, SLOT(setText(QString)));
     QObject::connect(dockScriptBrowser, SIGNAL(launchScript(QString, QString)), this, SLOT(launchScript(QString, QString)));
 
     retranslateUi();
@@ -740,8 +469,6 @@
     //label->setText(QApplication::translate("MainWindow", "Filter:", 0, QApplication::UnicodeUTF8));
     //kpushbutton_5->setText(QApplication::translate("MainWindow", "search", 0, QApplication::UnicodeUTF8));
     tabCategories->setTabText(tabCategories->indexOf(tabShell), QApplication::translate("MainWindow", "Terminal  ", 0, QApplication::UnicodeUTF8));
-    label_2->setText(QApplication::translate("MainWindow", "Filter:", 0, QApplication::UnicodeUTF8));
-    kpushbutton_7->setText(QApplication::translate("MainWindow", "search", 0, QApplication::UnicodeUTF8));
     tabCategories->setTabText(tabCategories->indexOf(tabEditor), QApplication::translate("MainWindow", "Creation  ", 0, QApplication::UnicodeUTF8));
     tabBBrowserPage->setTabText(tabBBrowserPage->indexOf(tabDefaultTab), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
     tabCategories->setTabText(tabCategories->indexOf(tabWebBrowser), QApplication::translate("MainWindow", "Web Browser   ", 0, QApplication::UnicodeUTF8));
@@ -758,7 +485,7 @@
     newScriptAction->setShortcut(Qt::CTRL + Qt::Key_W);
     actionCollection()->addAction("newScript", newScriptAction);
     connect(newScriptAction, SIGNAL(triggered(bool)),
-    txtScriptEditor, SLOT(clear()));
+    tabEditor->txtScriptEditor, SLOT(clear()));
     
     KAction* importScriptAction = new KAction(this);
     importScriptAction->setText(i18n("Import"));
@@ -766,7 +493,7 @@
     importScriptAction->setShortcut(Qt::CTRL + Qt::Key_W);
     actionCollection()->addAction("importScript", importScriptAction);
     connect(importScriptAction, SIGNAL(triggered(bool)),
-    txtScriptEditor, SLOT(clear()));
+    tabEditor->txtScriptEditor, SLOT(clear()));
     
     KAction* saveTextAction = new KAction(this);
     saveTextAction->setText(i18n("Save"));
@@ -774,7 +501,7 @@
     saveTextAction->setShortcut(Qt::CTRL + Qt::Key_W);
     actionCollection()->addAction("saveText", saveTextAction);
     connect(saveTextAction, SIGNAL(triggered(bool)),
-    txtScriptEditor, SLOT(clear()));
+    tabEditor->txtScriptEditor, SLOT(clear()));
     
     KAction* clearAction = new KAction(this);
     clearAction->setText(i18n("Clear"));
@@ -782,7 +509,7 @@
     clearAction->setShortcut(Qt::CTRL + Qt::Key_W);
     actionCollection()->addAction("clear", clearAction);
     connect(clearAction, SIGNAL(triggered(bool)),
-    txtScriptEditor, SLOT(clear()));
+    tabEditor->txtScriptEditor, SLOT(clear()));
 
     KAction* findAction = new KAction(this);
     findAction->setText(i18n("Find"));
@@ -806,7 +533,7 @@
     playAction->setShortcut(Qt::CTRL + Qt::Key_W);
     actionCollection()->addAction("play", playAction);
     connect(playAction, SIGNAL(triggered(bool)),
-    txtScriptEditor, SLOT(clear()));
+    tabEditor->txtScriptEditor, SLOT(clear()));
 
     KAction* pauseAction = new KAction(this);
     pauseAction->setText(i18n("Plause"));
@@ -814,7 +541,7 @@
     pauseAction->setShortcut(Qt::CTRL + Qt::Key_W);
     actionCollection()->addAction("pause", pauseAction);
     connect(pauseAction, SIGNAL(triggered(bool)),
-    txtScriptEditor, SLOT(clear()));
+    tabEditor->txtScriptEditor, SLOT(clear()));
 
     KAction* stopAction = new KAction(this);
     stopAction->setText(i18n("Stop"));
@@ -822,7 +549,7 @@
     stopAction->setShortcut(Qt::CTRL + Qt::Key_W);
     actionCollection()->addAction("stop", stopAction);
     connect(stopAction, SIGNAL(triggered(bool)),
-    txtScriptEditor, SLOT(clear()));
+    tabEditor->txtScriptEditor, SLOT(clear()));
 
     KAction* showLogAction = new KAction(this);
     showLogAction->setText(i18n("Show Log"));
@@ -914,69 +641,12 @@
     setupGUI();
   }
 
-
-  void MainWindow::saveFileAs(const QString &outputFileName) {
-    KSaveFile file(outputFileName);
-    file.open();
-
-    QByteArray outputByteArray;
-    outputByteArray.append(txtScriptEditor->toPlainText());
-    file.write(outputByteArray);
-    file.finalize();
-    file.close();
-
-    fileName = outputFileName;
-  }
-
-/**
-  Default KDE file saving funtion
-*/
-  void MainWindow::saveFileAs() {
-    saveFileAs(KFileDialog::getSaveFileName());
-  }
-
-/**
-  Default KDE file saving funtion
-*/
-  void MainWindow::saveFile() {
-    if(!fileName.isEmpty())
-      saveFileAs(fileName);
-    else
-      saveFileAs();
-  }
-
-/**
-  Default KDE file opening funtion
-*/
-  void MainWindow::openFile() {
-    openFile(KFileDialog::getOpenFileName());
-  }
-
-/**
-  Default KDE file opening funtion
-*/
-  void MainWindow::openFile(const QString &inputFileName) {
-    QString tmpFile;
-    if(KIO::NetAccess::download(inputFileName, tmpFile, this)) {
-      QFile file(tmpFile);
-      file.open(QIODevice::ReadOnly);
-      txtScriptEditor->setPlainText(QTextStream(&file).readAll());
-      fileName = inputFileName;
-
-      KIO::NetAccess::removeTempFile(tmpFile);
-    }
-    else {
-      KMessageBox::error(this,
-      KIO::NetAccess::lastErrorString());
-    }
-  }
-
 /**
   the editor tab search box function
 */
    void MainWindow::searchEdit() {
-      if (klineedit_4->text() != "")
-        txtScriptEditor->find(klineedit_4->text());
+      if (tabEditor->klineedit_4->text() != "")
+        tabEditor->txtScriptEditor->find(tabEditor->klineedit_4->text());
     }
 
 /**
@@ -989,9 +659,9 @@
       tabShell->klineedit_3->selectAll();
     }
     else {
-      frame_2->show();
-      klineedit_4->setFocus();
-      klineedit_4->selectAll();
+      tabEditor->frame_2->show();
+      tabEditor->klineedit_4->setFocus();
+      tabEditor->klineedit_4->selectAll();
     }
   }
 
@@ -1076,10 +746,6 @@
       viewDebug->setChecked(klingConfigSkeleton->showDebugWebBrowser);
     }
   
-  }
-
-  void MainWindow::setFileName(QString name) {
-    fileName = name;
   }
 
 void MainWindow::launchScript(QString name, QString content) {
