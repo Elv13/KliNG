@@ -42,8 +42,7 @@
 
   @param[in] parent The parent widget (nothing)
 */
-SideBar::SideBar(unsigned int absLineNB, SideBar* previousItem, QWidget* parent) : QWidget(parent)
-{
+  SideBar::SideBar(unsigned int absLineNB, SideBar* previousItem, QWidget* parent) : QWidget(parent),QTableWidgetItem() {
     debugState= false;
     previousSBItem= NULL;
     nextSBItem = NULL;
@@ -56,6 +55,7 @@ SideBar::SideBar(unsigned int absLineNB, SideBar* previousItem, QWidget* parent)
     btnDebug->setMinimumSize(QSize(12, 12));
     btnDebug->setMaximumSize(QSize(12, 12));
 
+    lineNumber->setStyleSheet(QString::fromUtf8("margin:0; border: 0px; border-radius: 0px; padding: 0px; spacing:0;"));
     aFrame->setStyleSheet(QString::fromUtf8("margin:0; border: 0px; border-radius: 0px; padding: 0px; width: 12px; height: 12px;spacing:0;"));
     btnDebug->setStyleSheet(QString::fromUtf8("margin-top: 0; margin-bottom: 0; margin-left: 0; margin-right: 0; border: 0px; border-radius: 0px; padding: 0px; width: 12px; height: 12px;spacing:0;"));
 
@@ -63,49 +63,54 @@ SideBar::SideBar(unsigned int absLineNB, SideBar* previousItem, QWidget* parent)
     aFrame->setFrameShape(QFrame::NoFrame);
     aFrame->setFrameStyle ( 0 );
 
-
-
     icnBP = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/bp.png");
     icnEmpty = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/null.png");
     icnArrow = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/arrow.png");
     icnArrowBP = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/arrowBP.png");
 
-   
-  if (previousItem != NULL)
-  {
-    previousSBItem = previousItem;
-    relLineNumber =  previousSBItem->relLineNumber +1;
-    lineNumber->setText(QString::number(relLineNumber));
-    nextSBItem = previousSBItem->nextSBItem;
-    previousSBItem->nextSBItem = this;
-  }
-  else
-  {
-    lineNumber->setText("1");
-    relLineNumber = 1; 
+  
+    if (previousItem != NULL)
+    {
+      previousSBItem = previousItem;
+      relLineNumber =  previousSBItem->relLineNumber +1;
+      lineNumber->setText(QString::number(relLineNumber));
+      nextSBItem = previousSBItem->nextSBItem;
+      previousSBItem->nextSBItem = this;
+    }
+    else
+    {
+      lineNumber->setText("1");
+      relLineNumber = 1; 
+    }
+    
+    aFrame->setMinimumSize(QSize(12, 12));
+    aFrame->setMaximumSize(QSize(12, 12));
+    hboxLayout = new QHBoxLayout(this);
+    hboxLayout->setContentsMargins(3, 2, 0, 0);
+    hboxLayout->setSizeConstraint (QLayout::SetMinimumSize);
+    hboxLayout->addWidget(lineNumber);
+    hboxLayout->addWidget(btnDebug);
+
+
+    QObject::connect(btnDebug, SIGNAL(clicked()), this, SLOT(changeState()));
   }
   
-  aFrame->setMinimumSize(QSize(12, 12));
-  aFrame->setMaximumSize(QSize(12, 12));
-  hboxLayout = new QHBoxLayout(this);
-  hboxLayout->setSizeConstraint (QLayout::SetMinimumSize);
-  hboxLayout->addWidget(lineNumber);
-  hboxLayout->addWidget(btnDebug);
-
-
-  QObject::connect(btnDebug, SIGNAL(clicked()), this, SLOT(changeState()));
-}
+  SideBar::SideBar(SideBar* toClone) {
+    SideBar(1, toClone->previousSBItem, 0);
+    debugState= toClone->debugState;
+    previousSBItem= toClone->previousSBItem;
+    nextSBItem = toClone->nextSBItem;
+  }
 
 /**
   SideBar destructor
 */
-SideBar::~SideBar()
-{
-  delete lineNumber;
-  delete btnDebug;
-  delete icnBP;
-  delete icnEmpty;
-}
+  /*SideBar::~SideBar() {
+    delete lineNumber;
+    delete btnDebug;
+    delete icnBP;
+    delete icnEmpty;
+  }*/
 
 /**
   React to state change
