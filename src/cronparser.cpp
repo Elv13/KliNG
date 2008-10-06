@@ -29,6 +29,7 @@
 #include "cronparser.h"
 
 #include "interface/newCronJob.h"
+#include <KLocalizedString>
 #include <unistd.h>
 #include <stdio.h>
 #include <fstream>
@@ -78,8 +79,8 @@ using namespace std;
     sscanf(command.c_str(),"%d %d %d %d %d",&minute,&hours,&dom,&month,&dow);
 
 
-    string dayOfTheWeek[7] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-    string monthOfTheYears[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    string dayOfTheWeek[7] = {i18n("Mon").toStdString(), i18n("Tue").toStdString(), i18n("Wed").toStdString(), i18n("Thu").toStdString(), i18n("Fri").toStdString(), i18n("Sat").toStdString(), i18n("Sun").toStdString()};
+    string monthOfTheYears[12] = {i18n("Jan").toStdString(), i18n("Feb").toStdString(), i18n("Mar").toStdString(), i18n("Apr").toStdString(), i18n("May").toStdString(), i18n("Jun").toStdString(), i18n("Jul").toStdString(), i18n("Aug").toStdString(), i18n("Sep").toStdString(), i18n("Oct").toStdString(), i18n("Nov").toStdString(), i18n("Dec").toStdString()};
 
     if (minute_str == "*")
       minute_str.clear();
@@ -90,20 +91,20 @@ using namespace std;
     }
 
     if (dom_str == "*")
-      dom_str = "Everyday";
+      dom_str = i18n("Everyday").toStdString();
 
     if (month_str != "*")
       month_str = monthOfTheYears[month-1];
     else
-      month_str = "Everymonth";
+      month_str = i18n("Everymonth").toStdString();
 
     if (dow_str != "*")
       dow_str = dayOfTheWeek[dow-1];
     else
       dow_str = "";
 
-    string output = month_str + " " + dom_str + " " + dow_str + " at " + hours_str + ":" + minute_str;
-    cout << "THIS IS THE OUTPUT: " << output << endl;
+    string output = month_str + " " + dom_str + " " + dow_str + i18n(" at ").toStdString() + hours_str + ":" + minute_str;
+    //cout << "THIS IS THE OUTPUT: " << output << endl;
     return output;
   }
 
@@ -118,33 +119,33 @@ using namespace std;
     string month;
 
     if (strcmp(parsedJob[3], "1") ==0)
-      month= "Jan";
+      month= i18n("Jan").toStdString();
     else if (strcmp(parsedJob[3], "2") ==0)
-      month= "Feb";
+      month= i18n("Feb").toStdString();
     else if (strcmp(parsedJob[3], "3") ==0)
-      month= "Mar";
+      month= i18n("Mar").toStdString();
     else if (strcmp(parsedJob[3], "4") ==0)
-      month= "Apr";
+      month= i18n("Apr").toStdString();
     else if (strcmp(parsedJob[3], "5") ==0)
-      month= "May";
+      month= i18n("May").toStdString();
     else if (strcmp(parsedJob[3], "6") ==0)
-      month= "Jun";
+      month= i18n("Jun").toStdString();
     else if (strcmp(parsedJob[3], "7") ==0)
-      month= "Jul";
+      month= i18n("Jul").toStdString();
     else if (strcmp(parsedJob[3], "8") ==0)
-      month= "Aug";
+      month= i18n("Aug").toStdString();
     else if (strcmp(parsedJob[3], "9") ==0)
-      month= "Sep";
+      month= i18n("Sep").toStdString();
     else if (strcmp(parsedJob[3], "10") ==0)
-      month= "Oct";
+      month= i18n("Oct").toStdString();
     else if (strcmp(parsedJob[3], "11") ==0)
-      month= "Nov";
+      month= i18n("Nov").toStdString();
     else if (strcmp(parsedJob[3],"12") ==0)
-      month= "Dec";
+      month= i18n("Dec").toStdString();
     else
-      month= "*(all)";
+      month= i18n("*(all)").toStdString();
 
-    cout << month << " " << parsedJob[2] << ", " << parsedJob[1] << ":" << parsedJob[0] << "    Command --> " << parsedJob[5];
+    //cout << month << " " << parsedJob[2] << ", " << parsedJob[1] << ":" << parsedJob[0] << "    Command --> " << parsedJob[5];
 
     string toReturn = parsedJob[0];
     toReturn += " ";
