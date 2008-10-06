@@ -40,33 +40,30 @@
 #include <kicon.h>
 
 QT_BEGIN_NAMESPACE
+  class SideBar : public QWidget, public QTableWidgetItem {
+        Q_OBJECT
 
-class SideBar : public QWidget, public QTableWidgetItem
-{
-      Q_OBJECT
+    public:
+      SideBar(unsigned int absLineNB, SideBar* previousItem, QWidget* parent);
+      SideBar(SideBar* toClone);
+      //~SideBar();
 
-  public:
-    SideBar(unsigned int absLineNB, SideBar* previousItem, QWidget* parent);
-    SideBar(SideBar* toClone);
-    //~SideBar();
+      int relLineNumber;
+      int absLineNumber;
+      bool debugState;
+      QHBoxLayout* hboxLayout;
+      QLabel* lineNumber;
+      KPushButton* btnDebug;
+      QLabel* codeFolding;
+      SideBar* previousSBItem;
+      SideBar* nextSBItem;
+      QFrame* aFrame;
+      KIcon* icnBP;
+      KIcon* icnEmpty;
+      KIcon* icnArrow;
+      KIcon* icnArrowBP;
 
-    int relLineNumber;
-    int absLineNumber;
-    bool debugState;
-    QHBoxLayout* hboxLayout;
-    QLabel* lineNumber;
-    KPushButton* btnDebug;
-    QLabel* codeFolding;
-    SideBar* previousSBItem;
-    SideBar* nextSBItem;
-    QFrame* aFrame;
-    KIcon* icnBP;
-    KIcon* icnEmpty;
-    KIcon* icnArrow;
-    KIcon* icnArrowBP;
-
-  private slots:
-    void changeState();
-
-};
+    private slots:
+      void changeState();
+  };
 #endif

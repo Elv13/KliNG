@@ -39,26 +39,24 @@
 //#include "../../mainwindow.h"
 #include <QtGui/QDockWidget>
 
-class SheduledTask : public QDockWidget
-{
-Q_OBJECT
-  public:
-    SheduledTask(QWidget* parent);
-    ~SheduledTask();
-    void fillTable();
-    void translateUi();
+  class SheduledTask : public QDockWidget {
+    Q_OBJECT
+    public:
+      SheduledTask(QWidget* parent);
+      ~SheduledTask();
+      void fillTable();
+      void translateUi();
 
-    /*QDockWidget *dockSheduledTask;*/
-    QWidget *dockSheduledTaskContents;
-    QVBoxLayout *verticalLayout_10;
-    QTableWidget *tlbvSheduledTask;
-    QHBoxLayout *hlShTskButton;
-    KPushButton *btnAddShTsk;
-    KPushButton *btnDeleteShTsk;
-    QSpacerItem *horizontalSpacer_21;
+      /*QDockWidget *dockSheduledTask;*/
+      QWidget *dockSheduledTaskContents;
+      QVBoxLayout *verticalLayout_10;
+      QTableWidget *tlbvSheduledTask;
+      QHBoxLayout *hlShTskButton;
+      KPushButton *btnAddShTsk;
+      KPushButton *btnDeleteShTsk;
+      QSpacerItem *horizontalSpacer_21;
 
-private slots:
-    void newCronJob();
-
-};
+    private slots:
+      void newCronJob();
+  };
 #endif

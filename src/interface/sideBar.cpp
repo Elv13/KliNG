@@ -69,16 +69,14 @@
     icnArrowBP = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/arrowBP.png");
 
   
-    if (previousItem != NULL)
-    {
+    if (previousItem != NULL) {
       previousSBItem = previousItem;
       relLineNumber =  previousSBItem->relLineNumber +1;
       lineNumber->setText(QString::number(relLineNumber));
       nextSBItem = previousSBItem->nextSBItem;
       previousSBItem->nextSBItem = this;
     }
-    else
-    {
+    else {
       lineNumber->setText("1");
       relLineNumber = 1; 
     }
@@ -115,16 +113,13 @@
 /**
   React to state change
 */
-void SideBar::changeState()
-{	
-  if (debugState == false)
-  {
-    debugState= true;
-    btnDebug->setIcon(*icnBP);
+  void SideBar::changeState() {	
+    if (debugState == false) {
+      debugState= true;
+      btnDebug->setIcon(*icnBP);
+    }
+    else {
+      btnDebug->setIcon(*icnEmpty);
+      debugState=false;
+    }
   }
-  else
-  {
-    btnDebug->setIcon(*icnEmpty);
-    debugState=false;
-  }
-}
