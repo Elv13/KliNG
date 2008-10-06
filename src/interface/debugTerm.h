@@ -34,15 +34,14 @@
 #include <QtGui/QWidget>
 #include <KTextBrowser>
 
-class DebugTerm : public QDockWidget
-{
-  public:
-    DebugTerm(QWidget* parent);
-    ~DebugTerm();
-    void translateUi();
+  class DebugTerm : public QDockWidget {
+    public:
+      DebugTerm(QWidget* parent);
+      ~DebugTerm();
+      void translateUi();
 
-    QWidget *dockDebugTermContents;
-    QVBoxLayout *verticalLayout_12;
-    KTextBrowser *rtfDegubTerm;
-};
+      QWidget *dockDebugTermContents;
+      QVBoxLayout *verticalLayout_12;
+      KTextBrowser *rtfDegubTerm;
+  };
 #endif

@@ -40,23 +40,21 @@
 #include <klistwidgetsearchline.h>
 #include <klineedit.h>
 
-class History  : public QDockWidget
-{
-  public:
-    History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton);
-    ~History();
-    void translateUi();
-    QString addItem(QString command, bool insertDB);
+  class History  : public QDockWidget {
+    public:
+      History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton);
+      ~History();
+      void translateUi();
+      QString addItem(QString command, bool insertDB);
 
-    //QDockWidget *dockHistory;
-    QWidget *dockHistoryContents;
-    QVBoxLayout *vboxLayout;
-    KListWidget *listHistory;
-    QStringList* historyStringList;
-    KListWidgetSearchLine *txtFindHistory;
-    KlingConfigSkeleton* config;
-  private:
-    QString getCommand(QString command);
-
-};
+      //QDockWidget *dockHistory;
+      QWidget *dockHistoryContents;
+      QVBoxLayout *vboxLayout;
+      KListWidget *listHistory;
+      QStringList* historyStringList;
+      KListWidgetSearchLine *txtFindHistory;
+      KlingConfigSkeleton* config;
+    private:
+      QString getCommand(QString command);
+  };
 #endif

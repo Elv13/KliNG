@@ -47,11 +47,14 @@
 
   @param[in] mainWindowCL The main window command line
 */
-History::History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton) : QDockWidget ( 0 ) {
+  History::History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton) : QDockWidget ( 0 ) {
     config = aConfigSkeleton;
     historyStringList = aStringList;
-    //dockHistory = new QDockWidget();
-    setGeometry(QRect(0, 435, 200, 122));
+    QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    sizePolicy3.setHorizontalStretch(0);
+    sizePolicy3.setVerticalStretch(0);
+    sizePolicy3.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    setSizePolicy(sizePolicy3);
     dockHistoryContents = new QWidget(this);
     dockHistoryContents->setObjectName(QString::fromUtf8("dockHistoryContents"));
     dockHistoryContents->setGeometry(QRect(2, 22, 196, 66));
@@ -63,7 +66,6 @@ History::History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigS
     listHistory->verticalScrollBar()->setValue(listHistory->verticalScrollBar()->maximum());
     listHistory->setDragDropMode(QAbstractItemView::DragOnly);
     
-    
     txtFindHistory = new KListWidgetSearchLine(this,listHistory);
     txtFindHistory->setObjectName(QString::fromUtf8("txtFindHystory"));
     txtFindHistory->setProperty("showClearButton", QVariant(true));
@@ -72,21 +74,16 @@ History::History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigS
 
     setWidget(dockHistoryContents);
 
-
-
-
     //SQL import of the history
     QSqlQuery query;
     query.exec("SELECT COMMAND FROM THISTORY");
     
-     while (query.next()) 
-     {
-	 addItem(query.value(0).toString(), false);
-	*historyStringList << query.value(0).toString();
-     }
-    
-	translateUi();
+    while (query.next())  {
+        addItem(query.value(0).toString(), false);
+      *historyStringList << query.value(0).toString();
     }
+    translateUi();
+  }
 
 /**
   History destructor

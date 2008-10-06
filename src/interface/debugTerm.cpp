@@ -34,14 +34,12 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
-
-
 /**
   Debug constructor
 
   @param[in] parent The parent window
 */
-DebugTerm::DebugTerm(QWidget* parent) : QDockWidget ( 0 ) {
+  DebugTerm::DebugTerm(QWidget* parent) : QDockWidget ( 0 ) {
     //dockDebug = new QDockWidget();
     setFloating(true);
     setObjectName(QString::fromUtf8("dockDebugTerm"));
@@ -56,21 +54,20 @@ DebugTerm::DebugTerm(QWidget* parent) : QDockWidget ( 0 ) {
     
     rtfDegubTerm = new KTextBrowser(dockDebugTermContents);
     verticalLayout_12->addWidget(rtfDegubTerm);
-
-
     translateUi();
-}
+  }
 
 /**
   Debug destructor
 */
-DebugTerm::~DebugTerm() {
-}
+  DebugTerm::~DebugTerm() {
+
+  }
 
 /**
   User interface string
 */
-void DebugTerm::translateUi() {
-    setWindowTitle("Output");
-}
+  void DebugTerm::translateUi() {
+      setWindowTitle("Output");
+  }
 
