@@ -45,32 +45,29 @@
 #include <QtGui/QVBoxLayout>
 #include "kled.h"
 using namespace std;
-class ScriptMonitor : public QFrame
-{
-  Q_OBJECT
-  public:
-    ScriptMonitor(QWidget* parent, QString scriptName);
-    ~ScriptMonitor();
-    void retranslateUi();
-    QVBoxLayout *verticalLayout_2;
-    QVBoxLayout *verticalLayout;
-    QHBoxLayout *horizontalLayout;
-    KLed *isRunning;
-    QLabel *lblCmd;
-    QSpacerItem *horizontalSpacer;
-    QLabel *lblNextCmd;
-    QSpacerItem *verticalSpacer;
-    QLabel *lblTitle;
-    QLabel *lblTime;
-    QProgressBar *progressBar;
-    void launchScript(std::string script);
-  private:
-    ThreadExec* aThread;
-  private slots:
-    void endMe();
-    void disCurrentLine(QString line);
-    void disNextLine(QString line);
-
-};
-
+  class ScriptMonitor : public QFrame {
+    Q_OBJECT
+    public:
+      ScriptMonitor(QWidget* parent, QString scriptName);
+      ~ScriptMonitor();
+      void retranslateUi();
+      QVBoxLayout *verticalLayout_2;
+      QVBoxLayout *verticalLayout;
+      QHBoxLayout *horizontalLayout;
+      KLed *isRunning;
+      QLabel *lblCmd;
+      QSpacerItem *horizontalSpacer;
+      QLabel *lblNextCmd;
+      QSpacerItem *verticalSpacer;
+      QLabel *lblTitle;
+      QLabel *lblTime;
+      QProgressBar *progressBar;
+      void launchScript(std::string script);
+    private:
+      ThreadExec* aThread;
+    private slots:
+      void endMe();
+      void disCurrentLine(QString line);
+      void disNextLine(QString line);
+  };
 #endif

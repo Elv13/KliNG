@@ -48,23 +48,16 @@ using namespace std;
 
   @param[in] parent The parent window
 */
-SheduledTask::SheduledTask(QWidget* parent) : QDockWidget ( 0 )
-{
-  
-//**************************************************************
-//                 dockSheduledTask
-//**************************************************************
-
-
-
+  SheduledTask::SheduledTask(QWidget* parent) : QDockWidget ( 0 ) {
     QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed); //
     sizePolicy1.setHorizontalStretch(31); //
     sizePolicy1.setVerticalStretch(31); //
-    setGeometry(QRect(0, 181, 200, 152));
-    QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    sizePolicy4.setHorizontalStretch(0);
-    sizePolicy4.setVerticalStretch(0);
-    sizePolicy4.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    //setGeometry(QRect(0, 181, 200, 152));
+    /*QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    sizePolicy3.setHorizontalStretch(0);
+    sizePolicy3.setVerticalStretch(0);
+    sizePolicy3.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    setSizePolicy(sizePolicy3);*/
     //setSizePolicy(sizePolicy4);
     //setMaximumSize(QSize(16777215, 16777215));
     //setBaseSize(QSize(0, 100));
@@ -91,7 +84,6 @@ SheduledTask::SheduledTask(QWidget* parent) : QDockWidget ( 0 )
     btnAddShTsk->setMaximumSize(QSize(31, 31));
     KIcon icnNewTsk("list-add");
     btnAddShTsk->setIcon(icnNewTsk);
-
     hlShTskButton->addWidget(btnAddShTsk);
 
     btnDeleteShTsk = new KPushButton(dockSheduledTaskContents);
@@ -107,77 +99,67 @@ SheduledTask::SheduledTask(QWidget* parent) : QDockWidget ( 0 )
     tlbvSheduledTask->setHorizontalHeaderItem(0, __colItem);
     QTableWidgetItem *__colItem1 = new QTableWidgetItem();
     tlbvSheduledTask->setHorizontalHeaderItem(1, __colItem1);
-
     hlShTskButton->addWidget(btnDeleteShTsk);
 
     horizontalSpacer_21 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
     hlShTskButton->addItem(horizontalSpacer_21);
-
-
     verticalLayout_10->addLayout(hlShTskButton);
 
     fillTable();
 
-
     setWidget(dockSheduledTaskContents);
     QObject::connect(btnAddShTsk, SIGNAL(clicked()), this, SLOT(newCronJob()));
     translateUi();
-
-}
+  }
 
 /**
   SheduledTask destructor
 */
-SheduledTask::~SheduledTask()
-{
-  delete horizontalSpacer_21;
-  delete btnDeleteShTsk;
-  delete btnAddShTsk;
-  delete hlShTskButton;
-  delete tlbvSheduledTask;
-  delete verticalLayout_10;
-  delete dockSheduledTaskContents;
-}
+  SheduledTask::~SheduledTask() {
+    delete horizontalSpacer_21;
+    delete btnDeleteShTsk;
+    delete btnAddShTsk;
+    delete hlShTskButton;
+    delete tlbvSheduledTask;
+    delete verticalLayout_10;
+    delete dockSheduledTaskContents;
+  }
 
 /**
   User interface strings
 */
-void SheduledTask::translateUi()
-{
-  setWindowTitle(QApplication::translate("MainWindow", "Sheduled tasks", 0, QApplication::UnicodeUTF8));
+  void SheduledTask::translateUi() {
+    setWindowTitle(QApplication::translate("MainWindow", "Sheduled tasks", 0, QApplication::UnicodeUTF8));
     tlbvSheduledTask->horizontalHeaderItem(0)->setText(QApplication::translate("MainWindow", "Date", 0, QApplication::UnicodeUTF8));
     tlbvSheduledTask->horizontalHeaderItem(1)->setText(QApplication::translate("MainWindow", "Command", 0, QApplication::UnicodeUTF8));
-}
+  }
 
 /**
   Display the NewJob dialog
 */
-void SheduledTask::newCronJob()
-{
-  NewCronJob* aCronJob = new NewCronJob(0);
-  aCronJob->show();
-  fillTable();
-}
+  void SheduledTask::newCronJob() {
+    NewCronJob* aCronJob = new NewCronJob(0);
+    aCronJob->show();
+    fillTable();
+  }
 
 /**
   Display all job in the table widget
 */
-void SheduledTask::fillTable()
-{
-  CronParser aCronParser;
-  vector<string> allJobs =aCronParser.parseUserJob();
-  tlbvSheduledTask->setRowCount(allJobs.size());
-  for (int i = 0; i < allJobs.size(); i++)
-  {
-    string thisJob = aCronParser.makeReadable(allJobs[i]); 
-    QTableWidgetItem* aTableWidget = new QTableWidgetItem(QString::fromStdString(thisJob));
-    tlbvSheduledTask->setItem((i), 0, aTableWidget);
-    aTableWidget->setToolTip(thisJob.c_str());
+  void SheduledTask::fillTable() {
+    CronParser aCronParser;
+    vector<string> allJobs =aCronParser.parseUserJob();
+    tlbvSheduledTask->setRowCount(allJobs.size());
+    for (int i = 0; i < allJobs.size(); i++) {
+      string thisJob = aCronParser.makeReadable(allJobs[i]); 
+      QTableWidgetItem* aTableWidget = new QTableWidgetItem(QString::fromStdString(thisJob));
+      tlbvSheduledTask->setItem((i), 0, aTableWidget);
+      aTableWidget->setToolTip(thisJob.c_str());
 
-    string thisJobCommand = aCronParser.getCommand(allJobs[i]); 
-    QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(QString::fromStdString(thisJobCommand));
-    tlbvSheduledTask->setItem((i), 1, aTableWidget1);
-    aTableWidget1->setToolTip(thisJobCommand.c_str());
+      string thisJobCommand = aCronParser.getCommand(allJobs[i]); 
+      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(QString::fromStdString(thisJobCommand));
+      tlbvSheduledTask->setItem((i), 1, aTableWidget1);
+      aTableWidget1->setToolTip(thisJobCommand.c_str());
+    }
   }
-}
+  

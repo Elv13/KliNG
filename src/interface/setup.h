@@ -51,62 +51,60 @@
 
 
 
-class Setup : public KXmlGuiWindow
-{
-  Q_OBJECT
+  class Setup : public KXmlGuiWindow {
+    Q_OBJECT
 
-public:
-    Setup();
-    void retranslateUi();
-    char page;
+    public:
+      Setup();
+      void retranslateUi();
+      char page;
 
+      QWidget *centralwidget;
+      QHBoxLayout *horizontalLayout_2;
+      QHBoxLayout *mainLayout;
+      QLabel *sideImage;
+      QFrame *setupLayout;
+      QVBoxLayout *verticalLayout_4;
+      KTitleWidget *titleSetup;
+      QFrame *Setup_Page4;
+      QLabel *messageSP4;
+      QWidget *layoutWidget;
+      QVBoxLayout *verticalLayout_3;
+      QHBoxLayout *horizontalLayout_4;
+      QLabel *primaryLang;
+      QSpacerItem *horizontalSpacer_2;
+      KComboBox *cbbPrimary;
+      QHBoxLayout *horizontalLayout_5;
+      QLabel *seconderyLang;
+      QSpacerItem *horizontalSpacer_3;
+      KComboBox *cbbSecondery;
+      QCheckBox *chkFetch;
+      QFrame *Setup_Page1;
+      QLabel *messageSP1;
+      QFrame *Setup_Page3;
+      QLabel *messageSP3;
+      QFrame *Setup_Page2;
+      QVBoxLayout *verticalLayout_2;
+      QTextBrowser *txtLicence;
+      QVBoxLayout *verticalLayout;
+      QRadioButton *rbAccept;
+      QRadioButton *rbDecline;
+      QFrame *Setup_Page5;
+      QLabel *messaheSP5;
+      QHBoxLayout *buttonLayout;
+      KPushButton *btnHelp;
+      QSpacerItem *horizontalSpacer;
+      KPushButton *btnFinish;
+      KPushButton *btnPrevious;
+      KPushButton *btnNext;
+      KPushButton *btnScan;
+      KPushButton *btnSkip;
+      QSqlDatabase* db;
 
-    QWidget *centralwidget;
-    QHBoxLayout *horizontalLayout_2;
-    QHBoxLayout *mainLayout;
-    QLabel *sideImage;
-    QFrame *setupLayout;
-    QVBoxLayout *verticalLayout_4;
-    KTitleWidget *titleSetup;
-    QFrame *Setup_Page4;
-    QLabel *messageSP4;
-    QWidget *layoutWidget;
-    QVBoxLayout *verticalLayout_3;
-    QHBoxLayout *horizontalLayout_4;
-    QLabel *primaryLang;
-    QSpacerItem *horizontalSpacer_2;
-    KComboBox *cbbPrimary;
-    QHBoxLayout *horizontalLayout_5;
-    QLabel *seconderyLang;
-    QSpacerItem *horizontalSpacer_3;
-    KComboBox *cbbSecondery;
-    QCheckBox *chkFetch;
-    QFrame *Setup_Page1;
-    QLabel *messageSP1;
-    QFrame *Setup_Page3;
-    QLabel *messageSP3;
-    QFrame *Setup_Page2;
-    QVBoxLayout *verticalLayout_2;
-    QTextBrowser *txtLicence;
-    QVBoxLayout *verticalLayout;
-    QRadioButton *rbAccept;
-    QRadioButton *rbDecline;
-    QFrame *Setup_Page5;
-    QLabel *messaheSP5;
-    QHBoxLayout *buttonLayout;
-    KPushButton *btnHelp;
-    QSpacerItem *horizontalSpacer;
-    KPushButton *btnFinish;
-    KPushButton *btnPrevious;
-    KPushButton *btnNext;
-    KPushButton *btnScan;
-    KPushButton *btnSkip;
-    QSqlDatabase* db;
-
-public slots:
-    void nextPage();
-    void previousPage();
-    void scan();
-    void skip();
-};
+    public slots:
+      void nextPage();
+      void previousPage();
+      void scan();
+      void skip();
+  };
 #endif // SETUP_H

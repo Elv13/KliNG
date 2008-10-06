@@ -58,19 +58,14 @@
 /**
   Setup constructor
 */
-Setup::Setup()
-{
-
+  Setup::Setup() {
     db = new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE"));
     db->setDatabaseName( "/home/lepagee/dev/tp3-prog_sess2/kling.db" );
     if ( db->open())
-    {
       std::cout << "database corectly opened" << std::endl;
-    }
     else
-    {
       std::cout << "ERROR while opening the database, get ready for a crash" << std::endl;
-    }
+
     resize(750, 450);
     QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     sizePolicy.setHorizontalStretch(0);
@@ -89,7 +84,6 @@ Setup::Setup()
     sideImage->setObjectName(QString::fromUtf8("sideImage"));
     sideImage->setMaximumSize(QSize(150, 450));
     sideImage->setPixmap(QPixmap("/home/lepagee/dev/tp3-prog_sess2/sideim.png"));
-
     mainLayout->addWidget(sideImage);
 
     setupLayout = new QFrame(centralwidget);
@@ -102,7 +96,6 @@ Setup::Setup()
     titleSetup->setObjectName(QString::fromUtf8("titleSetup"));
     titleSetup->setMaximumSize(QSize(16777215, 50));
     titleSetup->setPixmap(KIcon("tools-wizard").pixmap(22, 22), KTitleWidget::ImageRight);
-
     verticalLayout_4->addWidget(titleSetup);
 
     Setup_Page4 = new QFrame(setupLayout);
@@ -122,50 +115,37 @@ Setup::Setup()
     horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
     primaryLang = new QLabel(layoutWidget);
     primaryLang->setObjectName(QString::fromUtf8("primaryLang"));
-
     horizontalLayout_4->addWidget(primaryLang);
 
     horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
     horizontalLayout_4->addItem(horizontalSpacer_2);
 
     cbbPrimary = new KComboBox(layoutWidget);
     cbbPrimary->setObjectName(QString::fromUtf8("cbbPrimary"));
     cbbPrimary->setMinimumSize(QSize(100, 0));
-
     horizontalLayout_4->addWidget(cbbPrimary);
-
-
     verticalLayout_3->addLayout(horizontalLayout_4);
 
     horizontalLayout_5 = new QHBoxLayout();
     horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
     seconderyLang = new QLabel(layoutWidget);
     seconderyLang->setObjectName(QString::fromUtf8("seconderyLang"));
-
     horizontalLayout_5->addWidget(seconderyLang);
 
     horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
     horizontalLayout_5->addItem(horizontalSpacer_3);
 
     cbbSecondery = new KComboBox(layoutWidget);
     cbbSecondery->setObjectName(QString::fromUtf8("cbbSecondery"));
     cbbSecondery->setEnabled(false);
     cbbSecondery->setMinimumSize(QSize(100, 0));
-
     horizontalLayout_5->addWidget(cbbSecondery);
-
-
     verticalLayout_3->addLayout(horizontalLayout_5);
 
     chkFetch = new QCheckBox(layoutWidget);
     chkFetch->setObjectName(QString::fromUtf8("chkFetch"));
     chkFetch->setChecked(true);
-
     verticalLayout_3->addWidget(chkFetch);
-
-
     verticalLayout_4->addWidget(Setup_Page4);
 
     Setup_Page1 = new QFrame(setupLayout);
@@ -175,7 +155,6 @@ Setup::Setup()
     messageSP1 = new QLabel(Setup_Page1);
     messageSP1->setObjectName(QString::fromUtf8("messageSP1"));
     messageSP1->setGeometry(QRect(10, 10, 501, 151));
-
     verticalLayout_4->addWidget(Setup_Page1);
 
     Setup_Page3 = new QFrame(setupLayout);
@@ -185,7 +164,6 @@ Setup::Setup()
     messageSP3 = new QLabel(Setup_Page3);
     messageSP3->setObjectName(QString::fromUtf8("messageSP3"));
     messageSP3->setGeometry(QRect(10, 10, 501, 71));
-
     verticalLayout_4->addWidget(Setup_Page3);
 
     Setup_Page2 = new QFrame(setupLayout);
@@ -196,7 +174,6 @@ Setup::Setup()
     verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
     txtLicence = new QTextBrowser(Setup_Page2);
     txtLicence->setObjectName(QString::fromUtf8("txtLicence"));
-
     verticalLayout_2->addWidget(txtLicence);
 
     verticalLayout = new QVBoxLayout();
@@ -204,18 +181,12 @@ Setup::Setup()
     rbAccept = new QRadioButton(Setup_Page2);
     rbAccept->setObjectName(QString::fromUtf8("rbAccept"));
     rbAccept->setChecked(true);
-
     verticalLayout->addWidget(rbAccept);
 
     rbDecline = new QRadioButton(Setup_Page2);
     rbDecline->setObjectName(QString::fromUtf8("rbDecline"));
-
     verticalLayout->addWidget(rbDecline);
-
-
     verticalLayout_2->addLayout(verticalLayout);
-
-
     verticalLayout_4->addWidget(Setup_Page2);
 
     Setup_Page5 = new QFrame(setupLayout);
@@ -225,7 +196,6 @@ Setup::Setup()
     messaheSP5 = new QLabel(Setup_Page5);
     messaheSP5->setObjectName(QString::fromUtf8("messaheSP5"));
     messaheSP5->setGeometry(QRect(0, 0, 501, 171));
-
     verticalLayout_4->addWidget(Setup_Page5);
 
     buttonLayout = new QHBoxLayout();
@@ -237,11 +207,9 @@ Setup::Setup()
     KIcon icnHelp("help-contents");
     btnHelp->setIcon(icnHelp);
     btnHelp->setIconSize(QSize(22, 22));
-
     buttonLayout->addWidget(btnHelp);
 
     horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
     buttonLayout->addItem(horizontalSpacer);
 
     btnFinish = new KPushButton(setupLayout);
@@ -250,7 +218,6 @@ Setup::Setup()
     KIcon icnFinish("dialog-ok");
     btnFinish->setIcon(icnFinish);
     btnFinish->setIconSize(QSize(22, 22));
-
     buttonLayout->addWidget(btnFinish);
 
     btnPrevious = new KPushButton(setupLayout);
@@ -260,7 +227,6 @@ Setup::Setup()
     KIcon icnPrevious("go-previous");
     btnPrevious->setIcon(icnPrevious);
     btnPrevious->setIconSize(QSize(22, 22));
-
     buttonLayout->addWidget(btnPrevious);
 
     btnNext = new KPushButton(setupLayout);
@@ -270,7 +236,6 @@ Setup::Setup()
     KIcon icnNext("go-next");
     btnNext->setIcon(icnNext);
     btnNext->setIconSize(QSize(22, 22));
-
     buttonLayout->addWidget(btnNext);
 
     btnScan = new KPushButton(setupLayout);
@@ -280,7 +245,6 @@ Setup::Setup()
     KIcon icnScan("system-search");
     btnScan->setIcon(icnScan);
     btnScan->setIconSize(QSize(20, 20));
-
     buttonLayout->addWidget(btnScan);
 
     btnSkip = new KPushButton(setupLayout);
@@ -290,16 +254,9 @@ Setup::Setup()
     KIcon icnSkip("window-close");
     btnSkip->setIcon(icnSkip);
     btnSkip->setIconSize(QSize(20, 20));
-
     buttonLayout->addWidget(btnSkip);
-
-
     verticalLayout_4->addLayout(buttonLayout);
-
-
     mainLayout->addWidget(setupLayout);
-
-
     horizontalLayout_2->addLayout(mainLayout);
 
     setCentralWidget(centralwidget);
@@ -313,9 +270,8 @@ Setup::Setup()
     QObject::connect(btnScan, SIGNAL(clicked()), this, SLOT(scan()));
     QObject::connect(btnFinish, SIGNAL(clicked()), this, SLOT(close()));
 
-
     page =1;
-	btnFinish->hide();
+    btnFinish->hide();
     btnScan->hide();
     btnSkip->hide();
     Setup_Page1->show();
@@ -323,17 +279,13 @@ Setup::Setup()
     Setup_Page3->hide();
     Setup_Page4->hide();
     Setup_Page5->hide();
-
-
-
-    }
+  }
 
 
 /**
   User interface strings
 */
-    void Setup::retranslateUi()
-    {
+  void Setup::retranslateUi() {
     setWindowTitle(QApplication::translate("MainWindow", "Frist run setup", 0, QApplication::UnicodeUTF8));
     sideImage->setText(QString());
     titleSetup->setText(QApplication::translate("MainWindow", "First run wizard", 0, QApplication::UnicodeUTF8));
@@ -357,106 +309,95 @@ Setup::Setup()
     btnScan->setText(QApplication::translate("MainWindow", "Scan", 0, QApplication::UnicodeUTF8));
     btnSkip->setText(QApplication::translate("MainWindow", "Skip", 0, QApplication::UnicodeUTF8));
     txtLicence->setText(QApplication::translate("MainWindow", "<h3><a name=''SEC1'' href=''gpl-2.0.html#TOC1''>GNU GENERAL PUBLIC LICENSE</a></h3> <p> Version 2, June 1991 </p> <pre> Copyright (C) 1989, 1991 Free Software Foundation, Inc.  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed. </pre> <h3><a name=''SEC2'' href=''gpl-2.0.html#TOC2''>Preamble</a></h3> <p> The licenses for most software are designed to take away your freedom to share and change it.  By contrast, the GNU General Public License is intended to guarantee your freedom to share and change free software--to make sure the software is free for all its users.  This General Public License applies to most of the Free Software Foundation's software and to any other program whose authors commit to using it.  (Some other Free Software Foundation software is covered by the GNU Lesser General Public License instead.)  You can apply"));
-    } // retranslateUi
+  } // retranslateUi
 
 
 /**
    Display the next setup page
 */
-    void Setup::nextPage()
-    {
-      switch (page)
-      {
-	case 1:
-	  Setup_Page1->hide();
-	  Setup_Page2->show();
-	  page++;
-	break;
-	case 2:
-	  if (rbAccept->isChecked() == false)
-	  {
-	    int answer = KMessageBox::questionYesNo( 0, i18n( "Are you sure you want to quit Kling?" ), i18n( "Alert!" ));
-	    if (answer == KMessageBox::Yes)
-	    {
-	      close();
-	    }
-	  }
-	  else
-	  {
-	    Setup_Page2->hide();
-	    Setup_Page3->show();
-	    page++;
-	  }
-	break;
-	case 3:
-	  Setup_Page3->hide();
-	  Setup_Page4->show();
-	  btnScan->show();
-	  btnSkip->show();
-	  btnScan->setFocus();
-	  btnNext->hide();
-	  //btnPrevious->hide();
-	  page++;
-	break;
-	case 4:
-	  btnSkip->hide();
-	  btnScan->hide();
-	  Setup_Page4->hide();
-	  Setup_Page5->show();
-	  btnNext->hide();
-	  btnFinish->show();
-	  page++;
-	break;
-      }
-	
+  void Setup::nextPage() {
+    switch (page) {
+      case 1:
+        Setup_Page1->hide();
+        Setup_Page2->show();
+        page++;
+      break;
+      case 2:
+        if (rbAccept->isChecked() == false) {
+          int answer = KMessageBox::questionYesNo( 0, i18n( "Are you sure you want to quit Kling?" ), i18n( "Alert!" ));
+          if (answer == KMessageBox::Yes)
+            close();
+        }
+        else {
+          Setup_Page2->hide();
+          Setup_Page3->show();
+          page++;
+        }
+      break;
+      case 3:
+        Setup_Page3->hide();
+        Setup_Page4->show();
+        btnScan->show();
+        btnSkip->show();
+        btnScan->setFocus();
+        btnNext->hide();
+        //btnPrevious->hide();
+        page++;
+      break;
+      case 4:
+        btnSkip->hide();
+        btnScan->hide();
+        Setup_Page4->hide();
+        Setup_Page5->show();
+        btnNext->hide();
+        btnFinish->show();
+        page++;
+      break;
     }
+  }
     
 /**
    Display the previous setup page
   @todo if the system have been scanned, clean the DB before scanning it again
 */
-    void Setup::previousPage()
-    {
-      switch (page)
-      {
-      	case 2:
-	  Setup_Page1->show();
-	  Setup_Page2->hide();
-	  page--;
-	break;
-	case 3:
-	  Setup_Page2->show();
-	  Setup_Page3->hide();
-	  page--;
-	break;
-	case 4:
-	  btnSkip->hide();
-	  btnScan->hide();
-	  btnNext->show();
-	  Setup_Page3->show();
-	  Setup_Page4->hide();
-	  page--;
-	break;
-	case 5:
-	  Setup_Page4->show();
-	  Setup_Page5->hide();
-	  btnSkip->show();
-	  btnScan->show();
-	  btnFinish->hide();
-	  page--;
-	break;
-      }
+  void Setup::previousPage() {
+    switch (page) {
+      case 2:
+        Setup_Page1->show();
+        Setup_Page2->hide();
+        page--;
+      break;
+      case 3:
+        Setup_Page2->show();
+        Setup_Page3->hide();
+        page--;
+      break;
+      case 4:
+        btnSkip->hide();
+        btnScan->hide();
+        btnNext->show();
+        Setup_Page3->show();
+        Setup_Page4->hide();
+        page--;
+      break;
+      case 5:
+        Setup_Page4->show();
+        Setup_Page5->hide();
+        btnSkip->show();
+        btnScan->show();
+        btnFinish->hide();
+        page--;
+      break;
     }
+  }
 
 /**
    ask confirmation for skipping the system scan
 */
-  void Setup::skip()
-  {
+  void Setup::skip() {
     int answer = KMessageBox::warningYesNo( 0, i18n( "Are you sure you want to skip the scan. You will not be able to use most of the autocompletion system." ), i18n( "Warning" ));
 
-    if (answer == KMessageBox::Yes)
-    {
+    if (answer == KMessageBox::Yes) {
           Setup_Page4->hide();
 	  Setup_Page5->show();
 	  btnSkip->hide();
@@ -470,15 +411,13 @@ Setup::Setup()
 /**
    call the system scanner
 */
-void Setup::scan()
-{
-
-  ManParser::parseAllManPage();
-  Setup_Page4->hide();
-  Setup_Page5->show();
-  btnSkip->hide();
-  btnScan->hide();
-  btnNext->hide();
-  btnFinish->show();
-  page++;
-}
+  void Setup::scan() {
+    ManParser::parseAllManPage();
+    Setup_Page4->hide();
+    Setup_Page5->show();
+    btnSkip->hide();
+    btnScan->hide();
+    btnNext->hide();
+    btnFinish->show();
+    page++;
+  }

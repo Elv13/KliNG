@@ -52,9 +52,7 @@ using namespace std;
 
   @param[in] parent The parent widget (nothing)
 */
-ScriptMonitor::ScriptMonitor(QWidget* parent, QString scriptName) : QFrame(parent)
-{
-
+  ScriptMonitor::ScriptMonitor(QWidget* parent, QString scriptName) : QFrame(parent) {
     QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sizePolicy.setHorizontalStretch(0);
     sizePolicy.setVerticalStretch(0);
@@ -70,111 +68,91 @@ ScriptMonitor::ScriptMonitor(QWidget* parent, QString scriptName) : QFrame(paren
     horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
     isRunning = new KLed(this);
     isRunning->setObjectName(QString::fromUtf8("isRunning"));
-
     horizontalLayout->addWidget(isRunning);
 
     lblTitle = new QLabel(this);
     lblTitle->setObjectName(QString::fromUtf8("lblTitle"));
     lblTitle->setText("<b>"+ scriptName +"</b>");
-
     horizontalLayout->addWidget(lblTitle);
 
     horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
     horizontalLayout->addItem(horizontalSpacer);
 
     lblTime = new QLabel(this);
     lblTime->setObjectName(QString::fromUtf8("lblTime"));
-
     horizontalLayout->addWidget(lblTime);
-
-
     verticalLayout->addLayout(horizontalLayout);
 
     verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
     verticalLayout->addItem(verticalSpacer);
 
     lblCmd = new QLabel(this);
     lblCmd->setObjectName(QString::fromUtf8("lblCmd"));
-
     verticalLayout->addWidget(lblCmd);
 
     lblNextCmd = new QLabel(this);
     lblNextCmd->setObjectName(QString::fromUtf8("lblNextCmd"));
-
     verticalLayout->addWidget(lblNextCmd);
 
     progressBar = new QProgressBar(this);
     progressBar->setObjectName(QString::fromUtf8("progressBar"));
     progressBar->setValue(24);
-
     verticalLayout->addWidget(progressBar);
-
 
     verticalLayout_2->addLayout(verticalLayout);
     setStyleSheet(QString::fromUtf8("background-color:grey;"));
 
     retranslateUi();
-}
+  }
 
 /**
   CommandList user interface strings
 */
-void ScriptMonitor::retranslateUi()
-{
-
-  lblTime->setText(QApplication::translate("Dialog", "0:24", 0, QApplication::UnicodeUTF8));
-  lblCmd->setText(QApplication::translate("Dialog", "Current command: echo salut", 0, QApplication::UnicodeUTF8));
-  lblNextCmd->setText(QApplication::translate("Dialog", "Next Command: echo sa va?", 0, QApplication::UnicodeUTF8));
-} // retranslateUi
+  void ScriptMonitor::retranslateUi() {
+    lblTime->setText(QApplication::translate("Dialog", "0:24", 0, QApplication::UnicodeUTF8));
+    lblCmd->setText(QApplication::translate("Dialog", "Current command: echo salut", 0, QApplication::UnicodeUTF8));
+    lblNextCmd->setText(QApplication::translate("Dialog", "Next Command: echo sa va?", 0, QApplication::UnicodeUTF8));
+  } // retranslateUi
 
 /**
   ScriptMonitor destructor
 */
-ScriptMonitor::~ScriptMonitor()
-{
-  /*delete progressBar;
-  delete lblNextCmd;
-  delete lblCmd;
-  delete verticalSpacer;
-  delete lblTitle;
-  delete isRunning;
-  delete horizontalLayout;
-  delete verticalLayout;
-  delete verticalLayout_2;*/
-}
+  ScriptMonitor::~ScriptMonitor() {
+    /*delete progressBar;
+    delete lblNextCmd;
+    delete lblCmd;
+    delete verticalSpacer;
+    delete lblTitle;
+    delete isRunning;
+    delete horizontalLayout;
+    delete verticalLayout;
+    delete verticalLayout_2;*/
+  }
 
 /**
   React to the state checkbox change
 
   @param[in] script the script text
 */
-void ScriptMonitor::launchScript(string script) //TODO This is not bash compliant, if, while, for and until are not implemented yet
-{
+  void ScriptMonitor::launchScript(string script) {//TODO This is not bash compliant, if, while, for and until are not implemented yet
+    aThread = new ThreadExec(this,script);
+    QObject::connect(aThread, SIGNAL(progress(int)), progressBar, SLOT(setValue (int)));
+    QObject::connect(aThread, SIGNAL(isOver()), this, SLOT(endMe())); //I don't call the destructor because it is not only this signal that can call it, if the program is closed, it will do a segFault.
+    QObject::connect(aThread, SIGNAL(currentLine(QString)), this, SLOT(disCurrentLine(QString)));
+    QObject::connect(aThread, SIGNAL(nextLine(QString)), this, SLOT(disNextLine(QString)));
 
- aThread = new ThreadExec(this,script);
+    aThread->start();
+  }
 
-  QObject::connect(aThread, SIGNAL(progress(int)), progressBar, SLOT(setValue (int)));
-  QObject::connect(aThread, SIGNAL(isOver()), this, SLOT(endMe())); //I don't call the destructor because it is not only this signal that can call it, if the program is closed, it will do a segFault.
-  QObject::connect(aThread, SIGNAL(currentLine(QString)), this, SLOT(disCurrentLine(QString)));
-  QObject::connect(aThread, SIGNAL(nextLine(QString)), this, SLOT(disNextLine(QString)));
+  void ScriptMonitor::endMe() {
+    delete aThread;
+    delete this;
+  }
 
-  aThread->start();
-}
+  void ScriptMonitor::disCurrentLine(QString line) {
+    lblCmd->setText("Current command: " + line);
+  }
 
-void ScriptMonitor::endMe()
-{
-  delete aThread;
-  delete this;
-}
-
-void ScriptMonitor::disCurrentLine(QString line)
-{
-  lblCmd->setText("Current command: " + line);
-}
-
-void ScriptMonitor::disNextLine(QString line)
-{
-  lblNextCmd->setText("Next command: " + line);
-}
+  void ScriptMonitor::disNextLine(QString line) {
+    lblNextCmd->setText("Next command: " + line);
+  }
