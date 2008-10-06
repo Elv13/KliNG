@@ -34,16 +34,15 @@
 #include <QtGui/QWidget>
 #include <QtGui/QTableWidget>
 
-class Debug : public QDockWidget
-{
-  public:
-    Debug(QWidget* parent);
-    ~Debug();
-    void translateUi();
+  class Debug : public QDockWidget {
+    public:
+      Debug(QWidget* parent);
+      ~Debug();
+      void translateUi();
 
-    QDockWidget *dockDebug;
-    QWidget *dockDebugContents;
-    QVBoxLayout *verticalLayout_12;
-    QTableWidget *tbldebug;
-};
+      QDockWidget *dockDebug;
+      QWidget *dockDebugContents;
+      QVBoxLayout *verticalLayout_12;
+      QTableWidget *tbldebug;
+  };
 #endif

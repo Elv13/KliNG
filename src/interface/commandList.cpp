@@ -45,11 +45,13 @@ using namespace std;
   @param[in] commandStringList List of all system command availible used for autocompletion
   @todo Use double click to insert command
 */
-
-CommandList::CommandList(QWidget* parent, QStringList* commandStringList) : QDockWidget ( 0 )
-{
-
-    setGeometry(QRect(0, 435, 200, 122));
+  CommandList::CommandList(QWidget* parent, QStringList* commandStringList) : QDockWidget ( 0 ) {
+    //setGeometry(QRect(0, 435, 200, 122));
+    /*QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    sizePolicy3.setHorizontalStretch(0);
+    sizePolicy3.setVerticalStretch(0);
+    sizePolicy3.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    setSizePolicy(sizePolicy3);*/
     dockCommandListContents = new QWidget(this);
     dockCommandListContents->setObjectName(QString::fromUtf8("dockCommandListContents"));
     dockCommandListContents->setGeometry(QRect(2, 22, 196, 98));
@@ -57,16 +59,13 @@ CommandList::CommandList(QWidget* parent, QStringList* commandStringList) : QDoc
     verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
     verticalLayout_5->setContentsMargins(0, 0, 0, 0);
 
-
-
-
     listCommand = new KListWidget(dockCommandListContents);
     listCommand->setObjectName(QString::fromUtf8("listCommand"));
     listCommand->setSortingEnabled(true);
     listCommand->setDragDropMode(QAbstractItemView::DragOnly);
     indexCommand(commandStringList);
 
-    txtFindCommand = new KListWidgetSearchLine(dockCommandListContents,listCommand);
+    txtFindCommand = new KListWidgetSearchLine(this,listCommand);
     txtFindCommand->setObjectName(QString::fromUtf8("txtFindCommand"));
     txtFindCommand->setProperty("showClearButton", QVariant(true));
     verticalLayout_5->addWidget(txtFindCommand);
@@ -74,27 +73,24 @@ CommandList::CommandList(QWidget* parent, QStringList* commandStringList) : QDoc
 
     setWidget(dockCommandListContents);
     translateUi();
-
-}
+  }
 
 /**
   CommandList destructor
 */
-CommandList::~CommandList()
-{
- delete listCommand;
- delete txtFindCommand;
- delete verticalLayout_5;
- delete dockCommandListContents;
-}
+  CommandList::~CommandList() {
+    delete listCommand;
+    delete txtFindCommand;
+    delete verticalLayout_5;
+    delete dockCommandListContents;
+  }
 
 /**
   CommandList user interface strings
 */
-void CommandList::translateUi()
-{
-  setWindowTitle("System command list");
-}
+  void CommandList::translateUi() {
+    setWindowTitle("System command list");
+  }
 
 
 /**
@@ -104,34 +100,28 @@ void CommandList::translateUi()
   @bug add some non-executable file to the list
   @bug show duplicate command if the PATH contais a symlink
 */
-void CommandList::indexCommand(QStringList* commandStringList)
-{
+  void CommandList::indexCommand(QStringList* commandStringList) {
     FILE *PATH = popen("echo $PATH ", "r" );
 
     char buffer[2000];
     string tmp;
     if ( PATH != NULL ) {
-      while ( fgets( buffer, sizeof buffer, PATH ) != NULL )
-      {
-            string path = buffer;
-            while (path.find(":") != -1)
-            {
-                string folder = "ls " + path.substr(0, path.find(":"));
-                FILE *dirContent = popen(folder.c_str(), "r" );
-                char buffer2[256];
-                if ( dirContent != NULL ) {
-
-                  while ( fgets( buffer2, sizeof buffer2, dirContent ) != NULL ) {
-                      //cout << buffer2;
-		      tmp = buffer2;
-		      tmp = tmp.substr(0, tmp.size() -1);
-		      //listCommand->addItem(tmp.c_str());
-		      *commandStringList << tmp.c_str();
-                  }
-                  pclose( dirContent );
-                }
-                path = path.substr(path.find(":")+1, (path.size() - path.find(":") -1));
+      while ( fgets( buffer, sizeof buffer, PATH ) != NULL ) {
+        string path = buffer;
+        while (path.find(":") != -1) {
+          string folder = "ls " + path.substr(0, path.find(":"));
+          FILE *dirContent = popen(folder.c_str(), "r" );
+          char buffer2[256];
+          if ( dirContent != NULL ) {
+            while ( fgets( buffer2, sizeof buffer2, dirContent ) != NULL ) {
+              tmp = buffer2;
+              tmp = tmp.substr(0, tmp.size() -1);
+              *commandStringList << tmp.c_str();
             }
+            pclose( dirContent );
+          }
+          path = path.substr(path.find(":")+1, (path.size() - path.find(":") -1));
+        }
       }
       pclose( PATH );
     }
@@ -150,5 +140,5 @@ void CommandList::indexCommand(QStringList* commandStringList)
 	}
       }
     }
-}
+  }
 

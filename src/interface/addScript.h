@@ -44,37 +44,35 @@
 #include "ktextedit.h"
 #include "ktitlewidget.h"
 
-class AddScript : public KDialog
-{
-  Q_OBJECT
-public:
-    AddScript(QWidget *parent);
-    ~AddScript();
-    void retranslateUi();
+  class AddScript : public KDialog {
+    Q_OBJECT
+    public:
+      AddScript(QWidget *parent);
+      ~AddScript();
+      void retranslateUi();
 
-    QWidget *centralwidget;
-    QHBoxLayout *horizontalLayout_3;
-    QHBoxLayout *hlCat;
-    KListWidget *lstCategories;
-    QVBoxLayout *verticalLayout_2;
-    KTitleWidget *ktitlewidget;
-    QSpacerItem *verticalSpacer;
-    QHBoxLayout *horizontalLayout;
-    QLabel *scriptName;
-    QLabel* lblCat;
-    KLineEdit *txtName;
-    QHBoxLayout *horizontalLayout_2;
-    QLabel *scriptLang;
-    KComboBox *cbbScriptLang;
-    KComboBox *cbbScriptCat;
-    QSpacerItem *verticalSpacer_3;
-    QVBoxLayout *verticalLayout;
-    QLabel *scriptDes;
-    KTextEdit *txtDes;
-    QSpacerItem *verticalSpacer_2;
-
-private slots:
-    void addAScript();
-};
+      QWidget *centralwidget;
+      QHBoxLayout *horizontalLayout_3;
+      QHBoxLayout *hlCat;
+      KListWidget *lstCategories;
+      QVBoxLayout *verticalLayout_2;
+      KTitleWidget *ktitlewidget;
+      QSpacerItem *verticalSpacer;
+      QHBoxLayout *horizontalLayout;
+      QLabel *scriptName;
+      QLabel* lblCat;
+      KLineEdit *txtName;
+      QHBoxLayout *horizontalLayout_2;
+      QLabel *scriptLang;
+      KComboBox *cbbScriptLang;
+      KComboBox *cbbScriptCat;
+      QSpacerItem *verticalSpacer_3;
+      QVBoxLayout *verticalLayout;
+      QLabel *scriptDes;
+      KTextEdit *txtDes;
+      QSpacerItem *verticalSpacer_2;
+    private slots:
+      void addAScript();
+  };
 
 #endif

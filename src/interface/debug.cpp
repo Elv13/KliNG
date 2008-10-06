@@ -46,9 +46,7 @@
 
   @param[in] parent The parent window
 */
-Debug::Debug(QWidget* parent) : QDockWidget ( 0 )
-{
-    //dockDebug = new QDockWidget();
+  Debug::Debug(QWidget* parent) : QDockWidget ( 0 ) {
     setObjectName(QString::fromUtf8("dockDebug"));
     setGeometry(QRect(0, 563, 200, 90));
     dockDebugContents = new QWidget(this);
@@ -90,29 +88,25 @@ Debug::Debug(QWidget* parent) : QDockWidget ( 0 )
       anEnvVarValue->setText(anEnvVar.right(anEnvVar.count() - anEnvVar.indexOf("=") -1));
       anEnvVarValue->setToolTip(anEnvVar.right(anEnvVar.count() - anEnvVar.indexOf("=")-1));
       tbldebug->setItem(rowCount-1,1,anEnvVarValue);
-      
     }
-
     translateUi();
-}
+  }
 
 /**
   Debug destructor
 */
-Debug::~Debug()
-{
-  delete tbldebug;
-  delete verticalLayout_12;
-  delete dockDebugContents;
-}
+  Debug::~Debug() {
+    delete tbldebug;
+    delete verticalLayout_12;
+    delete dockDebugContents;
+  }
 
 /**
   User interface string
 */
-void Debug::translateUi()
-{
+  void Debug::translateUi() {
     setWindowTitle("Variables");
     tbldebug->horizontalHeaderItem(0)->setText("Variable");
     tbldebug->horizontalHeaderItem(1)->setText("Value");
-}
+  }
 

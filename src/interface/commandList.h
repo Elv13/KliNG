@@ -37,20 +37,16 @@
 #include <klistwidgetsearchline.h>
 #include "klistwidget.h"
 
-class CommandList  : public QDockWidget
-{
-  public:
-    CommandList(QWidget* parent, QStringList* commandStringList);
-    ~CommandList();
-    void translateUi();
-    void indexCommand(QStringList* commandStringList);
+  class CommandList  : public QDockWidget {
+    public:
+      CommandList(QWidget* parent, QStringList* commandStringList);
+      ~CommandList();
+      void translateUi();
+      void indexCommand(QStringList* commandStringList);
 
-    QWidget *dockCommandListContents;
-    QVBoxLayout *verticalLayout_5;
-    KListWidgetSearchLine *txtFindCommand;
-    KListWidget *listCommand;
-
-
-};
-
+      QWidget *dockCommandListContents;
+      QVBoxLayout *verticalLayout_5;
+      KListWidgetSearchLine *txtFindCommand;
+      KListWidget *listCommand;
+  };
 #endif
