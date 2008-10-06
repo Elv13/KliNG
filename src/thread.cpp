@@ -40,49 +40,42 @@ using namespace std;
 
   @param[in] parent The parent widget (nothing)
 */
-ThreadExec::ThreadExec(QObject* parent, std::string aScript) : QThread(parent)
-{
-  //start(LowPriority);
-  script = aScript;
-}
+  ThreadExec::ThreadExec(QObject* parent, std::string aScript) : QThread(parent) {
+    script = aScript;
+  }
 
 /**
   Virtual function executed on creation of the thread
 
   @param[in] parent The parent widget (nothing)
 */
-void ThreadExec::run()
-{
-  int pos0A =0;
-  int posLast0A=-1;
-  int i = 0;
-  int advencement;
+  void ThreadExec::run() {
+    int pos0A =0;
+    int posLast0A=-1;
+    int i = 0;
+    int advencement;
 
-  for (int j = 0; j <= script.size(); j++) //Count the script line
-  {
-	if ((script[j] == 0x0A) && (script[j+1] != 0x0A)) i++;
-  } 
-  if (script[script.size()-1] != 0x0A)
-  {
-    i++;
+    for (int j = 0; j <= script.size(); j++) //Count the script line
+          if ((script[j] == 0x0A) && (script[j+1] != 0x0A)) 
+            i++;
+            
+    if (script[script.size()-1] != 0x0A)
+      i++;
+      
+    advencement = 100 / i;
+    i=0;
+
+    while (pos0A < script.size()) {
+      while ((script[pos0A] != 0x0A) && (pos0A < script.size())) pos0A++;
+      int pos0Aclone = pos0A+1;
+      while ((script[pos0Aclone] != 0x0A) && (pos0Aclone < script.size())) pos0Aclone++;
+      emit currentLine(QString::fromStdString(script.substr(posLast0A+1, (pos0A-posLast0A-1))));
+      emit nextLine(QString::fromStdString(script.substr(pos0A+1, (pos0Aclone-pos0A-1))));
+      system(script.substr(posLast0A+1, (pos0A-posLast0A-1)).c_str());
+      i += advencement;
+      emit progress(i);
+      posLast0A=pos0A;
+      pos0A++;
+    }
+    emit isOver();
   }
-  advencement = 100 / i;
-
-  i=0;
-
-  while (pos0A < script.size())
-  {
-    while ((script[pos0A] != 0x0A) && (pos0A < script.size())) pos0A++;
-    int pos0Aclone = pos0A+1;
-    while ((script[pos0Aclone] != 0x0A) && (pos0Aclone < script.size())) pos0Aclone++;
-    emit currentLine(QString::fromStdString(script.substr(posLast0A+1, (pos0A-posLast0A-1))));
-    emit nextLine(QString::fromStdString(script.substr(pos0A+1, (pos0Aclone-pos0A-1))));
-    system(script.substr(posLast0A+1, (pos0A-posLast0A-1)).c_str());
-    i += advencement;
-    emit progress(i);
-    posLast0A=pos0A;
-    pos0A++;
-  }
-  emit isOver();
-  //delete this;
-}

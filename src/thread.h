@@ -37,19 +37,18 @@ QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 using namespace std;
 
- class ThreadExec : public QThread
- {
+  class ThreadExec : public QThread {
     Q_OBJECT
- public:
-     ThreadExec(QObject* parent, std::string aScript);
-     void run();
- signals:
-     void progress(int percent);
-     void currentLine(QString line);
-     void nextLine(QString line);
-     void isOver();
- private:
-     std::string script;
- };
+    public:
+        ThreadExec(QObject* parent, std::string aScript);
+        void run();
+    signals:
+        void progress(int percent);
+        void currentLine(QString line);
+        void nextLine(QString line);
+        void isOver();
+    private:
+        std::string script;
+  };
 
 #endif
