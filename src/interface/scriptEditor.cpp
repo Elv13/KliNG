@@ -293,19 +293,6 @@
     QObject::connect(btnComment, SIGNAL(clicked()), this, SLOT(commentLine()));
     QObject::connect(btnUncomment, SIGNAL(clicked()), this, SLOT(uncommentLine()));
     QObject::connect(txtScriptEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
-    
-
-    //sizePolicy.setHeightForWidth(->sizePolicy().hasHeightForWidth());
-    
-
-
-    /*for (int j =1; j < ((txtScriptEditor->height()) /20); j++) {
-      lineNBSideBar->setRowCount(j+1);
-      lineNBSideBar->setRowHeight (j, 20 );
-      lastSBItem = new SideBar(2, lastSBItem, lineNBSideBar);
-      lineNBSideBar->setCellWidget ( j, 0,lastSBItem);
-    }*/
-    
 
     btnDbgNextLine->setDisabled(true);
     btnDbgSkipLine->setDisabled(true);
@@ -322,18 +309,17 @@
   void ScriptEditor::startDebugging() {
     isDebugging = true;
     txtScriptEditor->setReadOnly(true);
-        btnDbgNextLine->setDisabled(false);
-        btnDbgSkipLine->setDisabled(false);
-        btnDgbNextBP->setDisabled(false);
-        btnStopDebug->setDisabled(false);
-        btnDebug->setDisabled(true);
-        btnPaste->setDisabled(true);
-        btnCopy->setDisabled(true);
-        btnCut->setDisabled(true);
-        btnComment->setDisabled(true);
-        btnUncomment->setDisabled(true);
+    btnDbgNextLine->setDisabled(false);
+    btnDbgSkipLine->setDisabled(false);
+    btnDgbNextBP->setDisabled(false);
+    btnStopDebug->setDisabled(false);
+    btnDebug->setDisabled(true);
+    btnPaste->setDisabled(true);
+    btnCopy->setDisabled(true);
+    btnCut->setDisabled(true);
+    btnComment->setDisabled(true);
+    btnUncomment->setDisabled(true);
         
-    
     aDebugTerm = new DebugTerm(0);
     aDebugTerm->show();
 
@@ -404,7 +390,6 @@
     btnCut->setDisabled(false);
     btnComment->setDisabled(false);
     btnUncomment->setDisabled(false);
-    //delete aDebugTerm;
   }
 
 

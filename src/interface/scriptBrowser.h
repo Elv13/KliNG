@@ -37,35 +37,33 @@
 #include <QtGui/QWidget>
 #include "kpushbutton.h"
 
-class ScriptBrowser  : public QDockWidget
-{
-  Q_OBJECT
-  public:
-    ScriptBrowser(QWidget* parent = NULL);
-    ~ScriptBrowser();
-    void translateUi();
-    void fillTree();
+  class ScriptBrowser  : public QDockWidget {
+    Q_OBJECT
+    public:
+      ScriptBrowser(QWidget* parent = NULL);
+      ~ScriptBrowser();
+      void translateUi();
+      void fillTree();
 
-    QWidget *dockScriptBrowserContents;
-    QVBoxLayout *verticalLayout_9;
-    QTreeWidget *tvScriptList;
-    QHBoxLayout *hlScriptControls;
-    KPushButton *btnNewScript;
-    KPushButton *btnDeleteScipt;
-    QSpacerItem *horizontalSpacer_2;
-    KPushButton *btnEdit;
-    KPushButton *btnLaunch;
-    //MainWindow* mainwindow;
-  private slots:
-    void addNewScript();
-    void editSelectedScript();
-    void launchSelectedScript();
-    
-  signals:
-    void enableEditor(bool);
-    void setFileName(QString name);
-    void setEdirorText(QString text);
-    void launchScript(QString name, QString content);
-
-};
+      QWidget *dockScriptBrowserContents;
+      QVBoxLayout *verticalLayout_9;
+      QTreeWidget *tvScriptList;
+      QHBoxLayout *hlScriptControls;
+      KPushButton *btnNewScript;
+      KPushButton *btnDeleteScipt;
+      QSpacerItem *horizontalSpacer_2;
+      KPushButton *btnEdit;
+      KPushButton *btnLaunch;
+      //MainWindow* mainwindow;
+    private slots:
+      void addNewScript();
+      void editSelectedScript();
+      void launchSelectedScript();
+      
+    signals:
+      void enableEditor(bool);
+      void setFileName(QString name);
+      void setEdirorText(QString text);
+      void launchScript(QString name, QString content);
+  };
 #endif

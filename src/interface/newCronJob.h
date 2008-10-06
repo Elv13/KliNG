@@ -48,58 +48,56 @@
 #include "kcombobox.h"
 #include "klineedit.h"
 
-class NewCronJob : public KDialog
-{
-  Q_OBJECT
-public:
-    NewCronJob(QWidget* parent);
-    ~NewCronJob();
-    void retranslateUi();
+  class NewCronJob : public KDialog {
+    Q_OBJECT
+    public:
+      NewCronJob(QWidget* parent);
+      ~NewCronJob();
+      void retranslateUi();
 
-    QWidget *centralwidget;
-    QVBoxLayout *verticalLayout_4;
-    QLabel *lblIntro;
-    QSpacerItem *verticalSpacer_3;
-    QHBoxLayout *horizontalLayout;
-    QCheckBox *chkMinute;
-    KLineEdit *txtMinute;
-    QSpacerItem *horizontalSpacer;
-    QCheckBox *chkHours;
-    KLineEdit *txtHours;
-    QSpacerItem *horizontalSpacer_2;
-    QCheckBox *chkDow;
-    KComboBox *cbbDow;
-    QSpacerItem *horizontalSpacer_4;
-    QCheckBox *chkDom;
-    KLineEdit *txtDom;
-    QCheckBox *chkMonth;
-    QSpacerItem *horizontalSpacer_5;
-    KComboBox *cbbMonth;
-    QSpacerItem *verticalSpacer_4;
-    QVBoxLayout *verticalLayout;
-    QRadioButton *rbScript;
-    QHBoxLayout *hlScript;
-    QListWidget *lstCategories;
-    QTableWidget *tblScript;
-    QSpacerItem *verticalSpacer_2;
-    QVBoxLayout *verticalLayout_2;
-    QRadioButton *rbCommand;
-    KLineEdit *txtCommand;
-    QSpacerItem *verticalSpacer;
-    QDialogButtonBox *buttonBox;
-  
-private:
+      QWidget *centralwidget;
+      QVBoxLayout *verticalLayout_4;
+      QLabel *lblIntro;
+      QSpacerItem *verticalSpacer_3;
+      QHBoxLayout *horizontalLayout;
+      QCheckBox *chkMinute;
+      KLineEdit *txtMinute;
+      QSpacerItem *horizontalSpacer;
+      QCheckBox *chkHours;
+      KLineEdit *txtHours;
+      QSpacerItem *horizontalSpacer_2;
+      QCheckBox *chkDow;
+      KComboBox *cbbDow;
+      QSpacerItem *horizontalSpacer_4;
+      QCheckBox *chkDom;
+      KLineEdit *txtDom;
+      QCheckBox *chkMonth;
+      QSpacerItem *horizontalSpacer_5;
+      KComboBox *cbbMonth;
+      QSpacerItem *verticalSpacer_4;
+      QVBoxLayout *verticalLayout;
+      QRadioButton *rbScript;
+      QHBoxLayout *hlScript;
+      QListWidget *lstCategories;
+      QTableWidget *tblScript;
+      QSpacerItem *verticalSpacer_2;
+      QVBoxLayout *verticalLayout_2;
+      QRadioButton *rbCommand;
+      KLineEdit *txtCommand;
+      QSpacerItem *verticalSpacer;
+      QDialogButtonBox *buttonBox;
+    
+    private:
 
-private slots:
-  void addAJob();
-  void chkMinute_checked(int state);
-  void chkHours_checked(int state);
-  void chkDow_checked(int state);
-  void chkDom_checked(int state);
-  void chkMonth_checked(int state);
-  void rbScript_checked();
-  void rbCommand_checked();
-  void loadScriptList(QListWidgetItem* current, QListWidgetItem* previous);
-};
-
+    private slots:
+      void addAJob();
+      void chkMinute_checked(int state);
+      void chkHours_checked(int state);
+      void chkDow_checked(int state);
+      void chkDom_checked(int state);
+      void chkMonth_checked(int state);
+      void rbScript_checked();
+      void rbCommand_checked();
+      void loadScriptList(QListWidgetItem* current, QListWidgetItem* previous);
+  };
 #endif
