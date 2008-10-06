@@ -33,7 +33,6 @@
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QHBoxLayout>
-//#include <QtGui/QTreeWidget>
 #include <QtGui/QTableView>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
@@ -51,14 +50,7 @@
 
   @param[in] parent The parent window
 */
-Man::Man(QWidget* parent) : QDockWidget ( 0 )
-{
-  
-//**************************************************************
-//                 dockManual
-//**************************************************************
-
-
+  Man::Man(QWidget* parent) : QDockWidget ( 0 ) {
     setObjectName(QString::fromUtf8("dockManual"));
     setGeometry(QRect(783, 24, 201, 629));
     QSizePolicy sizePolicy5(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -84,17 +76,13 @@ Man::Man(QWidget* parent) : QDockWidget ( 0 )
     cbbManPagelist->setInsertPolicy(QComboBox::NoInsert);
     cbbManPagelist->setAutoCompletion(false);
     cbbManPagelist->setTrapReturnKey(false);
-
     hlFindManPage->addWidget(cbbManPagelist);
 
     btnFindManPage = new KPushButton(dockManualContents);
     btnFindManPage->setObjectName(QString::fromUtf8("btnFindManPage"));
     btnFindManPage->setMaximumSize(QSize(60, 16777215));
     btnFindManPage->setSizeIncrement(QSize(0, 0));
-
     hlFindManPage->addWidget(btnFindManPage);
-
-
     verticalLayout->addLayout(hlFindManPage);
 
     tbManInfo = new QToolBox(dockManualContents);
@@ -114,7 +102,6 @@ Man::Man(QWidget* parent) : QDockWidget ( 0 )
     verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
     rtfManPage = new QTextBrowser(pageManual);
     rtfManPage->setObjectName(QString::fromUtf8("rtfManPage"));
-
     verticalLayout_2->addWidget(rtfManPage);
 
     tbManInfo->addItem(pageManual, "Manuel");
@@ -136,7 +123,6 @@ Man::Man(QWidget* parent) : QDockWidget ( 0 )
     tblUsage->setSelectionMode(QAbstractItemView::NoSelection);
     tblUsage->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     tblUsage->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-
     verticalLayout_4->addWidget(tblUsage);
 
     tbManInfo->addItem(PageUsage, "Usage");
@@ -157,18 +143,14 @@ Man::Man(QWidget* parent) : QDockWidget ( 0 )
     tblOptions->setDragEnabled(true);
     tblOptions->setDragDropMode(QAbstractItemView::DragOnly);
     tblOptions->setSelectionMode(QAbstractItemView::NoSelection);
-
     verticalLayout_3->addWidget(tblOptions);
-
     tbManInfo->addItem(pageOptions, "Options");
 
     verticalLayout->addWidget(tbManInfo);
     tblUsage->verticalHeader()->hide();
     tblOptions->verticalHeader()->hide();
     
-
     setWidget(dockManualContents);
-
     tbManInfo->setCurrentIndex(0);
     translateUi();
 
@@ -176,43 +158,38 @@ Man::Man(QWidget* parent) : QDockWidget ( 0 )
     query.exec("SELECT TITLE FROM TMAN_PAGE");
     
      while (query.next()) 
-     {
-	 cbbManPagelist->addItem(query.value(0).toString());
-     }
-	 cbbManPagelist->model()->sort(0);
-	 cbbManPagelist->setCurrentIndex(0);
-
-
-     QObject::connect(cbbManPagelist, SIGNAL(currentIndexChanged(int)), this, SLOT(loadPage()));
-}
+       cbbManPagelist->addItem(query.value(0).toString());
+         
+    cbbManPagelist->model()->sort(0);
+    cbbManPagelist->setCurrentIndex(0);
+    QObject::connect(cbbManPagelist, SIGNAL(currentIndexChanged(int)), this, SLOT(loadPage()));
+  }
 
 
 /**
   Man destructor
 */
-Man::~Man()
-{
-  delete tblOptions;
-  delete verticalLayout_3;
-  delete pageOptions;
-  delete tblUsage;
-  delete verticalLayout_4;
-  delete PageUsage;
-  delete rtfManPage;
-  delete verticalLayout_2;
-  delete pageManual;
-  delete btnFindManPage;
-  delete cbbManPagelist;
-  delete hlFindManPage;
-  delete verticalLayout;
-  delete dockManualContents;
-}
+  Man::~Man() {
+    delete tblOptions;
+    delete verticalLayout_3;
+    delete pageOptions;
+    delete tblUsage;
+    delete verticalLayout_4;
+    delete PageUsage;
+    delete rtfManPage;
+    delete verticalLayout_2;
+    delete pageManual;
+    delete btnFindManPage;
+    delete cbbManPagelist;
+    delete hlFindManPage;
+    delete verticalLayout;
+    delete dockManualContents;
+  }
 
 /**
   User interface string
 */
-void Man::translateUi()
-{
+  void Man::translateUi() {
     setWindowTitle("Manual");
     btnFindManPage->setText("Search");
     rtfManPage->setHtml("<center><h1>Welcome to kling</h1></center>");
@@ -223,85 +200,77 @@ void Man::translateUi()
     tblOptions->horizontalHeaderItem(0)->setText("Option");
     tblOptions->horizontalHeaderItem(1)->setText("Description");
     tbManInfo->setItemText(tbManInfo->indexOf(pageOptions),"Options");
-}
+  }
 
 /**
   Load a manPage from /usr/share/man. Also load usage, examples and options
 */
-void Man::loadPage()
-{
-  tblOptions->clear();
-  tblOptions->setRowCount(0);
-  QSqlQuery query;
-  query.exec("SELECT PATH FROM TMAN_PAGE WHERE TITLE = '"+ cbbManPagelist->itemText(cbbManPagelist->currentIndex())+"'");
-  
-    while (query.next()) 
-    {
-	system("mkdir /tmp/man");
-	std::string cmdCopy = "cp " + query.value(0).toString().toStdString() + " /tmp/man/";
-	std::string name;
-	std::string command;
-	system(cmdCopy.c_str());
+  void Man::loadPage() {
+    tblOptions->clear();
+    tblOptions->setRowCount(0);
+    QSqlQuery query;
+    query.exec("SELECT PATH FROM TMAN_PAGE WHERE TITLE = '"+ cbbManPagelist->itemText(cbbManPagelist->currentIndex())+"'");
+    
+    while (query.next())  {
+      system("mkdir /tmp/man");
+      std::string cmdCopy = "cp " + query.value(0).toString().toStdString() + " /tmp/man/";
+      std::string name;
+      std::string command;
+      system(cmdCopy.c_str());
 
-	if (query.value(0).toString().toStdString().find(".bz2") != -1)
-	{	
-	    name = query.value(0).toString().toStdString().substr( query.value(0).toString().toStdString().find_last_of("/") +1, (query.value(0).toString().toStdString().size() - query.value(0).toString().toStdString().find_last_of("/") -1));
-	    command =  "bunzip2 -d /tmp/man/" + name;
-	    name = name.substr(0, name.find(".bz2"));
-	}
-	else
-	{
+      if (query.value(0).toString().toStdString().find(".bz2") != -1) {
+          name = query.value(0).toString().toStdString().substr( query.value(0).toString().toStdString().find_last_of("/") +1, (query.value(0).toString().toStdString().size() - query.value(0).toString().toStdString().find_last_of("/") -1));
+          command =  "bunzip2 -d /tmp/man/" + name;
+          name = name.substr(0, name.find(".bz2"));
+      }
+      else {
 
-	}
-	system(command.c_str());
-	rtfManPage->setHtml(ManParser::parseManPage(name).c_str());
+      }
+      system(command.c_str());
+      rtfManPage->setHtml(ManParser::parseManPage(name).c_str());
     }
 
     QSqlQuery query2;
     query2.exec("SELECT OPT_NAME,OPT_DES FROM TOPTION WHERE COMMAND = '"+ cbbManPagelist->itemText(cbbManPagelist->currentIndex())+"'");
     int row = 1;
     tblOptions->setColumnCount(2);
-    while (query2.next()) 
-    {
-	tblOptions->setRowCount(row);
-
-	QWidget* aWidget = new QWidget(tblOptions); //Dirty hack to fix a QT bug
-	QLabel* aTableWidget = new QLabel(aWidget);
-	aTableWidget->setText(query2.value(0).toString());
-	tblOptions->setCellWidget((row-1), 0, aWidget);
-	aWidget->setToolTip(query2.value(0).toString());
-	
-	QWidget* aWidget2 = new QWidget(tblOptions); //Dirty hack to fix a QT bug
-	QLabel* aTableWidget2 = new QLabel(aWidget2);
-	aTableWidget2->setText(query2.value(1).toString());
-	tblOptions->setCellWidget((row-1), 1, aWidget2);
-	aWidget2->setToolTip(query2.value(1).toString());
-	tblOptions->setRowHeight(row-1, 25);
-	row++;
+    while (query2.next()) {
+      tblOptions->setRowCount(row);
+      QWidget* aWidget = new QWidget(tblOptions); //Dirty hack to fix a QT bug
+      QLabel* aTableWidget = new QLabel(aWidget);
+      aTableWidget->setText(query2.value(0).toString());
+      tblOptions->setCellWidget((row-1), 0, aWidget);
+      aWidget->setToolTip(query2.value(0).toString());
+      
+      QWidget* aWidget2 = new QWidget(tblOptions); //Dirty hack to fix a QT bug
+      QLabel* aTableWidget2 = new QLabel(aWidget2);
+      aTableWidget2->setText(query2.value(1).toString());
+      tblOptions->setCellWidget((row-1), 1, aWidget2);
+      aWidget2->setToolTip(query2.value(1).toString());
+      tblOptions->setRowHeight(row-1, 25);
+      row++;
     }
 
     QSqlQuery query3;
     query3.exec("SELECT USAGE,USAGE_DES FROM TUSAGE WHERE COMMAND = '"+ cbbManPagelist->itemText(cbbManPagelist->currentIndex())+"'");
     int row2 = 1;
     tblUsage->setColumnCount(2);
-    while (query3.next()) 
-    {
-	tblUsage->setRowCount(row2);
+    while (query3.next()) {
+      tblUsage->setRowCount(row2);
 
-	QWidget* aWidget = new QWidget(tblUsage);
-	QLabel* aTableWidget = new QLabel(aWidget);
-	aTableWidget->setObjectName(QString::fromUtf8("aTableLabel"));
-	aTableWidget->setText(query3.value(0).toString().toStdString().c_str());
-	tblUsage->setCellWidget((row2-1), 0, aWidget);
-	aWidget->setToolTip(query3.value(0).toString());
-	
-	QWidget* aWidget2 = new QWidget(tblUsage);
-	QLabel* aTableWidget2 = new QLabel(aWidget2);
-	aTableWidget2->setText(query3.value(1).toString());
-	tblUsage->setCellWidget((row2-1), 1, aWidget2);
-	aWidget2->setToolTip(query3.value(1).toString());
-	tblUsage->setRowHeight(row2-2, 25);
-	row2++;
+      QWidget* aWidget = new QWidget(tblUsage);
+      QLabel* aTableWidget = new QLabel(aWidget);
+      aTableWidget->setObjectName(QString::fromUtf8("aTableLabel"));
+      aTableWidget->setText(query3.value(0).toString().toStdString().c_str());
+      tblUsage->setCellWidget((row2-1), 0, aWidget);
+      aWidget->setToolTip(query3.value(0).toString());
+      
+      QWidget* aWidget2 = new QWidget(tblUsage);
+      QLabel* aTableWidget2 = new QLabel(aWidget2);
+      aTableWidget2->setText(query3.value(1).toString());
+      tblUsage->setCellWidget((row2-1), 1, aWidget2);
+      aWidget2->setToolTip(query3.value(1).toString());
+      tblUsage->setRowHeight(row2-2, 25);
+      row2++;
     }
-
-}
+  }

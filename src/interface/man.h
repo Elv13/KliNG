@@ -32,7 +32,6 @@
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QHBoxLayout>
-//#include <QtGui/QTreeWidget>
 #include <QtGui/QTableView>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
@@ -45,41 +44,31 @@
 #include <QHeaderView>
 #include <QTextBrowser>
 #include <QTableWidget>
-/*#include <>
-#include <>
-#include <>
-#include <>
-#include <>*/
 
+  class Man  : public QDockWidget {
+    Q_OBJECT
+    public:
+      Man(QWidget* parent);
+      ~Man();
+      void translateUi();
 
-class Man  : public QDockWidget
-{
-  Q_OBJECT
-  public:
-    Man(QWidget* parent);
-    ~Man();
-    void translateUi();
+      QWidget *dockManualContents;
+      QVBoxLayout *verticalLayout;
+      QHBoxLayout *hlFindManPage;
+      KComboBox *cbbManPagelist;
+      KPushButton *btnFindManPage;
+      QToolBox *tbManInfo;
+      QWidget *pageManual;
+      QVBoxLayout *verticalLayout_2;
+      QTextBrowser *rtfManPage;
+      QWidget *PageUsage;
+      QVBoxLayout *verticalLayout_4;
+      QTableWidget *tblUsage;
+      QWidget *pageOptions;
+      QVBoxLayout *verticalLayout_3;
+      QTableWidget *tblOptions;
 
-
-    QWidget *dockManualContents;
-    QVBoxLayout *verticalLayout;
-    QHBoxLayout *hlFindManPage;
-    KComboBox *cbbManPagelist;
-    KPushButton *btnFindManPage;
-    QToolBox *tbManInfo;
-    QWidget *pageManual;
-    QVBoxLayout *verticalLayout_2;
-    QTextBrowser *rtfManPage;
-    QWidget *PageUsage;
-    QVBoxLayout *verticalLayout_4;
-    QTableWidget *tblUsage;
-    QWidget *pageOptions;
-    QVBoxLayout *verticalLayout_3;
-    QTableWidget *tblOptions;
-
-  private slots:
-    void loadPage();
-
-
-};
+    private slots:
+      void loadPage();
+  };
 #endif

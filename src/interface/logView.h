@@ -39,6 +39,7 @@
 #include <QtGui/QSpacerItem>
 #include <QtGui/QTextBrowser>
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QListWidget>
 #include <QTableWidget>
 #include <QtGui/QWidget>
 #include <kcombobox.h>
@@ -46,59 +47,62 @@
 #include <kseparator.h>
 #include <kdialog.h>
 #include <QString>
+#include <klistwidgetsearchline.h>
 #include "../configSkeleton.h"
 
-class LogView : public KDialog
-{
-  Q_OBJECT
-public:
-    LogView(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton);  
-    ~LogView();
-    void retranslateUi();
-    
-    KlingConfigSkeleton* config;
-    QWidget *centralwidget;
-    QTableWidget* tblViewer;
-    QVBoxLayout *verticalLayout;
-    QHBoxLayout *hlControl;
-    KComboBox *cbbLog;
-    QSlider *sldLenght;
-    KSeparator *kseparator;
-    QHBoxLayout *horizontalLayout_3;
-    QTextBrowser *rtfViewer;
-    QHBoxLayout *horizontalLayout_2;
-    QSpacerItem *horizontalSpacer;
-    KPushButton *btnClose;
+#define COMMAND_HISTORY 0
+#define SCRIPT_HISTORY 1
+#define DMESG 2
 
-private:
-    QString getCommand(QString command);
-    
-private slots:
-    void fillTable(char kind, char level);
-    void showOutput(uint id);
+  class LogView : public KDialog {
+    Q_OBJECT
+    public:
+      LogView(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton);  
+      ~LogView();
+      void retranslateUi();
+      
+      KlingConfigSkeleton* config;
+      QWidget *centralwidget;
+      QTableWidget* tblViewer;
+      QVBoxLayout *verticalLayout;
+      QHBoxLayout *hlControl;
+      KComboBox *cbbLog;
+      QSlider *sldLenght;
+      KSeparator *kseparator;
+      QHBoxLayout *horizontalLayout_3;
+      QTextBrowser *rtfViewer;
+      QHBoxLayout *horizontalLayout_2;
+      QSpacerItem *horizontalSpacer;
+      KPushButton *btnClose;
+      QListWidget* lstLog;
+      KListWidgetSearchLine *txtFindLine;
+
+    private:
+      QString getCommand(QString command);
+      void setupHeader();
+      void showDmesg();
+      void showLog(QString path);
+      void fillList(QString text);
+      void addLog();
+      
+    private slots:
+      void displayCommandHistory(char level);
+      void showOutput(uint id);
+      void switchMode(int mode);
+  };
+
+  class OutputViewerButton : public KPushButton {
+    Q_OBJECT
+    public:
+      OutputViewerButton(QWidget* parent =0) : KPushButton( parent ) {
+        QObject::connect(this, SIGNAL(clicked()), this, SLOT(launched()));
+      }
+      uint id;
   
-
-//private slots:
-
-};
-
-class OutputViewerButton : public KPushButton
-{
-  Q_OBJECT
-public:
-    OutputViewerButton(QWidget* parent =0) : KPushButton( parent ) {
-      QObject::connect(this, SIGNAL(clicked()), this, SLOT(launched()));
-    }
-    //~OutputViewerButton() {}
-
-  uint id;
-  
-private slots:
-  void launched() { emit clicked(id); }
-  
-signals:
-  void clicked(uint);
-
-};
-
+    private slots:
+      void launched() { emit clicked(id); }
+      
+    signals:
+      void clicked(uint);
+  };
 #endif
