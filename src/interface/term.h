@@ -48,57 +48,55 @@
 
 QT_BEGIN_NAMESPACE
 
-class Term : public QWidget
-{
-      Q_OBJECT
+  class Term : public QWidget {
+    Q_OBJECT
 
-  public:
-    Term(History* aDockHistory, QWidget* parent, QStringList* commandStringList, QStringList* historyStringList);
-    ~Term();
+    public:
+      Term(History* aDockHistory, QWidget* parent, QStringList* commandStringList, QStringList* historyStringList);
+      ~Term();
 
-    QVBoxLayout *verticalLayout_6;
-    QFrame *frame;
-    QHBoxLayout *horizontalLayout_3;
-    KPushButton *kpushbutton_4;
-    QLabel *label;
-    KLineEdit *klineedit_3; //TODO when KDE bug #162071 will be fixed (reported by me) use KLineEdit instead of QLineEdit
-    KPushButton *kpushbutton_5;
-    QLabel* cmdStatus;
-    QPixmap* pxmCmdInactive;
-    QTextEdit *rtfCmdOutput;
-    QHBoxLayout *hlCommand;
-    KLineEdit *txtCommand;
-    KComboBox *cbbOutModifier;
-    KPushButton *kpushbutton_3;
-    QHBoxLayout *hlCkbLayout;
-    QCheckBox* ckbShowGUI;
-    QCheckBox* ckbShowHiddenFile;
-    QSplitter* completerSplitter;
-    History* dockHistory;
-    Completer* completer;
-    FileBrowser* fileBrowser;
+      QVBoxLayout *verticalLayout_6;
+      QFrame *frame;
+      QHBoxLayout *horizontalLayout_3;
+      KPushButton *kpushbutton_4;
+      QLabel *label;
+      KLineEdit *klineedit_3; 
+      KPushButton *kpushbutton_5;
+      QLabel* cmdStatus;
+      QPixmap* pxmCmdInactive;
+      QTextEdit *rtfCmdOutput;
+      QHBoxLayout *hlCommand;
+      KLineEdit *txtCommand;
+      KComboBox *cbbOutModifier;
+      KPushButton *kpushbutton_3;
+      QHBoxLayout *hlCkbLayout;
+      QCheckBox* ckbShowGUI;
+      QCheckBox* ckbShowHiddenFile;
+      QSplitter* completerSplitter;
+      History* dockHistory;
+      Completer* completer;
+      FileBrowser* fileBrowser;
 
-private:
-  ShellThread* aThread;
+    private:
+      ShellThread* aThread;
 
-private slots:
-  void sendCommand();
-  void searchCmdOutput();
-  void updateCmdOutput(QString line);
-  void resetCmdInputLine();
-  void clearCmdOutput();
-  void killPros();
-  void resizeCompleter();
-  void cmdInfoChanged(QString);
-  void showFileBrowser(QString path, bool setPath);
-  void addToHistory(QString line);
-  void updateDate(QString date, QString key);
-  void textChanged(QString text);
-  
-signals:
-  void cmdInfo(QString, int);
-  void showCompleter(QString);
+    private slots:
+      void sendCommand();
+      void searchCmdOutput();
+      void updateCmdOutput(QString line);
+      void resetCmdInputLine();
+      void clearCmdOutput();
+      void killPros();
+      void resizeCompleter();
+      void cmdInfoChanged(QString);
+      void showFileBrowser(QString path, bool setPath);
+      void addToHistory(QString line);
+      void updateDate(QString date, QString key);
+      void textChanged(QString text);
+      
+    signals:
+      void cmdInfo(QString, int);
+      void showCompleter(QString);
 
-};
-
+  };
 #endif

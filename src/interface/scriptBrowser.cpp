@@ -47,6 +47,7 @@
 #include <KIO/NetAccess>
 #include <KMessageBox>
 #include <KStandardDirs>
+#include <KLocalizedString>
 
 
 /**

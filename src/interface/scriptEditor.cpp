@@ -9,6 +9,7 @@
 #include <QTextStream>
 #include <KIO/NetAccess>
 #include <KMessageBox>
+#include <KLocalizedString>
 // count
 
   ScriptEditor::ScriptEditor(QWidget* parent) : QWidget(parent) {
