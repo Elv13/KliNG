@@ -38,6 +38,7 @@
 #include <QSqlDatabase>
 #include <QStringList>
 #include <QScrollBar>
+#include <KLocalizedString>
 #include "klistwidget.h"
 #include "klineedit.h"
 #include <time.h>
