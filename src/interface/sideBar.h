@@ -30,7 +30,7 @@
 #define DEF_SIDEBAR
 #include "sideBar.h"
 
-#include "/home/lepagee/dev/tp3-prog_sess2/mainwindow.h"
+#include "../../mainwindow.h"
 #include <QtGui/QHBoxLayout>
 #include <QTableWidgetItem>
 #include <QtGui/QWidget>
