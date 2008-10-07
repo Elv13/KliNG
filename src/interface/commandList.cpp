@@ -34,6 +34,7 @@
 #include <QtGui/QWidget>
 #include <QStringList>
 #include "klistwidget.h"
+#include <KLocalizedString>
 #include <klistwidgetsearchline.h>
 
 using namespace std;
@@ -68,6 +69,7 @@ using namespace std;
     txtFindCommand = new KListWidgetSearchLine(this,listCommand);
     txtFindCommand->setObjectName(QString::fromUtf8("txtFindCommand"));
     txtFindCommand->setProperty("showClearButton", QVariant(true));
+    txtFindCommand->setToolTip(i18n("Add a filter to the list bellow"));
     verticalLayout_5->addWidget(txtFindCommand);
     verticalLayout_5->addWidget(listCommand);
 
@@ -89,7 +91,7 @@ using namespace std;
   CommandList user interface strings
 */
   void CommandList::translateUi() {
-    setWindowTitle("System command list");
+    setWindowTitle(i18n("System command list"));
   }
 
 

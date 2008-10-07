@@ -128,6 +128,10 @@
       KAction* viewScheduledTask;
       KAction* viewScriptBrowser;
       KAction* viewDebug;
+      
+    private:
+      void saveDockState();
+      char currentMode;
 
 
     private slots:

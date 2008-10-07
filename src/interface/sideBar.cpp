@@ -33,6 +33,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QLabel>
 #include <QtGui/QFrame>
+#include <KLocalizedString>
 #include "kpushbutton.h"
 #include <kicon.h>
 
