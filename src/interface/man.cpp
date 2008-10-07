@@ -43,6 +43,7 @@
 #include <QLabel>
 #include <QTableView>
 #include <QHeaderView>
+#include <KLocalizedString>
 
 
 /**

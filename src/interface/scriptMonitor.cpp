@@ -43,6 +43,7 @@
 #include <QtGui/QProgressBar>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QVBoxLayout>
+#include <KLocalizedString>
 #include "kled.h"
 
 using namespace std;

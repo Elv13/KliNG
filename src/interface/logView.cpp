@@ -55,6 +55,7 @@
 #include <QTextStream>
 #include <KIO/NetAccess>
 #include <KFileDialog>
+#include <KLocalizedString>
 #include <sys/klog.h>
 
 
