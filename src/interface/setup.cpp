@@ -48,6 +48,7 @@
 #include "kcombobox.h"
 #include "kpushbutton.h"
 #include "ktitlewidget.h"
+#include <KLocalizedString>
 #include <kicon.h>
 #include <KMessageBox>
 #include <KAboutData>

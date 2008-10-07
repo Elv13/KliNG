@@ -18,6 +18,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QStringList>
+#include <KLocalizedString>
 
   Completer::Completer(QWidget* parent, QStringList* slCommandList, QStringList* slHistory) : QWidget(parent) {
     stringListCommand = slCommandList;

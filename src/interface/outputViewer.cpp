@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <KPushButton>
+#include <KLocalizedString>
 #include <KIcon>
 #include <QtSql>
 

@@ -33,6 +33,7 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
+#include <KLocalizedString>
 
 /**
   Debug constructor
