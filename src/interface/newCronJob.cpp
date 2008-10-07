@@ -43,6 +43,7 @@
 #include <QtGui/QSpacerItem>
 #include <QtGui/QTableWidget>
 #include <QtGui/QVBoxLayout>
+#include <KLocalizedString>
 //#include <KXmlGuiWindow>
 #include <QtSql>
 #include <QSqlDatabase>
