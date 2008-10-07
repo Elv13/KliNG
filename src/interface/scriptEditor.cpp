@@ -1,4 +1,4 @@
-#include "../../mainwindow.h"
+//include "../../mainwindow.h"
 #include "../Shell.h"
 #include "debugTerm.h"
 #include "scriptEditor.h"
@@ -10,6 +10,7 @@
 #include <KIO/NetAccess>
 #include <KMessageBox>
 #include <KLocalizedString>
+#include <QHeaderView>
 // count
 
   ScriptEditor::ScriptEditor(QWidget* parent) : QWidget(parent) {
@@ -300,8 +301,8 @@
     btnDgbNextBP->setDisabled(true);
     btnStopDebug->setDisabled(true);
     
-    label_2->setText(QApplication::translate("MainWindow", "Filter:", 0, QApplication::UnicodeUTF8));
-    kpushbutton_7->setText(QApplication::translate("MainWindow", "search", 0, QApplication::UnicodeUTF8));
+    label_2->setText("Filter:");
+    kpushbutton_7->setText("search");
   }
 
 /**

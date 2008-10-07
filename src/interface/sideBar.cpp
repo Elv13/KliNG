@@ -26,9 +26,9 @@
         @version 0.0.9
 */
 
-//#include "sideBar.h"
+#include "sideBar.h"
 #include <iostream>
-#include "../../mainwindow.h"
+//#include "../../mainwindow.h"
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QWidget>
 #include <QtGui/QLabel>

@@ -25,8 +25,8 @@
         @date 14 May 2008
         @version 0.0.9
 */
-#ifndef DEF_SCRIPTEDITOR
-#define DEF_SCRIPTEDITOR
+#ifndef DEF_SCRIPTEDITOR2
+#define DEF_SCRIPTEDITOR2
 
 #include <KPushButton>
 #include <QFrame>
@@ -36,6 +36,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <KTextEdit>
+#include <KLineEdit>
 #include <QLabel>
 #include <QThread>
 #include "sideBar.h"
