@@ -38,6 +38,7 @@
 #include  <QString>
 #include <QScrollBar>
 #include <KStandardDirs>
+#include <KLocalizedString>
 #include <KSaveFile>
 #include <QColor>
 #include <QBrush>
@@ -140,8 +141,6 @@ using namespace std;
     
       if (pipe(from_cmd) == -1)
         fatal_error("pipe(from_cmd)");
-
-      printf("I am parent PID %d\n", getpid());
     
       switch (pid = fork()) { // Duplicate the prosess
         case (pid_t) -1: //If it fail
@@ -213,7 +212,6 @@ using namespace std;
       }
 
       while (nr > 0);
-      printf("\n");
       emit isOver(QString::number(time(NULL)), key);
       saveOutput(&commandOutput);
     
@@ -223,7 +221,6 @@ using namespace std;
               fatal_error("close(from_cmd[0])");
 
       pidchild = wait(NULL);
-      printf(" Death of child PID=%d\n", pidchild);
     }
     return 0;
   }
@@ -273,7 +270,7 @@ using namespace std;
     if(chdir(path) == -1) {
       aString = "<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">";
       aString += path;
-      aString += ": No such directory";
+      aString += i18n(": No such directory");
       emit newLine(aString);
     }
     else {
@@ -309,11 +306,9 @@ using namespace std;
     }
     else {
       if (command.find(">>") != -1) {
-        cout << "rentreici";
         emit newLine("<b><font color=\"#008000\">" + QString::fromStdString(command.substr(0, command.find(">>"))) + "</font> <font color=\"#000000\">>></font> <font color=\"#FF8000\">" + QString::fromStdString(command.substr((command.find(">>") +2), ( command.size() - command.find(">>"))))+ "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
       }
       else if (command.find(">") != -1) {
-        cout << "rentreici";
         emit newLine("<b><font color=\"#008000\">" + QString::fromStdString(command.substr(0, command.find(">"))) + "</font> <font color=\"#000000\">></font> <font color=\"#FF8000\">" + QString::fromStdString(command.substr((command.find(">") +1), ( command.size() - command.find(">"))))+ "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
       }
       else {

@@ -62,6 +62,7 @@
 #include <KStatusBar>
 #include <QFrame>
 
+
 #include <KApplication>
 #include <KAction>
 #include <KLocale>
@@ -74,12 +75,9 @@
 #include <QtGui/QButtonGroup>
 #include <QtGui/QDockWidget>
 #include <QtGui/QFrame>
-//#include <QtGui/QGraphicsView>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QMainWindow> //
-#include <QtGui/QMenu> //
-#include <QtGui/QMenuBar> //
 #include <QtGui/QScrollArea>
 #include <QtGui/QSpacerItem>//
 #include <QtGui/QStatusBar> //
@@ -134,8 +132,6 @@
     else
       std::cout << "ERROR while opening the database, get ready for a crash" << std::endl;
 
-
-    
     centralwidget = new QWidget;
     setCentralWidget(centralwidget);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
@@ -181,6 +177,7 @@
     btnBack->setSizePolicy(sizePolicy1);
     btnBack->setMinimumSize(QSize(31, 31));
     btnBack->setMaximumSize(QSize(31, 31));
+    btnBack->setToolTip(i18n("Go backward"));
     KIcon icnGoPrevious("go-previous");
     btnBack->setIcon(icnGoPrevious);
     hlBrowserControl->addWidget(btnBack);
@@ -191,6 +188,7 @@
     btnNext->setSizePolicy(sizePolicy1);
     btnNext->setMinimumSize(QSize(31, 31));
     btnNext->setMaximumSize(QSize(31, 31));
+    btnNext->setToolTip(i18n("Go foward"));
     KIcon icnGoEdit("go-next");
     btnNext->setIcon(icnGoEdit);
     hlBrowserControl->addWidget(btnNext);
@@ -201,6 +199,7 @@
     btnReload->setSizePolicy(sizePolicy1);
     btnReload->setMinimumSize(QSize(31, 31));
     btnReload->setMaximumSize(QSize(31, 31));
+    btnReload->setToolTip(i18n("Reload this page"));
     KIcon icnRefresh("view-refresh");
     btnReload->setIcon(icnRefresh);
     hlBrowserControl->addWidget(btnReload);
@@ -212,6 +211,7 @@
     btnStop->setMinimumSize(QSize(31, 31));
     btnStop->setMaximumSize(QSize(31, 31));
     btnStop->setIcon(icon);
+    btnStop->setToolTip(i18n("Stop loading"));
     hlBrowserControl->addWidget(btnStop);
 
     cbbUrl = new KComboBox(tabWebBrowser);
@@ -233,6 +233,7 @@
     btnBookmark->setSizePolicy(sizePolicy1);
     btnBookmark->setMinimumSize(QSize(31, 31));
     btnBookmark->setMaximumSize(QSize(31, 31));
+    btnBookmark->setToolTip(i18n("Add a new bookmark"));
     KIcon icnBookmark("rating");
     btnBookmark->setIcon(icnBookmark);
     hlBrowserControl->addWidget(btnBookmark);
@@ -249,6 +250,7 @@
     btnNewTab->setSizePolicy(sizePolicy1);
     btnNewTab->setMinimumSize(QSize(31, 31));
     btnNewTab->setMaximumSize(QSize(31, 31));
+    btnNewTab->setToolTip(i18n("Add a new tab"));
     KIcon icnNewWin("window-new");
     btnNewTab->setIcon(icnNewWin);
     hlBrowserControl->addWidget(btnNewTab);
@@ -281,7 +283,7 @@
     horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
     webDefaultPage = new QWebView(tabDefaultTab);
     webDefaultPage->setObjectName(QString::fromUtf8("webDefaultPage"));
-    webDefaultPage->setUrl(QUrl("http://www.google.ca/"));
+    webDefaultPage->setUrl(QUrl("http://www.google.com/"));
     horizontalLayout_8->addWidget(webDefaultPage);
 
     tabBBrowserPage->addTab(tabDefaultTab, QString());
@@ -320,7 +322,7 @@
           
     //Status bar stuff
     statusJobRunning = new QLabel();
-    statusJobRunning->setText("0 running, 0 paused");
+    statusJobRunning->setText(i18n("0 running, 0 paused"));
     statusJobRunning->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum);
     statusBar()->addWidget(statusJobRunning);
     
@@ -465,13 +467,13 @@
   User interface strings
 */
   void MainWindow::retranslateUi() {
-    tabCategories->setTabText(tabCategories->indexOf(tabGestion), QApplication::translate("MainWindow", "Gestion  ", 0, QApplication::UnicodeUTF8));
+    tabCategories->setTabText(tabCategories->indexOf(tabGestion), i18n("Gestion") + "  ");
     //label->setText(QApplication::translate("MainWindow", "Filter:", 0, QApplication::UnicodeUTF8));
     //kpushbutton_5->setText(QApplication::translate("MainWindow", "search", 0, QApplication::UnicodeUTF8));
-    tabCategories->setTabText(tabCategories->indexOf(tabShell), QApplication::translate("MainWindow", "Terminal  ", 0, QApplication::UnicodeUTF8));
-    tabCategories->setTabText(tabCategories->indexOf(tabEditor), QApplication::translate("MainWindow", "Creation  ", 0, QApplication::UnicodeUTF8));
-    tabBBrowserPage->setTabText(tabBBrowserPage->indexOf(tabDefaultTab), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
-    tabCategories->setTabText(tabCategories->indexOf(tabWebBrowser), QApplication::translate("MainWindow", "Web Browser   ", 0, QApplication::UnicodeUTF8));
+    tabCategories->setTabText(tabCategories->indexOf(tabShell), i18n("Terminal") + "  ");
+    tabCategories->setTabText(tabCategories->indexOf(tabEditor), i18n("Creation") + "  ");
+    tabBBrowserPage->setTabText(tabBBrowserPage->indexOf(tabDefaultTab), i18n("Page"));
+    tabCategories->setTabText(tabCategories->indexOf(tabWebBrowser), i18n("Web Browser") + "  ");
   } // retranslateUi
 
 
@@ -685,6 +687,7 @@
   }
  
   void MainWindow::modeChanged(int index) {
+    saveDockState();
     if (index == TERMINAL_MODE) {
       dockHistory->setVisible(klingConfigSkeleton->showHistoryTerminal);
       dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserTerminal);
@@ -692,6 +695,49 @@
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListTerminal);
       dockManual->setVisible(klingConfigSkeleton->showManPageTerminal);
       dockDebug->setVisible(klingConfigSkeleton->showDebugTerminal);
+        
+      if (klingConfigSkeleton->scriptBrowserHeightTerminal != -1) {
+        dockScriptBrowser->resize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        /*dockScriptBrowser->setMaximumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockScriptBrowser->setMinimumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockScriptBrowser->setMaximumSize(99999, 99999);
+        dockScriptBrowser->setMinimumSize(0, 0);*/
+      }
+      if (klingConfigSkeleton->scheduledTaskHeightTerminal != -1) {
+        dockSheduledTask->resize(dockSheduledTask->width(), klingConfigSkeleton->scheduledTaskHeightTerminal);
+        /*dockSheduledTask->setMaximumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockSheduledTask->setMinimumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockSheduledTask->setMaximumSize(99999, 99999);
+        dockSheduledTask->setMinimumSize(0, 0);*/
+      }
+      if (klingConfigSkeleton->commandListTHeighterminal != -1) {
+        dockCommandList->resize(dockCommandList->width(), klingConfigSkeleton->commandListTHeighterminal);
+        /*dockCommandList->setMaximumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockCommandList->setMinimumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockCommandList->setMaximumSize(99999, 99999);
+        dockCommandList->setMinimumSize(0, 0);*/
+      }
+      if (klingConfigSkeleton->historyHeightTerminal != -1) {
+        dockHistory->resize(dockHistory->width(), klingConfigSkeleton->historyHeightTerminal);
+        /*dockHistory->setMaximumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockHistory->setMinimumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockHistory->setMaximumSize(99999, 99999);
+        dockHistory->setMinimumSize(0, 0);*/
+      }
+      if (klingConfigSkeleton->manPageHeightTerminal != -1) {
+        dockManual->resize(dockManual->width(), klingConfigSkeleton->manPageHeightTerminal);
+        /*dockManual->setMaximumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockManual->setMinimumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockManual->setMaximumSize(99999, 99999);
+        dockManual->setMinimumSize(0, 0);*/
+      }
+      if (klingConfigSkeleton->debugHeightTerminal != -1) {
+        dockDebug->resize(dockDebug->width(), klingConfigSkeleton->debugHeightTerminal);
+        /*dockDebug->setMaximumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockDebug->setMinimumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        dockDebug->setMaximumSize(99999, 99999);
+        dockDebug->setMinimumSize(0, 0);*/
+      }
       
       viewManPage->setChecked(klingConfigSkeleton->showManPageTerminal);
       viewHistory->setChecked(klingConfigSkeleton->showHistoryTerminal);
@@ -707,6 +753,19 @@
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListMonitor);
       dockManual->setVisible(klingConfigSkeleton->showManPageMonitor);
       dockDebug->setVisible(klingConfigSkeleton->showDebugMonitor);
+      
+      if (klingConfigSkeleton->scriptBrowserHeightMonitor != -1)
+        dockScriptBrowser->resize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightMonitor);
+      if (klingConfigSkeleton->scheduledTaskHeightMonitor != -1)
+        dockSheduledTask->resize(dockSheduledTask->width(), klingConfigSkeleton->scheduledTaskHeightMonitor);
+      if (klingConfigSkeleton->commandListHeightMonitor != -1)
+        dockCommandList->resize(dockCommandList->width(), klingConfigSkeleton->commandListHeightMonitor);
+      if (klingConfigSkeleton->historyHeightMonitor != -1)
+        dockHistory->resize(dockHistory->width(), klingConfigSkeleton->historyHeightMonitor);
+      if (klingConfigSkeleton->manPageHeightMonitor != -1)
+        dockManual->resize(dockManual->width(), klingConfigSkeleton->manPageHeightMonitor);
+      if (klingConfigSkeleton->debugHeightMonitor != -1)
+        dockDebug->resize(dockDebug->width(), klingConfigSkeleton->debugHeightMonitor);
           
       viewManPage->setChecked(klingConfigSkeleton->showManPageMonitor);
       viewHistory->setChecked(klingConfigSkeleton->showHistoryMonitor);
@@ -722,6 +781,19 @@
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListEditor);
       dockManual->setVisible(klingConfigSkeleton->showManPageEditor);
       dockDebug->setVisible(klingConfigSkeleton->showDebugEditor);
+      
+      if (klingConfigSkeleton->scriptBrowserHeightEditor != -1)
+        dockScriptBrowser->resize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightEditor);
+      if (klingConfigSkeleton->scheduledTaskHeightEditor != -1)
+        dockSheduledTask->resize(dockSheduledTask->width(), klingConfigSkeleton->scheduledTaskHeightEditor);
+      if (klingConfigSkeleton->commandListHeightEditor != -1)
+        dockCommandList->resize(dockCommandList->width(), klingConfigSkeleton->commandListHeightEditor);
+      if (klingConfigSkeleton->historyHeightEditor != -1)
+        dockHistory->resize(dockHistory->width(), klingConfigSkeleton->historyHeightEditor);
+      if (klingConfigSkeleton->manPageHeightEditor != -1)
+        dockManual->resize(dockManual->width(), klingConfigSkeleton->manPageHeightEditor);
+      if (klingConfigSkeleton->debugHeightEditor != -1)
+        dockDebug->resize(dockDebug->width(), klingConfigSkeleton->debugHeightEditor);
           
       viewManPage->setChecked(klingConfigSkeleton->showManPageEditor);
       viewHistory->setChecked(klingConfigSkeleton->showHistoryEditor);
@@ -737,6 +809,19 @@
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListrWebBrowser);
       dockManual->setVisible(klingConfigSkeleton->showManPagerWebBrowser);
       dockDebug->setVisible(klingConfigSkeleton->showDebugWebBrowser);
+      
+      if (klingConfigSkeleton->scriptBrowserHeightWebBrowser != -1)
+        dockScriptBrowser->resize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightWebBrowser);
+      if (klingConfigSkeleton->scheduledTaskHeightWebBrowser != -1)
+        dockSheduledTask->resize(dockSheduledTask->width(), klingConfigSkeleton->scheduledTaskHeightWebBrowser);
+      if (klingConfigSkeleton->commandListHeightWebBrowser != -1)
+        dockCommandList->resize(dockCommandList->width(), klingConfigSkeleton->commandListHeightWebBrowser);
+      if (klingConfigSkeleton->historyHeightWebBrowser != -1)
+        dockHistory->resize(dockHistory->width(), klingConfigSkeleton->historyHeightWebBrowser);
+      if (klingConfigSkeleton->manPageHeightWebBrowser != -1)
+        dockManual->resize(dockManual->width(), klingConfigSkeleton->manPageHeightWebBrowser);
+      if (klingConfigSkeleton->debugHeightWebBrowser != -1)
+        dockDebug->resize(dockDebug->width(), klingConfigSkeleton->debugHeightWebBrowser);
           
       viewManPage->setChecked(klingConfigSkeleton->showManPagerWebBrowser);
       viewHistory->setChecked(klingConfigSkeleton->showHistoryrWebBrowser);
@@ -745,14 +830,14 @@
       viewScriptBrowser->setChecked(klingConfigSkeleton->showScriptBrowserWebBrowser);
       viewDebug->setChecked(klingConfigSkeleton->showDebugWebBrowser);
     }
-  
+    currentMode= index;
   }
 
-void MainWindow::launchScript(QString name, QString content) {
-  ScriptMonitor* aNewExecutionMonitor = new ScriptMonitor(tabGestion, name );
-  horizontalLayout_4->addWidget( aNewExecutionMonitor);
-  aNewExecutionMonitor->launchScript(content.toStdString());
-}
+  void MainWindow::launchScript(QString name, QString content) {
+    ScriptMonitor* aNewExecutionMonitor = new ScriptMonitor(tabGestion, name );
+    horizontalLayout_4->addWidget( aNewExecutionMonitor);
+    aNewExecutionMonitor->launchScript(content.toStdString());
+  }
 
 
   void MainWindow::setViewScriptBrowser(bool value) {  
@@ -856,6 +941,42 @@ void MainWindow::launchScript(QString name, QString content) {
     }
     klingConfigSkeleton->writeConfig();
   }
+  
+  void MainWindow::saveDockState() {
+    if (currentMode ==  TERMINAL_MODE) {
+      klingConfigSkeleton->scriptBrowserHeightTerminal = dockScriptBrowser->height();
+      klingConfigSkeleton->scheduledTaskHeightTerminal = dockSheduledTask->height();
+      klingConfigSkeleton->commandListTHeighterminal = dockCommandList->height();
+      klingConfigSkeleton->historyHeightTerminal = dockHistory->height();
+      klingConfigSkeleton->manPageHeightTerminal = dockManual->height();
+      klingConfigSkeleton->debugHeightTerminal = dockDebug->height();
+    }
+    else if (currentMode ==  MONITOR_MODE) {
+      klingConfigSkeleton->scriptBrowserHeightMonitor = dockScriptBrowser->height();
+      klingConfigSkeleton->scheduledTaskHeightMonitor = dockSheduledTask->height();
+      klingConfigSkeleton->commandListHeightMonitor = dockCommandList->height();
+      klingConfigSkeleton->historyHeightMonitor = dockHistory->height();
+      klingConfigSkeleton->manPageHeightMonitor = dockManual->height();
+      klingConfigSkeleton->debugHeightMonitor = dockDebug->height();
+    }
+    else if (currentMode ==  EDITOR_MODE) {
+      klingConfigSkeleton->scriptBrowserHeightEditor = dockScriptBrowser->height();
+      klingConfigSkeleton->scheduledTaskHeightEditor = dockSheduledTask->height();
+      klingConfigSkeleton->commandListHeightEditor = dockCommandList->height();
+      klingConfigSkeleton->historyHeightEditor = dockHistory->height();
+      klingConfigSkeleton->manPageHeightEditor = dockManual->height();
+      klingConfigSkeleton->debugHeightEditor = dockDebug->height();
+    }
+    else if (currentMode ==  WEB_BROWSER_MODE) {
+      klingConfigSkeleton->scriptBrowserHeightWebBrowser = dockScriptBrowser->height();
+      klingConfigSkeleton->scheduledTaskHeightWebBrowser = dockSheduledTask->height();
+      klingConfigSkeleton->commandListHeightWebBrowser = dockCommandList->height();
+      klingConfigSkeleton->historyHeightWebBrowser = dockHistory->height();
+      klingConfigSkeleton->manPageHeightWebBrowser = dockManual->height();
+      klingConfigSkeleton->debugHeightWebBrowser = dockDebug->height();
+    }
+    klingConfigSkeleton->writeConfig();
+  }
 
   void MainWindow::newCronJob() {
     NewCronJob* aCronJob = new NewCronJob(0);
@@ -869,10 +990,10 @@ void MainWindow::launchScript(QString name, QString content) {
     if (answer == KMessageBox::Yes) {
       statusProgressBar->setMinimum(0);
       statusProgressBar->setMaximum(0);
-      statusTask->setText("Clearing database");
+      statusTask->setText(i18n("Clearing database"));
       QSqlQuery query;
       query.exec("REMOVE * FROM TMAN_PAGE");
-      statusTask->setText("Scanning manual");
+      statusTask->setText(i18n("Scanning manual"));
       ManThread* aThread = new ManThread(this);
       QObject::connect(aThread, SIGNAL(over()), this, SLOT(cleanStatusBarTask()));
       aThread->start();

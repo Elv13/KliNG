@@ -49,6 +49,7 @@
 #include "kicon.h"
 #include <KStandardDirs>
 #include <KSaveFile>
+#include <KLocalizedString>
 
 
 /**
@@ -56,229 +57,203 @@
 
   @param[in] parent The parent widget (nothing)
 */
-AddScript::AddScript(QWidget *parent) : KDialog( parent )
-{
+  AddScript::AddScript(QWidget *parent) : KDialog( parent ) {
+    centralwidget = new QWidget;
+    setMainWidget(centralwidget);
+    centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+    centralwidget->setGeometry(QRect(206, 24, 1000, 400));
+    centralwidget->setMinimumSize(700, 400);
 
-  centralwidget = new QWidget;
-  setMainWidget(centralwidget);
-  centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-  centralwidget->setGeometry(QRect(206, 24, 1000, 400));
-  centralwidget->setMinimumSize(700, 400);
+    setCaption( "Add new script" );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    horizontalLayout_3 = new QHBoxLayout(centralwidget);
+    horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+    lstCategories = new KListWidget(this);
+    KIcon icnNewScript("text-x-script");
+    QListWidgetItem *__listItem = new QListWidgetItem(lstCategories);
+    __listItem->setIcon(icnNewScript);
+    KIcon icnFromTemplate("application-x-tar");
+    QListWidgetItem *__listItem1 = new QListWidgetItem(lstCategories);
+    __listItem1->setIcon(icnFromTemplate);
+    KIcon icnNewTemplate("x-kde-nsplugin-generated");
+    QListWidgetItem *__listItem2 = new QListWidgetItem(lstCategories);
+    __listItem2->setIcon(icnNewTemplate);
+    lstCategories->setObjectName(QString::fromUtf8("lstCategories"));
+    QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(lstCategories->sizePolicy().hasHeightForWidth());
+    lstCategories->setSizePolicy(sizePolicy);
+    lstCategories->setMaximumSize(QSize(120, 16777215));
+    lstCategories->setAlternatingRowColors(false);
+    lstCategories->setTextElideMode(Qt::ElideMiddle);
+    lstCategories->setMovement(QListView::Static);
+    lstCategories->setFlow(QListView::TopToBottom);
+    lstCategories->setResizeMode(QListView::Adjust);
+    lstCategories->setSpacing(15);
+    lstCategories->setViewMode(QListView::IconMode);
+    horizontalLayout_3->addWidget(lstCategories);
 
-  setCaption( "Add new script" );
-  setButtons( KDialog::Ok | KDialog::Cancel );
-  horizontalLayout_3 = new QHBoxLayout(centralwidget);
-  horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-  lstCategories = new KListWidget(this);
-  KIcon icnNewScript("text-x-script");
-  QListWidgetItem *__listItem = new QListWidgetItem(lstCategories);
-  __listItem->setIcon(icnNewScript);
-  KIcon icnFromTemplate("application-x-tar");
-  QListWidgetItem *__listItem1 = new QListWidgetItem(lstCategories);
-  __listItem1->setIcon(icnFromTemplate);
-  KIcon icnNewTemplate("x-kde-nsplugin-generated");
-  QListWidgetItem *__listItem2 = new QListWidgetItem(lstCategories);
-  __listItem2->setIcon(icnNewTemplate);
-  lstCategories->setObjectName(QString::fromUtf8("lstCategories"));
-  QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-  sizePolicy.setHorizontalStretch(0);
-  sizePolicy.setVerticalStretch(0);
-  sizePolicy.setHeightForWidth(lstCategories->sizePolicy().hasHeightForWidth());
-  lstCategories->setSizePolicy(sizePolicy);
-  lstCategories->setMaximumSize(QSize(120, 16777215));
-  lstCategories->setAlternatingRowColors(false);
-  lstCategories->setTextElideMode(Qt::ElideMiddle);
-  lstCategories->setMovement(QListView::Static);
-  lstCategories->setFlow(QListView::TopToBottom);
-  lstCategories->setResizeMode(QListView::Adjust);
-  lstCategories->setSpacing(15);
-  lstCategories->setViewMode(QListView::IconMode);
+    verticalLayout_2 = new QVBoxLayout();
+    verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+    ktitlewidget = new KTitleWidget(this);
+    ktitlewidget->setObjectName(QString::fromUtf8("ktitlewidget"));
+    verticalLayout_2->addWidget(ktitlewidget);
 
-  horizontalLayout_3->addWidget(lstCategories);
+    verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Fixed);
+    verticalLayout_2->addItem(verticalSpacer);
 
-  verticalLayout_2 = new QVBoxLayout();
-  verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-  ktitlewidget = new KTitleWidget(this);
-  ktitlewidget->setObjectName(QString::fromUtf8("ktitlewidget"));
+    horizontalLayout = new QHBoxLayout();
+    horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+    scriptName = new QLabel(this);
+    scriptName->setObjectName(QString::fromUtf8("scriptName"));
+    QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    sizePolicy1.setHorizontalStretch(0);
+    sizePolicy1.setVerticalStretch(0);
+    sizePolicy1.setHeightForWidth(scriptName->sizePolicy().hasHeightForWidth());
+    scriptName->setSizePolicy(sizePolicy1);
+    horizontalLayout->addWidget(scriptName);
 
-  verticalLayout_2->addWidget(ktitlewidget);
+    txtName = new KLineEdit(this);
+    txtName->setObjectName(QString::fromUtf8("txtName"));
+    horizontalLayout->addWidget(txtName);
 
-  verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Fixed);
+    hlCat = new QHBoxLayout();
+    lblCat = new QLabel(this);
 
-  verticalLayout_2->addItem(verticalSpacer);
+    hlCat->addWidget(lblCat);
+    cbbScriptCat = new KComboBox(this);
 
-  horizontalLayout = new QHBoxLayout();
-  horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-  scriptName = new QLabel(this);
-  scriptName->setObjectName(QString::fromUtf8("scriptName"));
-  QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Preferred);
-  sizePolicy1.setHorizontalStretch(0);
-  sizePolicy1.setVerticalStretch(0);
-  sizePolicy1.setHeightForWidth(scriptName->sizePolicy().hasHeightForWidth());
-  scriptName->setSizePolicy(sizePolicy1);
-
-  horizontalLayout->addWidget(scriptName);
-
-  txtName = new KLineEdit(this);
-  txtName->setObjectName(QString::fromUtf8("txtName"));
-
-  horizontalLayout->addWidget(txtName);
-
-  hlCat = new QHBoxLayout();
-  lblCat = new QLabel(this);
-
-  hlCat->addWidget(lblCat);
-  cbbScriptCat = new KComboBox(this);
-
-  QSqlQuery query;
-  query.exec("SELECT NAME FROM TCATEGORIES");
-  
+    QSqlQuery query;
+    query.exec("SELECT NAME FROM TCATEGORIES");
+    
     while (query.next()) 
-    {
-	cbbScriptCat->addItem(query.value(0).toString());
-    }
+      cbbScriptCat->addItem(query.value(0).toString());
+      
+    hlCat->addWidget(cbbScriptCat);
 
-  hlCat->addWidget(cbbScriptCat);
+    verticalLayout_2->addLayout(horizontalLayout);
+    verticalLayout_2->addLayout(hlCat);
 
-  verticalLayout_2->addLayout(horizontalLayout);
-  verticalLayout_2->addLayout(hlCat);
+    horizontalLayout_2 = new QHBoxLayout();
+    horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+    scriptLang = new QLabel(this);
+    scriptLang->setObjectName(QString::fromUtf8("scriptLang"));
+    sizePolicy1.setHeightForWidth(scriptLang->sizePolicy().hasHeightForWidth());
+    scriptLang->setSizePolicy(sizePolicy1);
+    lblCat->setSizePolicy(sizePolicy1);
+    horizontalLayout_2->addWidget(scriptLang);
 
-  horizontalLayout_2 = new QHBoxLayout();
-  horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-  scriptLang = new QLabel(this);
-  scriptLang->setObjectName(QString::fromUtf8("scriptLang"));
-  sizePolicy1.setHeightForWidth(scriptLang->sizePolicy().hasHeightForWidth());
-  scriptLang->setSizePolicy(sizePolicy1);
-  lblCat->setSizePolicy(sizePolicy1);
-  horizontalLayout_2->addWidget(scriptLang);
+    cbbScriptLang = new KComboBox(this);
+    cbbScriptLang->setObjectName(QString::fromUtf8("cbbScriptLang"));
+    cbbScriptLang->setToolTip(i18n("Select your favorite scripting language"));
+    horizontalLayout_2->addWidget(cbbScriptLang);
+    verticalLayout_2->addLayout(horizontalLayout_2);
+    
+    verticalSpacer_3 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
+    verticalLayout_2->addItem(verticalSpacer_3);
 
-  cbbScriptLang = new KComboBox(this);
-  cbbScriptLang->setObjectName(QString::fromUtf8("cbbScriptLang"));
+    verticalLayout = new QVBoxLayout();
+    verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+    scriptDes = new QLabel(this);
+    scriptDes->setObjectName(QString::fromUtf8("scriptDes"));
+    verticalLayout->addWidget(scriptDes);
 
-  horizontalLayout_2->addWidget(cbbScriptLang);
+    txtDes = new KTextEdit(this);
+    txtDes->setObjectName(QString::fromUtf8("txtDes"));
+    txtDes->setMinimumSize(QSize(0, 150));
+    txtDes->setMaximumSize(QSize(16777215, 150));
+    txtDes->setToolTip(i18n("Enter the description of this widget"));
+    verticalLayout->addWidget(txtDes);
 
+    verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    verticalLayout->addItem(verticalSpacer_2);
+    verticalLayout_2->addLayout(verticalLayout);
+    horizontalLayout_3->addLayout(verticalLayout_2);
 
-  verticalLayout_2->addLayout(horizontalLayout_2);
+    ktitlewidget->raise();
+    ktitlewidget->raise();
+    scriptName->raise();
+    cbbScriptLang->raise();
+    scriptLang->raise();
+    scriptDes->raise();
+    txtName->raise();
+    txtDes->raise();
+    lstCategories->raise();
 
-  verticalSpacer_3 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-  verticalLayout_2->addItem(verticalSpacer_3);
-
-  verticalLayout = new QVBoxLayout();
-  verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-  scriptDes = new QLabel(this);
-  scriptDes->setObjectName(QString::fromUtf8("scriptDes"));
-
-  verticalLayout->addWidget(scriptDes);
-
-  txtDes = new KTextEdit(this);
-  txtDes->setObjectName(QString::fromUtf8("txtDes"));
-  txtDes->setMinimumSize(QSize(0, 150));
-  txtDes->setMaximumSize(QSize(16777215, 150));
-
-  verticalLayout->addWidget(txtDes);
-
-  verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-  verticalLayout->addItem(verticalSpacer_2);
-
-
-  verticalLayout_2->addLayout(verticalLayout);
-
-
-  horizontalLayout_3->addLayout(verticalLayout_2);
-
-  ktitlewidget->raise();
-  ktitlewidget->raise();
-  scriptName->raise();
-  cbbScriptLang->raise();
-  scriptLang->raise();
-  scriptDes->raise();
-  txtName->raise();
-  txtDes->raise();
-  lstCategories->raise();
-
-  connect( this, SIGNAL( okClicked() ), this, SLOT( addAScript() ) );
-
-  retranslateUi();
-
-} 
+    connect( this, SIGNAL( okClicked() ), this, SLOT( addAScript() ) );
+    retranslateUi();
+  } 
 
 /**
   CommandList user interface strings
 */
-void AddScript::retranslateUi()
-{
+  void AddScript::retranslateUi() {
+    const bool __sortingEnabled = lstCategories->isSortingEnabled();
+    lstCategories->setSortingEnabled(false);
+    lstCategories->item(0)->setText(i18n("Empty Script"));
+    lstCategories->item(1)->setText(i18n("   Template  "));
+    lstCategories->item(2)->setText(i18n("New Template"));
 
-  const bool __sortingEnabled = lstCategories->isSortingEnabled();
-  lstCategories->setSortingEnabled(false);
-  lstCategories->item(0)->setText(QApplication::translate("Dialog", "Empty Script", 0, QApplication::UnicodeUTF8));
-  lstCategories->item(1)->setText(QApplication::translate("Dialog", "   Template  ", 0, QApplication::UnicodeUTF8));
-  lstCategories->item(2)->setText(QApplication::translate("Dialog", "New Template", 0, QApplication::UnicodeUTF8));
-
-  lstCategories->setSortingEnabled(__sortingEnabled);
-  ktitlewidget->setText(QApplication::translate("Dialog", "Add a new script", 0, QApplication::UnicodeUTF8));
-  scriptName->setText(QApplication::translate("Dialog", "Name:      ", 0, QApplication::UnicodeUTF8));
-  scriptLang->setText(QApplication::translate("Dialog", "Type:       ", 0, QApplication::UnicodeUTF8));
-  lblCat->setText(QApplication::translate("Dialog", "Categorie: ", 0, QApplication::UnicodeUTF8));
-  scriptDes->setText(QApplication::translate("Dialog", "Description: ", 0, QApplication::UnicodeUTF8));
-}
+    lstCategories->setSortingEnabled(__sortingEnabled);
+    ktitlewidget->setText(i18n("Add a new script"));
+    scriptName->setText(i18n("Name:      "));
+    scriptLang->setText(i18n("Type:       "));
+    lblCat->setText(i18n("Categorie: "));
+    scriptDes->setText(i18n("Description: "));
+  }
 
 /**
   AddScript destructor
 */
-AddScript::~AddScript()
-{
-  delete verticalSpacer_2;
-  delete txtDes;
-  delete scriptDes;
-  delete verticalLayout;
-  delete verticalSpacer_3;
-  delete cbbScriptLang;
-  delete scriptLang;
-  delete horizontalLayout_2;
-  delete cbbScriptCat;
-  delete lblCat;
-  delete hlCat;
-  delete txtName;
-  delete scriptName;
-  delete horizontalLayout;
-  delete verticalSpacer;
-  delete ktitlewidget;
-  delete verticalLayout_2;
-  delete lstCategories;
-  delete horizontalLayout_3;
-  delete centralwidget;
-}
+  AddScript::~AddScript() {
+    delete verticalSpacer_2;
+    delete txtDes;
+    delete scriptDes;
+    delete verticalLayout;
+    delete verticalSpacer_3;
+    delete cbbScriptLang;
+    delete scriptLang;
+    delete horizontalLayout_2;
+    delete cbbScriptCat;
+    delete lblCat;
+    delete hlCat;
+    delete txtName;
+    delete scriptName;
+    delete horizontalLayout;
+    delete verticalSpacer;
+    delete ktitlewidget;
+    delete verticalLayout_2;
+    delete lstCategories;
+    delete horizontalLayout_3;
+    delete centralwidget;
+  }
 
 /**
   Add a script to the DB and create the file
 */
-void AddScript::addAScript()
-{
-  //TODO This function need to be rewriten, it is buggy, cheap and ugly.
-  QSqlQuery query;
-  
-  if (txtName->text().right(3) == ".sh") { //TODO fix this duplicated code
-    query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text() +"','" + txtDes->toPlainText() + "')");
-    KSaveFile file(KStandardDirs::locateLocal("appdata", "/script/") + txtName->text().trimmed());
-    file.open();
-    QByteArray outputByteArray;
-    outputByteArray.append(txtDes->toPlainText() );
-    file.write(outputByteArray);
-    file.finalize();
-    file.close();
+  void AddScript::addAScript() {
+    //TODO This function need to be rewriten, it is buggy, cheap and ugly.
+    QSqlQuery query;
+    
+    if (txtName->text().right(3) == ".sh") { //TODO fix this duplicated code
+      query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text() +"','" + txtDes->toPlainText() + "')");
+      KSaveFile file(KStandardDirs::locateLocal("appdata", "/script/") + txtName->text().trimmed());
+      file.open();
+      QByteArray outputByteArray;
+      outputByteArray.append(txtDes->toPlainText() );
+      file.write(outputByteArray);
+      file.finalize();
+      file.close();
+    }
+    else {
+      KSaveFile file(KStandardDirs::locateLocal("appdata", "/script/") + txtName->text().trimmed() + ".sh");
+      query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text().trimmed() +".sh','" + txtDes->toPlainText() + "')");
+      file.open();
+      QByteArray outputByteArray;
+      outputByteArray.append(txtDes->toPlainText() );
+      file.write(outputByteArray);
+      file.finalize();
+      file.close();
+    }
   }
-  else {
-    KSaveFile file(KStandardDirs::locateLocal("appdata", "/script/") + txtName->text().trimmed() + ".sh");
-    query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text().trimmed() +".sh','" + txtDes->toPlainText() + "')");
-    file.open();
-    QByteArray outputByteArray;
-    outputByteArray.append(txtDes->toPlainText() );
-    file.write(outputByteArray);
-    file.finalize();
-    file.close();
-  }
-
-
-}

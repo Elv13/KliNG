@@ -1,6 +1,7 @@
 #define _FILE_OFFSET_BITS 64
 #include "fileBrowser.h"
 #include <QStringList>
+#include <KLocalizedString>
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/types.h>
