@@ -34,6 +34,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include <QTableWidgetItem>
+#include <KLocalizedString>
 #include <QHeaderView>
 #include <stdio.h>
 #include <sys/types.h>

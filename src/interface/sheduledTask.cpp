@@ -39,6 +39,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QTableView>
+#include <KLocalizedString>
 #include "kpushbutton.h"
 
 using namespace std;
