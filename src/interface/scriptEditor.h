@@ -73,7 +73,6 @@ QT_BEGIN_NAMESPACE
       QSpacerItem *horizontalSpacer;
       QScrollArea *scrollArea;
       QWidget *scrollAreaWidgetContents_2;
-      QVBoxLayout *verticalLayout_13;
       QHBoxLayout *textEditLayout;
       QFrame *frame_3;
       QSpacerItem *verticalSpacer_12;

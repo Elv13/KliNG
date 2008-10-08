@@ -40,8 +40,8 @@ using namespace std;
 
   @param[in] parent The parent widget (nothing)
 */
-  ThreadExec::ThreadExec(QObject* parent, std::string aScript) : QThread(parent) {
-    script = aScript;
+  ThreadExec::ThreadExec(QObject* parent, QString aScript) : QThread(parent) {
+    script = aScript.trimmed();
   }
 
 /**
@@ -54,10 +54,12 @@ using namespace std;
     int posLast0A=-1;
     int i = 0;
     int advencement;
+    script += "\n";
 
-    for (int j = 0; j <= script.size(); j++) //Count the script line
+    for (int j = 0; j <= script.size(); j++) { //Count the script line
           if ((script[j] == 0x0A) && (script[j+1] != 0x0A)) 
             i++;
+    } 
             
     if (script[script.size()-1] != 0x0A)
       i++;
@@ -69,9 +71,9 @@ using namespace std;
       while ((script[pos0A] != 0x0A) && (pos0A < script.size())) pos0A++;
       int pos0Aclone = pos0A+1;
       while ((script[pos0Aclone] != 0x0A) && (pos0Aclone < script.size())) pos0Aclone++;
-      emit currentLine(QString::fromStdString(script.substr(posLast0A+1, (pos0A-posLast0A-1))));
-      emit nextLine(QString::fromStdString(script.substr(pos0A+1, (pos0Aclone-pos0A-1))));
-      system(script.substr(posLast0A+1, (pos0A-posLast0A-1)).c_str());
+      emit currentLine(script.mid(posLast0A+1, (pos0A-posLast0A-1)));
+      emit nextLine(script.mid(pos0A+1, (pos0Aclone-pos0A-1)));
+      system(script.mid(posLast0A+1, (pos0A-posLast0A-1)).toStdString().c_str());
       i += advencement;
       emit progress(i);
       posLast0A=pos0A;

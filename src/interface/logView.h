@@ -87,6 +87,7 @@
       
     private slots:
       void displayCommandHistory(char level);
+      void displayScriptHistory(char level);
       void showOutput(uint id);
       void switchMode(int mode);
   };

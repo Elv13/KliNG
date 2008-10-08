@@ -40,7 +40,7 @@ using namespace std;
   class ThreadExec : public QThread {
     Q_OBJECT
     public:
-        ThreadExec(QObject* parent, std::string aScript);
+        ThreadExec(QObject* parent, QString aScript);
         void run();
     signals:
         void progress(int percent);
@@ -48,7 +48,7 @@ using namespace std;
         void nextLine(QString line);
         void isOver();
     private:
-        std::string script;
+        QString script;
   };
 
 #endif

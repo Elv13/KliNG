@@ -62,12 +62,16 @@ using namespace std;
       QLabel *lblTitle;
       QLabel *lblTime;
       QProgressBar *progressBar;
-      void launchScript(std::string script);
+      void launchScript(QString script);
     private:
       ThreadExec* aThread;
+      int second;
+      QString scriptName;
+      int key;
     private slots:
       void endMe();
       void disCurrentLine(QString line);
       void disNextLine(QString line);
+      void increment();
   };
 #endif

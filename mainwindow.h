@@ -152,5 +152,7 @@
       void setViewHistory(bool value);
       void setViewManPage(bool value);
       void setViewDebug(bool value);
+      void setEditorMode();
+      void setMonitorMode();
   };
 #endif

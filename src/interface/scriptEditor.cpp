@@ -161,27 +161,18 @@
     verticalLayout_7->addLayout(hlControl2);
 
     scrollArea = new QScrollArea(this);
+    scrollArea->setContentsMargins(0, 0, 0, 0);
     scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
-    scrollArea->setStyleSheet(QString::fromUtf8("margin-left: 0px;\n"
-"margin-right: 0px;\n"
-"margin-top: 0px;\n"
-"margin-bottom: 0px;\n"
-"border-left: 0px;\n"
-"border-right: 0px;\n"
-"border-top: 0px;\n"
-"border-bottom: 0px;\n"
-"padding-left: 0px;\n"
-"padding-right: 0px;\n"
-"padding-top: 0px;\n"
-"padding-bottom: 0px;"));
+    scrollArea->setStyleSheet(QString::fromUtf8("margin:0px;border:0px;padding:0px;spacing:0px;"));
     scrollArea->setFrameShape(QFrame::StyledPanel);
     scrollArea->setWidgetResizable(true);
     scrollAreaWidgetContents_2 = new QWidget();
+    scrollAreaWidgetContents_2->setContentsMargins(0, 0, 0, 0);
+    scrollAreaWidgetContents_2->setStyleSheet(QString::fromUtf8("margin:0px;border:0px;padding:0px;spacing:0px;"));
     scrollAreaWidgetContents_2->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_2"));
     scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 493, 1010));
-    verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents_2);
-    verticalLayout_13->setObjectName(QString::fromUtf8("verticalLayout_13"));
-    textEditLayout = new QHBoxLayout();
+    textEditLayout = new QHBoxLayout(scrollAreaWidgetContents_2);
+    textEditLayout->setContentsMargins(0, 0, 0, 0);
     textEditLayout->setSpacing(0);
     textEditLayout->setObjectName(QString::fromUtf8("textEditLayout"));
 
@@ -194,15 +185,14 @@
     lineNBSideBar->setSizePolicy(sizePolicy);
     lineNBSideBar->setMaximumWidth(35);
     lineNBSideBar->setMinimumWidth(35);
+    lineNBSideBar->setStyleSheet("margin:0px;border:0px;padding:0px;spacing:0px;");
     
     firstSBItem = new SideBar(1, NULL,lineNBSideBar );
     lastSBItem = firstSBItem;
     if (lineNBSideBar->columnCount() < 1)
         lineNBSideBar->setColumnCount(1);
         
-    //lineNBSideBar->resize( 35, txtScriptEditor->height() );
     lineNBSideBar->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //lineNBSideBar->setRowCount(50);
     lineNBSideBar->setRowHeight (0, 20 );
     lineNBSideBar->setColumnWidth(0, 35);
     lineNBSideBar->setCellWidget ( 0, 0, firstSBItem );
@@ -219,12 +209,7 @@
     txtScriptEditor->setFontPointSize ( 14 );
     txtScriptEditor->setObjectName(QString::fromUtf8("txtScriptEditor"));
     txtScriptEditor->setMinimumSize(QSize(0, 1000));
-    txtScriptEditor->setStyleSheet(QString::fromUtf8("margin-left: 0px;\n"
-"margin-right: 0px;\n"
-"margin-top: 0px;\n"
-"margin-bottom: 0px;\n"
-"padding-left: 0px;\n"
-"margin-left: 0px;"));
+    txtScriptEditor->setStyleSheet(QString::fromUtf8("margin:0px;border:0px;padding:0px;spacing:0px;"));
     txtScriptEditor->setFrameShape(QFrame::StyledPanel);
     txtScriptEditor->setLineWidth(1);
     txtScriptEditor->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -233,8 +218,6 @@
     txtScriptEditor->setLineWrapColumnOrWidth(100);
     txtScriptEditor->setAcceptRichText(true);
     textEditLayout->addWidget(txtScriptEditor);
-
-    verticalLayout_13->addLayout(textEditLayout);
 
     scrollArea->setWidget(scrollAreaWidgetContents_2);
 
@@ -247,10 +230,11 @@
     frame_2->setStyleSheet(QString::fromUtf8(""));
     frame_2->setFrameShape(QFrame::StyledPanel);
     frame_2->setFrameShadow(QFrame::Raised);
-    frame_2->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:0;border-color:#808000;padding-top:1;spacing:0;");
+    frame_2->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0px;padding:0px;border:0px;border-color:#808000;padding-top:0px;spacing:0px;");
     frame_2->hide();
     horizontalLayout_5 = new QHBoxLayout(frame_2);
     horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+    horizontalLayout_5->setContentsMargins(0, 0, 0, 0);
     kpushbutton_6 = new KPushButton(frame_2);
     kpushbutton_6->setObjectName(QString::fromUtf8("kpushbutton_6"));
     kpushbutton_6->setMinimumSize(QSize(22, 22));
@@ -262,17 +246,18 @@
 
     label_2 = new QLabel(frame_2);
     label_2->setObjectName(QString::fromUtf8("label_2"));
+    label_2->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0px;min-height:15px;font-size:12px;padding-top:1px");
     horizontalLayout_5->addWidget(label_2);
 
     klineedit_4 = new KLineEdit(frame_2);
     klineedit_4->setObjectName(QString::fromUtf8("klineedit_4"));
     klineedit_4->setProperty("showClearButton", QVariant(true));
-    klineedit_4->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;");
+    klineedit_4->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0px;padding:0px;border:1px;border-style:solid;border-color:#808000;spacing:0px;height:15px;min-height:15px;");
     horizontalLayout_5->addWidget(klineedit_4);
 
     kpushbutton_7 = new KPushButton(frame_2);
     kpushbutton_7->setObjectName(QString::fromUtf8("kpushbutton_7"));
-    kpushbutton_7->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;padding-right:5;padding-left:5;");
+    kpushbutton_7->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0;border:1;border-style:solid;border-color:#808000;padding-right:5;padding-left:5;spacing:0;min-height:15px;margin-right:5px;");
     horizontalLayout_5->addWidget(kpushbutton_7);
 
     verticalLayout_7->addWidget(frame_2);

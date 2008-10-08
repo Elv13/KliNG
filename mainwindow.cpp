@@ -355,25 +355,13 @@
     QObject::connect(btnReload, SIGNAL(clicked()), webDefaultPage, SLOT(reload()));
     QObject::connect(btnStop, SIGNAL(clicked()), webDefaultPage, SLOT(stop()));
     QObject::connect(cbbUrl, SIGNAL(returnPressed()), this, SLOT(loadWebPage()));
-    /*QObject::connect(btnCopy, SIGNAL(clicked()), txtScriptEditor, SLOT(copy()));
-    QObject::connect(btnPaste, SIGNAL(clicked()), txtScriptEditor, SLOT(paste()));
-    QObject::connect(btnCut, SIGNAL(clicked()), txtScriptEditor, SLOT(cut()));
-    QObject::connect(bntNext, SIGNAL(clicked()), txtScriptEditor, SLOT(redo()));
-    QObject::connect(btnPrevious, SIGNAL(clicked()), txtScriptEditor, SLOT(undo()));
-    QObject::connect(btnPaste, SIGNAL(clicked()), this, SLOT(seNewLine()));
-    QObject::connect(klineedit_4, SIGNAL(returnPressed()), this, SLOT(searchEdit()));
-    QObject::connect(kpushbutton_7, SIGNAL(clicked()), this, SLOT(searchEdit()));
-    QObject::connect(btnDebug, SIGNAL(clicked()), this, SLOT(startDebugging()));
-    QObject::connect(btnStopDebug, SIGNAL(clicked()), this, SLOT(stopDebugging()));
-    QObject::connect(btnDbgNextLine, SIGNAL(clicked()), this, SLOT(dbgNextLine()));
-    QObject::connect(btnDbgSkipLine, SIGNAL(clicked()), this, SLOT(dbgSkipLine()));
-    QObject::connect(btnDgbNextBP, SIGNAL(clicked()), this, SLOT(dbgGoToNextBP()));
-    QObject::connect(btnComment, SIGNAL(clicked()), this, SLOT(commentLine()));
-    QObject::connect(btnUncomment, SIGNAL(clicked()), this, SLOT(uncommentLine()));*/
     QObject::connect(dockScriptBrowser, SIGNAL(enableEditor(bool)), tabEditor->txtScriptEditor, SLOT(setEnabled(bool)));
     QObject::connect(dockScriptBrowser, SIGNAL(setFileName(QString)), tabEditor, SLOT(setFileName(QString)));
     QObject::connect(dockScriptBrowser, SIGNAL(setEdirorText(QString)), tabEditor, SLOT(setText(QString)));
     QObject::connect(dockScriptBrowser, SIGNAL(launchScript(QString, QString)), this, SLOT(launchScript(QString, QString)));
+    QObject::connect(dockScriptBrowser->btnEdit, SIGNAL(clicked()), this, SLOT(setEditorMode()));
+    QObject::connect(dockScriptBrowser->btnEdit, SIGNAL(clicked()), tabEditor->txtScriptEditor, SLOT(setFocus()));
+    QObject::connect(dockScriptBrowser->btnLaunch, SIGNAL(clicked()), this, SLOT(setMonitorMode()));
 
     retranslateUi();
     setupActions();
@@ -836,7 +824,7 @@
   void MainWindow::launchScript(QString name, QString content) {
     ScriptMonitor* aNewExecutionMonitor = new ScriptMonitor(tabGestion, name );
     horizontalLayout_4->addWidget( aNewExecutionMonitor);
-    aNewExecutionMonitor->launchScript(content.toStdString());
+    aNewExecutionMonitor->launchScript(content);
   }
 
 
@@ -1004,4 +992,12 @@
     statusProgressBar->setRange(0,100);
     statusProgressBar->setValue(0);
     statusTask->setText("");
+  }
+
+  void MainWindow::setEditorMode() {
+    tabCategories->setCurrentIndex(EDITOR_MODE);
+  }
+
+  void MainWindow::setMonitorMode() {
+    tabCategories->setCurrentIndex(MONITOR_MODE);
   }
