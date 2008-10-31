@@ -266,7 +266,7 @@ void Completer::updateCommand(QString name, int index=0) {
   else 
     tvCompletion->topLevelItem(0)->setHidden(true);
 
-  if (tvCompletion->topLevelItem(01)->childCount() == false) 
+  if (tvCompletion->topLevelItem(0)->childCount() == false) 
     tvCompletion->topLevelItem(0)->setHidden(true);
 }
 

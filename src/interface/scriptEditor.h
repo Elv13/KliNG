@@ -41,7 +41,6 @@
 #include <QThread>
 #include "sideBar.h"
 #include "debugTerm.h"
-#include <iostream>
 
 QT_BEGIN_NAMESPACE
 
@@ -90,7 +89,9 @@ QT_BEGIN_NAMESPACE
     private:
       void sendCommand(QString command);
       int countLine(QString script);
-      std::string* commandArray;
+      void setDebuggerMode(bool value);
+      bool evalCondition(QString line);
+      QString* commandArray;
       bool isDebugging;
       int currentLine;
       int lineNumber;
@@ -100,6 +101,18 @@ QT_BEGIN_NAMESPACE
       SideBar* lastSBItem;
       SideBar* sbCurrentLine;
       DebugTerm* aDebugTerm;
+      int inCondition;
+      
+      //Interpreter
+      bool loopUntilCondition();
+      bool ifStatement();
+      bool whileLoop();
+      bool forLoop();
+      bool untilLoop();
+      bool elseStatement();
+      bool elifStatement();
+      bool fiStatement();
+      bool evalCommand();
       
     private slots:
       void startDebugging();
@@ -118,6 +131,7 @@ QT_BEGIN_NAMESPACE
       void setText(QString script);
       void textChanged();
       void updateLineCount(int lineCount);
+      void executeNextCommand();
   };
   
   class EditorThread : public QThread {

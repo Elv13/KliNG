@@ -45,10 +45,9 @@
 
 /**
   History constructor
-
-  @param[in] mainWindowCL The main window command line
 */
-  History::History(KLineEdit* mainWindowCL, QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton) : QDockWidget ( 0 ) {
+  History::History(QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton) : QDockWidget ( 0 ) {
+    setObjectName("History");
     config = aConfigSkeleton;
     historyStringList = aStringList;
     QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -91,9 +90,9 @@
 */
 History::~History()
 {
-  delete listHistory;
+  /*delete listHistory;
   delete vboxLayout;
-  delete dockHistoryContents;
+  delete dockHistoryContents;*/
   /*delete dockHistory;*/
 }
 
@@ -128,7 +127,7 @@ QString History::addItem(QString command, bool insertDB)
     QSqlQuery query2;
     query2.exec("SELECT THISTORY_KEY FROM THISTORY ORDER BY THISTORY_KEY DESC" ); //TODO add top 1
     query2.next();
-    printf("\n %s \n",query2.value(0).toString().toStdString().c_str()); //exit(33);
+    //printf("\n %s \n",query2.value(0).toString().toStdString().c_str()); //exit(33);
     return query2.value(0).toString();
   }
   //THISTORY (THISTORY_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, DATE DATE, TIME double)

@@ -268,8 +268,10 @@ QT_BEGIN_NAMESPACE
   }
 
   void LogView::setupHeader() {
+    tblViewer->setRowCount(0);
     QTableWidgetItem *__colItem = new QTableWidgetItem();
     tblViewer->setHorizontalHeaderItem(0, __colItem);
+    tblViewer->setSelectionBehavior(QAbstractItemView::SelectRows);
     tblViewer->horizontalHeaderItem(0)->setText("Name");
     tblViewer->setColumnWidth(0,312); //FIXME
     QTableWidgetItem *__colItem1 = new QTableWidgetItem();

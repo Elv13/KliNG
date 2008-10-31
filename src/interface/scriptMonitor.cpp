@@ -49,11 +49,10 @@
 #include <QBrush>
 #include <QPalette>
 #include <QTimer>
-#include <QTime>
+//#include <QTime>
 #include <time.h>
 #include "kled.h"
 
-using namespace std;
 
 /**
   ScriptMonitor constructor
@@ -118,7 +117,7 @@ using namespace std;
 
 
     //string defaultColor = aPalette.button().color().name();
-    setStyleSheet("background-color:qlineargradient( y1:0, y2:1,stop:0 " + aPalette.window().color().name() + ", stop:1 " + aPalette.button().color().name() + ");border-radius:10;border-color:black;barder-width:1px;");
+    setStyleSheet("background-color:qlineargradient( y1:0, y2:1,stop:0 " + aPalette.window().color().name() + ", stop:1 " + aPalette.button().color().name() + ");border-radius:10;border-color:black;border-width:1px;");
 
     retranslateUi();
   }
@@ -155,13 +154,12 @@ using namespace std;
   void ScriptMonitor::launchScript(QString script) {//TODO This is not bash compliant, if, while, for and until are not implemented yet
     QSqlQuery query;
     query.exec("insert into TSCRIPT_HISTORY (SCRIPT, DATE) values ('"+ scriptName +"', '" + QString::number(time(NULL)) +"')"); 
-    //return query;
     
     QSqlQuery query2;
     query2.exec("SELECT TSCRIPT_HISTORY_KEY FROM TSCRIPT_HISTORY ORDER BY TSCRIPT_HISTORY_KEY DESC" ); //TODO add top 1
+    
     query2.next();
-    key = query2.value(0).toInt(); //exit(33);
-
+    key = query2.value(0).toString().toInt(); //exit(33);
 
     aThread = new ThreadExec(this,script);
     QTimer *timer = new QTimer(this);
@@ -171,13 +169,14 @@ using namespace std;
     QObject::connect(aThread, SIGNAL(finished()), this, SLOT(endMe())); //I don't call the destructor because it is not only this signal that can call it, if the program is closed, it will do a segFault.
     QObject::connect(aThread, SIGNAL(currentLine(QString)), this, SLOT(disCurrentLine(QString)));
     QObject::connect(aThread, SIGNAL(nextLine(QString)), this, SLOT(disNextLine(QString)));
+    QObject::connect(aThread, SIGNAL(cmdExecuted()), this, SLOT(cmdExecuted()));
     timer->start(1000);
     aThread->start();
   }
 
   void ScriptMonitor::endMe() {
     QSqlQuery query;
-    query.exec("update TSCRIPT_HISTORY SET TIME_END = '" + QString::number(time(NULL)) + "' WHERE TSCRIPT_HISTORY_KEY = " + key); 
+    query.exec("update TSCRIPT_HISTORY SET TIME_END = '" + QString::number(time(NULL)) + "' WHERE TSCRIPT_HISTORY_KEY = " + QString::number(key)); 
     delete aThread;
     delete this;
   }
@@ -194,4 +193,8 @@ using namespace std;
     second++;
     QTime aTime(0,0,second,0);
     lblTime->setText(aTime.toString("hh:mm:ss"));
+  }
+  
+  void ScriptMonitor::cmdExecuted() {
+    emit newCommand();
   }
