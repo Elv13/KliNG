@@ -42,11 +42,12 @@
       CommandList(QWidget* parent, QStringList* commandStringList);
       ~CommandList();
       void translateUi();
-      void indexCommand(QStringList* commandStringList);
+      void indexCommand();
 
       QWidget *dockCommandListContents;
       QVBoxLayout *verticalLayout_5;
       KListWidgetSearchLine *txtFindCommand;
       KListWidget *listCommand;
+      QStringList* commandList;
   };
 #endif

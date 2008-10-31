@@ -49,6 +49,7 @@
 #include <QString>
 #include <klistwidgetsearchline.h>
 #include "../configSkeleton.h"
+#include "miniClasses.h"
 
 #define COMMAND_HISTORY 0
 #define SCRIPT_HISTORY 1
@@ -92,18 +93,5 @@
       void switchMode(int mode);
   };
 
-  class OutputViewerButton : public KPushButton {
-    Q_OBJECT
-    public:
-      OutputViewerButton(QWidget* parent =0) : KPushButton( parent ) {
-        QObject::connect(this, SIGNAL(clicked()), this, SLOT(launched()));
-      }
-      uint id;
-  
-    private slots:
-      void launched() { emit clicked(id); }
-      
-    signals:
-      void clicked(uint);
-  };
+
 #endif

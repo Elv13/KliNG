@@ -50,6 +50,7 @@ using namespace std;
   @param[in] parent The parent window
 */
   SheduledTask::SheduledTask(QWidget* parent) : QDockWidget ( 0 ) {
+    setObjectName("SheduledTask");
     QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed); //
     sizePolicy1.setHorizontalStretch(31); //
     sizePolicy1.setVerticalStretch(31); //
@@ -117,13 +118,13 @@ using namespace std;
   SheduledTask destructor
 */
   SheduledTask::~SheduledTask() {
-    delete horizontalSpacer_21;
+    /*delete horizontalSpacer_21;
     delete btnDeleteShTsk;
     delete btnAddShTsk;
     delete hlShTskButton;
     delete tlbvSheduledTask;
     delete verticalLayout_10;
-    delete dockSheduledTaskContents;
+    delete dockSheduledTaskContents;*/
   }
 
 /**

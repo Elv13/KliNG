@@ -16,6 +16,7 @@
     browserLayout->addWidget(lblCurrentDir);
     
     tblDetailsView = new QTableWidget(this);
+    tblDetailsView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tblDetailsView->verticalHeader()->hide();
     tblDetailsView->setColumnCount(4);
     setupHeader();

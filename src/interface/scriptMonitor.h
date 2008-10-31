@@ -29,9 +29,8 @@
 #ifndef DEF_SCRIPTMONITOR
 #define DEF_SCRIPTMONITOR
 
-#include <iostream>
 #include "../thread.h"
-#include "../../mainwindow.h"
+//#include "../../mainwindow.h"
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
@@ -73,5 +72,8 @@ using namespace std;
       void disCurrentLine(QString line);
       void disNextLine(QString line);
       void increment();
+      void cmdExecuted();
+    signals:
+      void newCommand();
   };
 #endif
