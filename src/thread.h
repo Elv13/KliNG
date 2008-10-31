@@ -47,6 +47,7 @@ using namespace std;
         void currentLine(QString line);
         void nextLine(QString line);
         void isOver();
+        void cmdExecuted();
     private:
         QString script;
   };

@@ -30,6 +30,11 @@
         src/interface/outputViewer.cpp
         src/interface/debugTerm.cpp
         src/interface/scriptEditor.cpp
+        src/interface/executionMonitor.cpp
+        src/interface/advancedScriptManager.cpp
+        src/interface/miniClasses.cpp
+        src/interface/webBrowser.cpp
+        src/interface/defaultScreen.cpp
       )
 
       kde4_add_executable(kling ${kling_SRCS})
