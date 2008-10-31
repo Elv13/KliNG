@@ -48,6 +48,7 @@
   @param[in] parent The parent window
 */
   Debug::Debug(QWidget* parent) : QDockWidget ( 0 ) {
+    setObjectName("Debug");
     setObjectName(QString::fromUtf8("dockDebug"));
     setGeometry(QRect(0, 563, 200, 90));
     dockDebugContents = new QWidget(this);
@@ -77,7 +78,7 @@
     for (env = environ; *env != NULL; ++env) {
       tbldebug->setRowCount(++rowCount);
       tbldebug->setRowHeight((rowCount-1), 20);
-      puts (*env);
+      //puts (*env);
       QString anEnvVar = *env;
       
       QTableWidgetItem* anEnvVarName = new QTableWidgetItem();
@@ -97,9 +98,9 @@
   Debug destructor
 */
   Debug::~Debug() {
-    delete tbldebug;
+    /*delete tbldebug;
     delete verticalLayout_12;
-    delete dockDebugContents;
+    delete dockDebugContents;*/
   }
 
 /**

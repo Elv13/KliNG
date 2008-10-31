@@ -41,7 +41,7 @@
       static string getCommand(string line);
 
     private:
-      string display(char* parsedJob[3]);
+      QString display(char* parsedJob[3]);
           
   };
 

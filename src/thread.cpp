@@ -73,6 +73,7 @@ using namespace std;
       while ((script[pos0Aclone] != 0x0A) && (pos0Aclone < script.size())) pos0Aclone++;
       emit currentLine(script.mid(posLast0A+1, (pos0A-posLast0A-1)));
       emit nextLine(script.mid(pos0A+1, (pos0Aclone-pos0A-1)));
+      emit cmdExecuted();
       system(script.mid(posLast0A+1, (pos0A-posLast0A-1)).toStdString().c_str());
       i += advencement;
       emit progress(i);
