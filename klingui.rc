@@ -16,9 +16,31 @@
   </ToolBar>
   <MenuBar>
     <Menu name="file" >
-      <Action name="newScript" />
+      <Menu name="new" >
+        <text>&amp;New</text>
+        <Action name="newScript" />
+        <Action name="newTermWindow" />
+        <Action name="newTermTab" />
+        <Action name="newEditor" />
+      </Menu>
+      <Action name="importScript" />
+      <Action name="saveScript" />
+      <Action name="printScript" />
+      <Separator/>
+      <Action name="exportLog" />
+      <Action name="backupLog" />
+      <Separator/>
+      <Action name="quit" />
     </Menu>
     <Menu name="edit" >
+      <Action name="undo" />
+      <Action name="redo" />
+      <Separator/>
+      <Action name="cut" />
+      <Action name="copy" />
+      <Action name="paste" />
+      <Action name="selectAll" />
+      <Separator/>
       <Action name="find" />
     </Menu>
     <Menu name="view" >
@@ -30,6 +52,7 @@
       <Action name="viewDebug" />
     </Menu>
     <Menu name="tools" >
+      <Action name="showAdvScriptManager" />
       <Action name="showLog" />
       <Action name="newCron" />
       <Action name="newScript" />

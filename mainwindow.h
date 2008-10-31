@@ -29,12 +29,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#define TERMINAL_MODE  0
-#define MONITOR_MODE  1
-#define EDITOR_MODE 2
-#define WEB_BROWSER_MODE  3
-
-#include <iostream>
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
@@ -52,7 +46,6 @@
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
-#include <QtWebKit/QWebView> 
 #include <QProgressBar>
 #include "kcombobox.h"
 #include "klineedit.h"
@@ -73,7 +66,11 @@
 #include "src/interface/debug.h"
 #include "src/interface/term.h"
 #include "src/interface/scriptEditor.h"
+#include "src/interface/executionMonitor.h"
+#include "src/interface/advancedScriptManager.h"
+#include "src/interface/webBrowser.h"
 #include "src/configSkeleton.h"
+
 
   class MainWindow : public KXmlGuiWindow {
     Q_OBJECT
@@ -83,28 +80,12 @@
       void setupActions();
       MainWindow(QWidget *parent=0, KlingConfigSkeleton* configuration = 0);
       ~MainWindow();
-      QWidget *centralwidget;
-      QVBoxLayout *verticalLayout_11;//
       QTabWidget *tabCategories;//
-      QWidget *tabGestion;//
-      QVBoxLayout *horizontalLayout_4;
+      ExecutionMonitor *tabGestion;
       Term *tabShell;
       ScriptEditor* tabEditor;
-      QWidget *tabWebBrowser;
-      QVBoxLayout *verticalLayout_8;
-      QHBoxLayout *hlBrowserControl;
-      KPushButton *btnBack;
-      KPushButton *btnNext;
-      KPushButton *btnReload;
-      KPushButton *btnStop;
-      KComboBox *cbbUrl;
-      KPushButton *btnBookmark;
-      QFrame *line_4;
-      KPushButton *btnNewTab;
-      KPushButton *btnCloseTab;
-      KTabWidget *tabBBrowserPage;
-      QWidget *tabDefaultTab;
-      QHBoxLayout *horizontalLayout_8;
+      WebBrowser* tabWebBrowser;
+      AdvancedScriptManager* tabAdvScripManager;
       QStringList* commandStringList;
       QStringList* historyStringList;
       QProgressBar* statusProgressBar;
@@ -112,7 +93,6 @@
       QLabel* statusCurrentDir;
       QLabel* statusTask;
       QCompleter *cmdLineCompleter;
-      QWebView *webDefaultPage; 
       QSqlDatabase* db;
       KlingConfigSkeleton* klingConfigSkeleton;
       History* dockHistory;
@@ -128,6 +108,12 @@
       KAction* viewScheduledTask;
       KAction* viewScriptBrowser;
       KAction* viewDebug;
+      KAction* actionUndo;
+      KAction* actionRedo;
+      KAction* actionCut;
+      KAction* actionCopy;
+      KAction* actionPaste;
+      KAction* actionSelectAll;
       
     private:
       void saveDockState();
@@ -135,13 +121,22 @@
 
 
     private slots:
-      void loadWebPage();
       void find();
+      void save();
+      void print();
+      void exportLog();
+      void backup();
+      void cut();
+      void copy();
+      void paste();
+      void undo();
+      void redo();
+      void selectAll();
       void searchEdit();
       void showLog();
       void showSettings();
+      void showAdvancedScriptManager();
       void modeChanged(int index);
-      void launchScript(QString name, QString content);
       void newCronJob();
       void parseAllManPage();
       void cleanStatusBarTask();
@@ -154,5 +149,11 @@
       void setViewDebug(bool value);
       void setEditorMode();
       void setMonitorMode();
+      
+      void newTerminal(); 
+      void newGestion(); 
+      void newEditor(); 
+      void newWebBrowser();
+      void newMonitor();
   };
 #endif

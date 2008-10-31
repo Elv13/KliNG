@@ -32,7 +32,6 @@ Boston, MA 02111-1307, USA.
 #include <QFile>
 #include <KStandardDirs>
 #include <KUrl>
-#include <iostream>
 
 #include "mainwindow.h"
 //#include "src/Shell.h"

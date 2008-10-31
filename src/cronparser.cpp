@@ -50,37 +50,35 @@ using namespace std;
     int minute, hours, month, dow, dom;
     int i=0;
     size_t iteration =0;
-    string minute_str, hours_str, month_str, dow_str, dom_str;
+    QString minute_str, hours_str, month_str, dow_str, dom_str;
     char tmp[5][2];
     bool UseMinuteAlternative, UseHoursAlternative, UseMonthAlternative, UseDowAlternative, UseDomAlternative = {false};
 
     sscanf(command.c_str(),"%s %s %s %s %s",tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]);
 
     minute_str = tmp[0];
-    minute_str=minute_str.substr(0,2);
+    minute_str=minute_str.left(2);
     hours_str = tmp[1];
-    hours_str=hours_str.substr(0,2);
+    hours_str=hours_str.left(2);
     month_str = tmp[3];
-    month_str=month_str.substr(0,2);
+    month_str=month_str.left(2);
     dow_str = tmp[4];
-    dow_str=dow_str.substr(0,2);
+    dow_str=dow_str.left(2);
     dom_str = tmp[2];
-    dom_str=dom_str.substr(0,2);
+    dom_str=dom_str.left(2);
 
-    cout << minute_str<<"hours: "<<hours_str<<"DOM:"<<dom_str <<endl;
     while (i < 5) {
       iteration = command.find(" ", iteration+1);
       i++;
     }
     command = command.substr(0, iteration);
-    cout << command << endl;
 
     while (command.find("*") != -1) command = command.replace(command.find("*"), 1, "99");
     sscanf(command.c_str(),"%d %d %d %d %d",&minute,&hours,&dom,&month,&dow);
 
 
-    string dayOfTheWeek[7] = {i18n("Mon").toStdString(), i18n("Tue").toStdString(), i18n("Wed").toStdString(), i18n("Thu").toStdString(), i18n("Fri").toStdString(), i18n("Sat").toStdString(), i18n("Sun").toStdString()};
-    string monthOfTheYears[12] = {i18n("Jan").toStdString(), i18n("Feb").toStdString(), i18n("Mar").toStdString(), i18n("Apr").toStdString(), i18n("May").toStdString(), i18n("Jun").toStdString(), i18n("Jul").toStdString(), i18n("Aug").toStdString(), i18n("Sep").toStdString(), i18n("Oct").toStdString(), i18n("Nov").toStdString(), i18n("Dec").toStdString()};
+    QString dayOfTheWeek[7] = {i18n("Mon"), i18n("Tue"), i18n("Wed"), i18n("Thu"), i18n("Fri"), i18n("Sat"), i18n("Sun")};
+    QString monthOfTheYears[12] = {i18n("Jan"), i18n("Feb"), i18n("Mar"), i18n("Apr"), i18n("May"), i18n("Jun"), i18n("Jul"), i18n("Aug"), i18n("Sep"), i18n("Oct"), i18n("Nov"), i18n("Dec")};
 
     if (minute_str == "*")
       minute_str.clear();
@@ -91,21 +89,20 @@ using namespace std;
     }
 
     if (dom_str == "*")
-      dom_str = i18n("Everyday").toStdString();
+      dom_str = i18n("Everyday");
 
     if (month_str != "*")
       month_str = monthOfTheYears[month-1];
     else
-      month_str = i18n("Everymonth").toStdString();
+      month_str = i18n("Everymonth");
 
     if (dow_str != "*")
       dow_str = dayOfTheWeek[dow-1];
     else
       dow_str = "";
 
-    string output = month_str + " " + dom_str + " " + dow_str + i18n(" at ").toStdString() + hours_str + ":" + minute_str;
-    //cout << "THIS IS THE OUTPUT: " << output << endl;
-    return output;
+    QString output = month_str + " " + dom_str + " " + dow_str + i18n(" at ") + hours_str + ":" + minute_str;
+    return output.toStdString();
   }
 
 /**
@@ -115,39 +112,38 @@ using namespace std;
   @return a semi parser string
   @todo check if it is still used
 */
-  string CronParser::display(char* parsedJob[3]) {
-    string month;
+  QString CronParser::display(char* parsedJob[3]) {
+    QString month;
 
     if (strcmp(parsedJob[3], "1") ==0)
-      month= i18n("Jan").toStdString();
+      month= i18n("Jan");
     else if (strcmp(parsedJob[3], "2") ==0)
-      month= i18n("Feb").toStdString();
+      month= i18n("Feb");
     else if (strcmp(parsedJob[3], "3") ==0)
-      month= i18n("Mar").toStdString();
+      month= i18n("Mar");
     else if (strcmp(parsedJob[3], "4") ==0)
-      month= i18n("Apr").toStdString();
+      month= i18n("Apr");
     else if (strcmp(parsedJob[3], "5") ==0)
-      month= i18n("May").toStdString();
+      month= i18n("May");
     else if (strcmp(parsedJob[3], "6") ==0)
-      month= i18n("Jun").toStdString();
+      month= i18n("Jun");
     else if (strcmp(parsedJob[3], "7") ==0)
-      month= i18n("Jul").toStdString();
+      month= i18n("Jul");
     else if (strcmp(parsedJob[3], "8") ==0)
-      month= i18n("Aug").toStdString();
+      month= i18n("Aug");
     else if (strcmp(parsedJob[3], "9") ==0)
-      month= i18n("Sep").toStdString();
+      month= i18n("Sep");
     else if (strcmp(parsedJob[3], "10") ==0)
-      month= i18n("Oct").toStdString();
+      month= i18n("Oct");
     else if (strcmp(parsedJob[3], "11") ==0)
-      month= i18n("Nov").toStdString();
+      month= i18n("Nov");
     else if (strcmp(parsedJob[3],"12") ==0)
-      month= i18n("Dec").toStdString();
+      month= i18n("Dec");
     else
-      month= i18n("*(all)").toStdString();
+      month= i18n("*(all)");
 
-    //cout << month << " " << parsedJob[2] << ", " << parsedJob[1] << ":" << parsedJob[0] << "    Command --> " << parsedJob[5];
 
-    string toReturn = parsedJob[0];
+    QString toReturn = parsedJob[0];
     toReturn += " ";
     toReturn += parsedJob[1];
     toReturn += " ";
@@ -201,7 +197,7 @@ using namespace std;
         }
 
         if (buffer[0] != '#') {
-            newCronFile.push_back(display(parsedJob));
+            newCronFile.push_back(display(parsedJob).toStdString());
             currentLine++;
         }
       }
@@ -274,12 +270,10 @@ using namespace std;
     else
       aNewCronJob += gui->txtCommand->text().toStdString();
     
-    cout << "Job:  "<< aNewCronJob ;
     newCronFile.push_back(aNewCronJob);
     ofstream toWrite("/tmp/newCronFile.cron");
     for (int l =0; l < newCronFile.size(); l++) {
         toWrite << newCronFile[l].substr(0, newCronFile[l].size() -1)  << endl;
-        cout << newCronFile[l].substr(0, newCronFile[l].size() -1) << endl;
     }
     toWrite.close();
     system("crontab /tmp/newCronFile.cron");
