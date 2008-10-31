@@ -52,6 +52,7 @@
   @param[in] parent The parent window
 */
   Man::Man(QWidget* parent) : QDockWidget ( 0 ) {
+    setObjectName("Man");
     setObjectName(QString::fromUtf8("dockManual"));
     setGeometry(QRect(783, 24, 201, 629));
     QSizePolicy sizePolicy5(QSizePolicy::Ignored, QSizePolicy::Ignored);

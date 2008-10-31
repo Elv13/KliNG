@@ -36,6 +36,9 @@
 #include "klistwidget.h"
 #include <KLocalizedString>
 #include <klistwidgetsearchline.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <getopt.h>
 
 using namespace std;
 
@@ -47,6 +50,8 @@ using namespace std;
   @todo Use double click to insert command
 */
   CommandList::CommandList(QWidget* parent, QStringList* commandStringList) : QDockWidget ( 0 ) {
+    commandList = commandStringList;
+    setObjectName("CommandList");
     //setGeometry(QRect(0, 435, 200, 122));
     /*QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sizePolicy3.setHorizontalStretch(0);
@@ -64,7 +69,7 @@ using namespace std;
     listCommand->setObjectName(QString::fromUtf8("listCommand"));
     listCommand->setSortingEnabled(true);
     listCommand->setDragDropMode(QAbstractItemView::DragOnly);
-    indexCommand(commandStringList);
+    indexCommand();
 
     txtFindCommand = new KListWidgetSearchLine(this,listCommand);
     txtFindCommand->setObjectName(QString::fromUtf8("txtFindCommand"));
@@ -81,10 +86,10 @@ using namespace std;
   CommandList destructor
 */
   CommandList::~CommandList() {
-    delete listCommand;
+    /*delete listCommand;
     delete txtFindCommand;
     delete verticalLayout_5;
-    delete dockCommandListContents;
+    delete dockCommandListContents;*/
   }
 
 /**
@@ -102,42 +107,48 @@ using namespace std;
   @bug add some non-executable file to the list
   @bug show duplicate command if the PATH contais a symlink
 */
-  void CommandList::indexCommand(QStringList* commandStringList) {
-    FILE *PATH = popen("echo $PATH ", "r" );
+  void CommandList::indexCommand() {
+  
+    QString path;
+    extern char **environ;
+    char **env;
+    for (env = environ; *env != NULL; ++env) {
+      QString anEnvVar = *env;
+      if (anEnvVar.left(anEnvVar.indexOf("=")) == "PATH") {
+        path = anEnvVar.right(anEnvVar.count() - anEnvVar.indexOf("=") -1);
+      }
+    }
+    //FILE *PATH = popen("echo $PATH ", "r" );
 
     char buffer[2000];
     string tmp;
-    if ( PATH != NULL ) {
-      while ( fgets( buffer, sizeof buffer, PATH ) != NULL ) {
-        string path = buffer;
-        while (path.find(":") != -1) {
-          string folder = "ls " + path.substr(0, path.find(":"));
-          FILE *dirContent = popen(folder.c_str(), "r" );
-          char buffer2[256];
-          if ( dirContent != NULL ) {
-            while ( fgets( buffer2, sizeof buffer2, dirContent ) != NULL ) {
-              tmp = buffer2;
-              tmp = tmp.substr(0, tmp.size() -1);
-              *commandStringList << tmp.c_str();
-            }
-            pclose( dirContent );
+    if ( path.count() != 0 ) {
+      while (path.indexOf(":") != -1) {
+        QString folder = "ls " + path.left(path.indexOf(":"));
+        FILE *dirContent = popen(folder.toStdString().c_str(), "r" );
+        char buffer2[256];
+        if ( dirContent != NULL ) {
+          while ( fgets( buffer2, sizeof buffer2, dirContent ) != NULL ) {
+            tmp = buffer2;
+            tmp = tmp.substr(0, tmp.size() -1);
+            *commandList << tmp.c_str();
           }
-          path = path.substr(path.find(":")+1, (path.size() - path.find(":") -1));
+          pclose( dirContent );
         }
+        path = path.mid(path.indexOf(":")+1, (path.count() - path.indexOf(":") -1));
       }
-      pclose( PATH );
     }
 
-    if (commandStringList->isEmpty() == false) {
-      commandStringList->sort();
-      listCommand->addItem(commandStringList->at(0));
+    if (commandList->isEmpty() == false) {
+      commandList->sort();
+      listCommand->addItem(commandList->at(0));
       int i =1;
-      while (i < commandStringList->size()) {
-	if (commandStringList->at(i) == commandStringList->at(i-1)) {
-	  commandStringList->removeAt(i);
+      while (i < commandList->size()) {
+	if (commandList->at(i) == commandList->at(i-1)) {
+	  commandList->removeAt(i);
 	}
 	else {
-	  listCommand->addItem(commandStringList->at(i));
+	  listCommand->addItem(commandList->at(i));
 	  i++;
 	}
       }

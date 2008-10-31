@@ -41,6 +41,7 @@
       QWidget* monitorCentralWidget;
       QWidget* editorCentralWidget;
       QWidget* webBrowserCentralWidget;
+      QWidget* managerCentralWidget;
       QCheckBox* enableTerminal;
       QCheckBox* enableMonitor;
       QCheckBox* enableEditor;
@@ -55,6 +56,7 @@
       QGridLayout* gridEditor;
       QGridLayout* gridWebBrowser;
       QGridLayout* gridTerminalOpts;
+      QGridLayout* gridManager;
       QCheckBox* ckbShowScriptBrowserTerminal;
       QCheckBox* ckbShowScheduledTaskTerminal;
       QCheckBox* ckbShowCommandListTerminal;
@@ -82,6 +84,7 @@
       QCheckBox* ckbShowDebugMonitor;
       QCheckBox* ckbShowDebugEditor;
       QCheckBox* ckbShowDebugWebBrowser;
+      QCheckBox* ckbEnableManager;
       
       QGridLayout* gridLogging;
       QSpinBox* spinMb;
@@ -104,8 +107,18 @@
       KPushButton* btnPluginConfig;
       KPushButton* btnDownloadPlugin;
       
+      QWidget* generalCentral;
+      QListWidget* lstTabOrder;
+      KPushButton* btnUp;
+      KPushButton* btnDown;
+      
     private slots:
       void saveConfig();
       void addLogExclude();
+      void moveTabUp();
+      void moveTabDown();
+      
+    private:
+      int countActiveMode();
   };
 #endif
