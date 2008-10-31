@@ -254,7 +254,7 @@
   NewCronJob destructor
 */
   NewCronJob::~NewCronJob() {
-    delete verticalSpacer;
+    /*delete verticalSpacer;
     delete txtCommand;
     delete rbCommand;
     delete verticalSpacer_2;
@@ -279,7 +279,7 @@
     delete verticalSpacer_3;
     delete lblIntro;
     delete verticalLayout_4;
-    delete centralwidget;
+    delete centralwidget;*/
   }
 
 /**

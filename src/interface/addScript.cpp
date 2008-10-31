@@ -50,6 +50,7 @@
 #include <KStandardDirs>
 #include <KSaveFile>
 #include <KLocalizedString>
+#include <time.h>
 
 
 /**
@@ -207,7 +208,7 @@
   AddScript destructor
 */
   AddScript::~AddScript() {
-    delete verticalSpacer_2;
+    /*delete verticalSpacer_2;
     delete txtDes;
     delete scriptDes;
     delete verticalLayout;
@@ -226,18 +227,24 @@
     delete verticalLayout_2;
     delete lstCategories;
     delete horizontalLayout_3;
-    delete centralwidget;
+    delete centralwidget;*/
   }
 
 /**
   Add a script to the DB and create the file
 */
   void AddScript::addAScript() {
-    //TODO This function need to be rewriten, it is buggy, cheap and ugly.
+    QString description = txtDes->toPlainText();
+    while (description.indexOf("'") != -1)
+      description.replace(description.indexOf("'"), 1, "@[^@");
+      
+    while (description.indexOf(0x22) != -1)
+      description.replace(description.indexOf(0x22), 1, "@[^^@");
+      
     QSqlQuery query;
     
     if (txtName->text().right(3) == ".sh") { //TODO fix this duplicated code
-      query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text() +"','" + txtDes->toPlainText() + "')");
+      query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES, DATE_CRE, DATE_MOD) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text() +"','" + description + "','" + QString::number(time(NULL)) + "','"+ QString::number(time(NULL)) + "')");
       KSaveFile file(KStandardDirs::locateLocal("appdata", "/script/") + txtName->text().trimmed());
       file.open();
       QByteArray outputByteArray;
@@ -248,7 +255,7 @@
     }
     else {
       KSaveFile file(KStandardDirs::locateLocal("appdata", "/script/") + txtName->text().trimmed() + ".sh");
-      query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text().trimmed() +".sh','" + txtDes->toPlainText() + "')");
+      query.exec("insert into TSCRIPT (CATEGORIE,NAME,SCRIPT_DES, DATE_CRE, DATE_MOD) values ('"+ cbbScriptCat->itemText(cbbScriptCat->currentIndex()) +"','" + txtName->text().trimmed() +".sh','" + description + "','" + QString::number(time(NULL)) + "','"+ QString::number(time(NULL)) + "')");
       file.open();
       QByteArray outputByteArray;
       outputByteArray.append(txtDes->toPlainText() );

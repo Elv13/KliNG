@@ -10,7 +10,39 @@
   Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigDialog(parent, "settings", aConfigSkeleton) {
     configSkeleton = aConfigSkeleton;
     resize(600,500);
-    pwiGeneral = addPage(new QLabel("test2"), i18n("General") );
+    
+    generalCentral = new QWidget();
+    
+    QGridLayout* gridGeneral =  new QGridLayout;
+    generalCentral->setLayout(gridGeneral);
+    
+    lstTabOrder = new QListWidget;
+    gridGeneral->addWidget(lstTabOrder,0,0,1,2);
+    
+    btnUp = new KPushButton;
+    btnUp->setText("Move up");
+    btnUp->setIcon(KIcon("arrow-up"));
+    gridGeneral->addWidget(btnUp,1,0);
+    
+    btnDown = new KPushButton;
+    btnDown->setText("Move down");
+    btnDown->setIcon(KIcon("arrow-down"));
+    gridGeneral->addWidget(btnDown,1,1);
+    
+    for (int l =0; l < 5; l++) {
+      if (aConfigSkeleton->terminalTabOrder == l)
+        lstTabOrder->addItem("Terminal");
+      else if (aConfigSkeleton->monitorTabOrder == l)
+        lstTabOrder->addItem("Monitor");
+      else if (aConfigSkeleton->editorTabOrder == l)
+        lstTabOrder->addItem("Editor");
+      else if (aConfigSkeleton->webbrowserTabOrder == l)
+        lstTabOrder->addItem("Web Browser");
+      else if (aConfigSkeleton->scriptManagerTabOrder == l)
+        lstTabOrder->addItem("Script Manager");
+    }
+    
+    pwiGeneral = addPage(generalCentral, i18n("General") );
     pwiGeneral->setIcon( KIcon( "configure" ) );
 
     QWidget* generalCentralWidget = new QWidget();
@@ -27,7 +59,7 @@
 
     enableTerminal = new QCheckBox();
     enableTerminal->setText("Enable terminal");
-    enableTerminal->setChecked(aConfigSkeleton->enableTerminal);
+    enableTerminal->setChecked((configSkeleton->terminalTabOrder == -1) ? false : true);
     terminalLayout->addWidget(enableTerminal);
 
     showInTerminal = new QGroupBox();
@@ -98,7 +130,7 @@
 
     enableMonitor = new QCheckBox();
     enableMonitor->setText("Enable execution monitor");
-    enableMonitor->setChecked(aConfigSkeleton->enableMonitor);
+    enableMonitor->setChecked((configSkeleton->monitorTabOrder == -1) ? false : true);
     monitorLayout->addWidget(enableMonitor);
 
     showInMonitor = new QGroupBox();
@@ -149,7 +181,7 @@
 
     enableEditor = new QCheckBox();
     enableEditor->setText("Enable editor");
-    enableEditor->setChecked(aConfigSkeleton->enableEditor);
+    enableEditor->setChecked((configSkeleton->editorTabOrder == -1) ? false : true);
     editorLayout->addWidget(enableEditor);
 
     showInEditor = new QGroupBox();
@@ -200,7 +232,7 @@
 
     enableWebBrowser = new QCheckBox();
     enableWebBrowser->setText("Enable web browser");
-    enableWebBrowser->setChecked(aConfigSkeleton->enableWebBrowser);
+    enableWebBrowser->setChecked((configSkeleton->webbrowserTabOrder == -1) ? false : true);
     webBrowserLayout->addWidget(enableWebBrowser);
 
     showInWebBrowser = new QGroupBox();
@@ -240,6 +272,19 @@
     gridWebBrowser->addWidget(ckbShowDebugWebBrowser,2,1);
     webBrowserLayout->addItem(new QSpacerItem(38, 30, QSizePolicy::Minimum, QSizePolicy::Expanding));
     generalLayout->addWidget(twGeneral);
+    
+    managerCentralWidget = new QWidget();
+    
+    gridManager = new QGridLayout;
+    managerCentralWidget->setLayout(gridManager);
+    
+    ckbEnableManager = new QCheckBox;
+    ckbEnableManager->setText("Enable script manager");
+    ckbEnableManager->setChecked((configSkeleton->scriptManagerTabOrder == -1) ? false : true);
+    gridManager->addWidget(ckbEnableManager,0,0);
+    
+    twGeneral->addTab(managerCentralWidget,QString());
+    twGeneral->setTabText(4, "Script Manager");
 
     pwiMode = addPage(generalCentralWidget, i18n("Mode") );
     pwiMode->setIcon( KIcon( "fork" ) );
@@ -251,7 +296,7 @@
     ckbEnableLogging = new QCheckBox();
     ckbEnableLogging->setText("Enable output logging");
     gridLogging->addWidget(ckbEnableLogging,0,0);
-
+    
     lblMb = new QLabel();
     lblMb->setText("Amount of data to keep: ");
     gridLogging->addWidget(lblMb,1,0);
@@ -346,15 +391,84 @@
     pwiPlugins->setIcon( KIcon( "vcs_add" ) );
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( saveConfig() ) );
+    connect( btnUp, SIGNAL( clicked() ), this, SLOT( moveTabUp() ) );
+    connect( btnDown, SIGNAL( clicked() ), this, SLOT( moveTabDown() ) );
     connect( btnAddExcludedCommand, SIGNAL( pressed() ), this, SLOT( addLogExclude() ) );
+  }
+  
+  void Config::moveTabUp() {
+    if (lstTabOrder->currentRow() != 0) {
+      QString tmp = lstTabOrder->currentItem()->text();
+      lstTabOrder->item(lstTabOrder->currentRow())->setText(lstTabOrder->item(lstTabOrder->currentRow() - 1)->text());
+      lstTabOrder->item(lstTabOrder->currentRow() - 1)->setText(tmp);
+      lstTabOrder->setCurrentRow(lstTabOrder->currentRow() - 1);
+    }
+  }
+  
+  void Config::moveTabDown() {
+    if (lstTabOrder->count() > lstTabOrder->currentRow() +1) {
+      QString tmp = lstTabOrder->currentItem()->text();
+      lstTabOrder->item(lstTabOrder->currentRow())->setText(lstTabOrder->item(lstTabOrder->currentRow() + 1)->text());
+      lstTabOrder->item(lstTabOrder->currentRow() +1)->setText(tmp);
+      lstTabOrder->setCurrentRow(lstTabOrder->currentRow() + 1);
+    }
   }
 
   void Config::saveConfig() {
-    configSkeleton->enableTerminal = enableTerminal->isChecked();
-    configSkeleton->enableMonitor = enableMonitor->isChecked();
-    configSkeleton->enableEditor = enableEditor->isChecked();
-    configSkeleton->enableWebBrowser = enableWebBrowser->isChecked();
+  
+    for (int l =0; l < lstTabOrder->count(); l++) {
+      if (lstTabOrder->item(l)->text() == "Terminal")
+        configSkeleton->terminalTabOrder = l;
+      else if (lstTabOrder->item(l)->text() == "Monitor")
+        configSkeleton->monitorTabOrder = l;
+      else if (lstTabOrder->item(l)->text() == "Editor")
+        configSkeleton->editorTabOrder = l;
+      else if (lstTabOrder->item(l)->text() == "Web Browser")
+        configSkeleton->webbrowserTabOrder = l;
+      else if (lstTabOrder->item(l)->text() == "Script Manager")
+        configSkeleton->scriptManagerTabOrder = l;
+    }
+    //configSkeleton->enableTerminal = enableTerminal->isChecked();
+    if (!enableTerminal->isChecked()) {
+      configSkeleton->terminalTabOrder = -1;
+    }
+    else if (configSkeleton->terminalTabOrder == -1) {
+      configSkeleton->terminalTabOrder = countActiveMode();
+    }
+    
+    //configSkeleton->enableMonitor = enableMonitor->isChecked();
+    if (!enableMonitor->isChecked()) {
+      configSkeleton->monitorTabOrder = -1;
+    }
+    else if (configSkeleton->monitorTabOrder == -1) {
+      configSkeleton->monitorTabOrder = countActiveMode();
+    }
+    //configSkeleton->enableEditor = enableEditor->isChecked();
+    if (!enableEditor->isChecked()) {
+      configSkeleton->editorTabOrder = -1;
+    }
+    else if (configSkeleton->editorTabOrder == -1) {
+      configSkeleton->editorTabOrder = countActiveMode();
+    }
+    //configSkeleton->enableWebBrowser = enableWebBrowser->isChecked();
+    if (!enableWebBrowser->isChecked()) {
+      configSkeleton->webbrowserTabOrder = -1;
+    }
+    else if (configSkeleton->webbrowserTabOrder == -1) {
+      configSkeleton->webbrowserTabOrder = countActiveMode();
+    }
+    
+    if (!ckbEnableManager->isChecked()) {
+      configSkeleton->scriptManagerTabOrder = -1;
+    }
+    else if (configSkeleton->webbrowserTabOrder == -1) {
+      configSkeleton->scriptManagerTabOrder = countActiveMode();
+    }
+    
     configSkeleton->showScriptBrowserTerminal = ckbShowScriptBrowserTerminal->isChecked();
+    /*if !() {
+      
+    }*/
     configSkeleton->showScheduledTaskTerminal = ckbShowScheduledTaskTerminal->isChecked();
     configSkeleton->showCommandListTerminal = ckbShowCommandListTerminal->isChecked();
     configSkeleton->showHistoryTerminal = ckbShowHistoryTerminal->isChecked();
@@ -377,10 +491,13 @@
     configSkeleton->showCommandListrWebBrowser = ckbShowCommandListrWebBrowser->isChecked();
     configSkeleton->showHistoryrWebBrowser = ckbShowHistoryrWebBrowser->isChecked();
     configSkeleton->showManPagerWebBrowser = ckbShowManPagerWebBrowser->isChecked();
-    configSkeleton->writeConfig();
     
     configSkeleton->maxOutputSize = spinMaxOutputSize->value();
     configSkeleton->ammountToKeep = spinMb->value();
+    
+    configSkeleton->writeConfig();
+    
+
   }
 
   void Config::addLogExclude() {
@@ -391,4 +508,19 @@
       configSkeleton->writeConfig();
       lstExclude->addItem(text);
     }
+  }
+
+  int Config::countActiveMode() {
+    int i =0;
+    if (configSkeleton->terminalTabOrder != -1)
+      i++;
+    if (configSkeleton->monitorTabOrder != -1)
+      i++;
+    if (configSkeleton->editorTabOrder != -1)
+      i++;
+    if (configSkeleton->webbrowserTabOrder != -1)
+      i++;
+    if (configSkeleton->scriptManagerTabOrder != -1)
+      i++;
+    return i;
   }

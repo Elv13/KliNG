@@ -54,6 +54,7 @@
   @param[in] parent The parent window
 */
   ScriptBrowser::ScriptBrowser(QWidget* parent) : QDockWidget ( 0 ) {
+    setObjectName("ScriptBrowser");
     QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed); //
     sizePolicy1.setHorizontalStretch(31); //
     sizePolicy1.setVerticalStretch(31); //
@@ -153,7 +154,7 @@
   ScriptBrowser destructor
 */
   ScriptBrowser::~ScriptBrowser() {
-    delete horizontalSpacer_2;
+    /*delete horizontalSpacer_2;
     delete btnLaunch;
     delete btnEdit;
     delete btnDeleteScipt;
@@ -161,7 +162,7 @@
     delete hlScriptControls;
     delete tvScriptList;
     delete verticalLayout_9;
-    delete dockScriptBrowserContents;
+    delete dockScriptBrowserContents;*/
   }
 
 /**
@@ -191,7 +192,6 @@
       query2.exec("SELECT NAME FROM TSCRIPT WHERE CATEGORIE = '"+ query.value(0).toString() +"'");
       while (query2.next()) {
 	new QTreeWidgetItem(aTVItem);
-	std::cout << query2.value(0).toString().toStdString() << std::endl << std::endl;
 	
 	tvScriptList->topLevelItem(j)->child(k)->setText(0,query2.value(0).toString());
 	k++;
