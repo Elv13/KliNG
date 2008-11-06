@@ -39,6 +39,9 @@
 #include <KLineEdit>
 #include <QLabel>
 #include <QThread>
+#include <QStringList>
+#include <QVector>
+#include "syntax/bash.h"
 #include "sideBar.h"
 #include "debugTerm.h"
 
@@ -48,7 +51,7 @@ QT_BEGIN_NAMESPACE
     Q_OBJECT
     
     public:
-      ScriptEditor(QWidget* parent);
+      ScriptEditor(QWidget* parent, QStringList commandList);
       
       QVBoxLayout *verticalLayout_7;
       QHBoxLayout *hlControl2;
@@ -85,13 +88,16 @@ QT_BEGIN_NAMESPACE
       KPushButton *kpushbutton_7;
       QTableWidget* lineNBSideBar;
       QString fileName;
+      BashSyntaxHighlighter* bashHighlighter;
             
     private:
       void sendCommand(QString command);
       int countLine(QString script);
       void setDebuggerMode(bool value);
       bool evalCondition(QString line);
+      void highlightLine(int number);
       QString* commandArray;
+      QString originalText;
       bool isDebugging;
       int currentLine;
       int lineNumber;
@@ -101,14 +107,16 @@ QT_BEGIN_NAMESPACE
       SideBar* lastSBItem;
       SideBar* sbCurrentLine;
       DebugTerm* aDebugTerm;
-      int inCondition;
       
       //Interpreter
+      QVector<bool*> ifVector;
+      QVector<int*> loopVector;
       bool loopUntilCondition();
       bool ifStatement();
       bool whileLoop();
       bool forLoop();
       bool untilLoop();
+      bool doneStatement();
       bool elseStatement();
       bool elifStatement();
       bool fiStatement();
