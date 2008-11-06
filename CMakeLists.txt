@@ -35,6 +35,7 @@
         src/interface/miniClasses.cpp
         src/interface/webBrowser.cpp
         src/interface/defaultScreen.cpp
+        src/interface/syntax/bash.cpp
       )
 
       kde4_add_executable(kling ${kling_SRCS})

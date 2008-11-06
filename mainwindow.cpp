@@ -91,14 +91,6 @@
     tabCategories->setTabPosition(QTabWidget::East);
     tabCategories->setTabShape(QTabWidget::Rounded);
     setCentralWidget(tabCategories);
-
-    tabWebBrowser = new WebBrowser(0);
-
-    tabEditor = new ScriptEditor(0);
-    
-    tabAdvScripManager = new AdvancedScriptManager(0);
-    
-    tabGestion = new ExecutionMonitor(0);
     
     //These dock need to exist, they manage the completer and the logging
     historyStringList = new QStringList();
@@ -106,6 +98,14 @@
     
     commandStringList = new QStringList();
     dockCommandList = new CommandList(this, commandStringList); 
+
+    tabWebBrowser = new WebBrowser(0);
+
+    tabEditor = new ScriptEditor(0, *commandStringList);
+    
+    tabAdvScripManager = new AdvancedScriptManager(0);
+    
+    tabGestion = new ExecutionMonitor(0);
     
     tabShell = new Term (dockHistory ,0, commandStringList, historyStringList);
 
@@ -933,7 +933,7 @@
     aDialog->setLayout(aLayout);
     aDialog->setWindowTitle("Script Editor");
     aDialog->resize(780,530);
-    ScriptEditor* centralWidget = new ScriptEditor(0);
+    ScriptEditor* centralWidget = new ScriptEditor(0, *commandStringList);
     aLayout->addWidget(centralWidget);
     aDialog->show();
   }
