@@ -11,7 +11,6 @@
         addItemBool("isConfigured", isConfigured, false);
         
           setCurrentGroup("Terminal");
-          addItemBool("enableTerminal", enableTerminal, true);
           addItemBool("showScriptBrowserTerminal", showScriptBrowserTerminal, true);
           addItemBool("showScheduledTaskTerminal", showScheduledTaskTerminal, true);
           addItemBool("showCommandListTerminal", showCommandListTerminal, true);
@@ -29,7 +28,6 @@
           addItemInt("debugHeightTerminal", debugHeightTerminal, -1);
 
           setCurrentGroup("Monitor");
-          addItemBool("enableMonitor", enableMonitor, true);
           addItemBool("showScriptBrowserMonitor", showScriptBrowserMonitor, true);
           addItemBool("showScheduledTaskMonitor", showScheduledTaskMonitor, true);
           addItemBool("showCommandListMonitor", showCommandListMonitor, false);
@@ -44,7 +42,6 @@
           addItemInt("debugHeightMonitor", debugHeightMonitor, -1);
 
           setCurrentGroup("Editor");
-          addItemBool("enableEditor", enableEditor, true);
           addItemBool("showScriptBrowserEditor", showScriptBrowserEditor, true);
           addItemBool("showScheduledTaskEditor", showScheduledTaskEditor, true);
           addItemBool("showCommandListEditor", showCommandListEditor, true);
@@ -59,7 +56,6 @@
           addItemInt("debugHeightEditor", debugHeightEditor, -1);
 
           setCurrentGroup("WebBrowser");
-          addItemBool("enableWebBrowser", enableWebBrowser, true);
           addItemBool("showScriptBrowserWebBrowser", showScriptBrowserWebBrowser, false);
           addItemBool("showScheduledTaskrWebBrowser", showScheduledTaskrWebBrowser, false);
           addItemBool("showCommandListrWebBrowser", showCommandListrWebBrowser, false);
@@ -72,6 +68,14 @@
           addItemInt("historyHeightWebBrowser", historyHeightWebBrowser, -1);
           addItemInt("manPageHeightWebBrowser", manPageHeightWebBrowser, -1);
           addItemInt("debugHeightWebBrowser", debugHeightWebBrowser, -1);
+          
+          setCurrentGroup("AdvScriptManager");
+          addItemBool("showScriptBrowserAdvScriptManager", showScriptBrowserAdvScriptManager, false);
+          addItemBool("showScheduledTaskAdvScriptManager", showScheduledTaskAdvScriptManager, false);
+          addItemBool("showCommandListAdvScriptManager", showCommandListAdvScriptManager, false);
+          addItemBool("showHistoryAdvScriptManager", showHistoryAdvScriptManager, false);
+          addItemBool("showManPageAdvScriptManager", showManPageAdvScriptManager, false);
+          addItemBool("showDebugAdvScriptManager", showDebugAdvScriptManager, false);
           
           setCurrentGroup("Logginf");
           addItemInt("ammountToKeep", ammountToKeep,20);
@@ -87,13 +91,16 @@
           addItemBool("appendToBashHistory", appendToBashHistory, true);
           addItemStringList("logExcludeList", logExcludeList, QStringList() << "ls" << "dir" << "cd" << "pwd");
           addItemStringList("fileToWatch", fileToWatch, QStringList() << "/var/log/messages");
+          
+          setCurrentGroup("TabOrder");
+          addItemInt("terminalTabOrder", terminalTabOrder, 0);
+          addItemInt("editorTabOrder", editorTabOrder, 1);
+          addItemInt("monitorTabOrder", monitorTabOrder, 2);
+          addItemInt("webbrowserTabOrder", webbrowserTabOrder, 3);
+          addItemInt("scriptManagerTabOrder", scriptManagerTabOrder, 4);
       }
 
       bool isConfigured;
-      bool enableTerminal;
-      bool enableMonitor;
-      bool enableEditor;
-      bool enableWebBrowser;
       
       //Terminal
       bool showScriptBrowserTerminal;
@@ -155,6 +162,14 @@
       int manPageHeightWebBrowser;
       int debugHeightWebBrowser;
       
+      //Advanced Script Manager
+      bool showScriptBrowserAdvScriptManager;
+      bool showScheduledTaskAdvScriptManager;
+      bool showCommandListAdvScriptManager;
+      bool showHistoryAdvScriptManager;
+      bool showManPageAdvScriptManager;
+      bool showDebugAdvScriptManager;
+      
       //Logging
       int ammountToKeep;
       int maxOutputSize;
@@ -162,6 +177,13 @@
       QStringList fileToWatch;
       bool keepOutput;
       bool appendToBashHistory;
+      
+      //Tab order
+      int terminalTabOrder;
+      int editorTabOrder;
+      int monitorTabOrder;
+      int webbrowserTabOrder;
+      int scriptManagerTabOrder;
   };
 #endif
 
