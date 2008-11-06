@@ -727,8 +727,7 @@
     while ((commandArray[currentLine].trimmed().left(2).toLower() != "fi") && (commandArray[currentLine].trimmed().left(4).toLower() != "elif") && (commandArray[currentLine].trimmed().left(4).toLower() != "else")) {
       currentLine++;
       highlightLine(currentLine);
-      /*sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      sbCurrentLine = sbCurrentLine->nextSBItem;*/
+      setNextSbLine();
     }
     return false;
   }
@@ -741,8 +740,7 @@
       *ifVector.last() = true;
       currentLine++;
       highlightLine(currentLine);
-      sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      sbCurrentLine = sbCurrentLine->nextSBItem;
+      setNextSbLine();
       evalCommand();
     }
     else {
@@ -775,15 +773,17 @@
     if (evalCondition(commandArray[currentLine])) {
       currentLine++;
       highlightLine(currentLine);
-      sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      sbCurrentLine = sbCurrentLine->nextSBItem;
+      setNextSbLine();
       evalCommand();
     }
     else {
       loopVector.pop_back();
-      while (commandArray[currentLine].trimmed().left(4).toLower() != "done")
+      while (commandArray[currentLine].trimmed().left(4).toLower() != "done") {
         currentLine++;
+	setNextSbLine();
+      }
       currentLine++;
+      setNextSbLine();
       evalCommand();
     }
   }
@@ -793,7 +793,39 @@
   }
   
   bool ScriptEditor::untilLoop() {
+    if (loopVector.count() == 0) {
+      int* tmp = new int;
+      *tmp = currentLine;
+      loopVector.append(tmp);
+      currentLine++;
+      setNextSbLine();
+      evalCommand();
+    }
+    else if (*loopVector.last() != currentLine) {
+      int* tmp = new int;
+      *tmp = currentLine;
+      loopVector.append(tmp);
+      currentLine++;
+      setNextSbLine();
+      evalCommand();
+    }
     
+    if (evalCondition(commandArray[currentLine])) {
+      currentLine++;
+      highlightLine(currentLine);
+      setNextSbLine();
+      evalCommand();
+    }
+    else {
+      loopVector.pop_back();
+      while (commandArray[currentLine].trimmed().left(4).toLower() != "done") {
+        currentLine++;
+	setNextSbLine();
+      }
+      currentLine++;
+      setNextSbLine();
+      evalCommand();
+    }
   }
   
   bool ScriptEditor::doneStatement() { //TODO remove the crap, it is impossible that it go to the else if noting bug and the script is valid
@@ -802,8 +834,7 @@
       for (int i =0; i < *loopVector.last();i++) {
         sbCurrentLine = sbCurrentLine->nextSBItem;
         if ((currentLine < lineNumber) && (sbCurrentLine->debugState == false))
-          if (sbCurrentLine->previousSBItem != NULL) 
-            sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
+          setNextSbLine();
       }
       currentLine = *loopVector.last();
       evalCommand();
@@ -824,8 +855,7 @@
     else if (*ifVector.last() == false) {
       currentLine++;
       highlightLine(currentLine);
-      sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      sbCurrentLine = sbCurrentLine->nextSBItem;
+      setNextSbLine();
       evalCommand();
     }
     else {
@@ -846,8 +876,7 @@
           *ifVector.last() = true;
           currentLine++;
           highlightLine(currentLine);
-          sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-          sbCurrentLine = sbCurrentLine->nextSBItem;
+          setNextSbLine();
           evalCommand();
     }
     else {
@@ -869,8 +898,7 @@
     ifVector.pop_back();
     currentLine++;
     highlightLine(currentLine);
-    sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-    sbCurrentLine = sbCurrentLine->nextSBItem;
+    setNextSbLine();
     evalCommand();
   }
   
@@ -878,8 +906,7 @@
     if (commandArray[currentLine].trimmed().left(1).toLower() == "#") { 
       currentLine++;
       highlightLine(currentLine);
-      sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      sbCurrentLine = sbCurrentLine->nextSBItem;
+      setNextSbLine();
       sendCommand(commandArray[currentLine].toStdString().c_str());
     }
     else if (commandArray[currentLine].trimmed().left(2).toLower() == "if") {                            
@@ -911,4 +938,11 @@
       sendCommand(commandArray[currentLine].toStdString().c_str());
       sbCurrentLine = sbCurrentLine->nextSBItem;
     }
+  }
+
+  void ScriptEditor::setNextSbLine() {
+    if (sbCurrentLine->previousSBItem != NULL) 
+      sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
+    sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
+    sbCurrentLine = sbCurrentLine->nextSBItem;
   }

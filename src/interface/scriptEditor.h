@@ -96,6 +96,7 @@ QT_BEGIN_NAMESPACE
       void setDebuggerMode(bool value);
       bool evalCondition(QString line);
       void highlightLine(int number);
+      void setNextSbLine();
       QString* commandArray;
       QString originalText;
       bool isDebugging;

@@ -398,17 +398,55 @@ using namespace std;
   char** Shell::parseCommand(string command, int &paramNumber) {
     int counter;
     int i = 0;
-    string tmp;
+    QString tmp;
     counter = 0;
+    tmp = QString::fromStdString(command);
+    QVector<QString> argsVec;
 
-    tmp = command;
-    while (tmp.find(" ") != -1) {
+    //BEGINING test exaustively
+    while (!tmp.isEmpty()) {
+      if (tmp.indexOf("\"") < tmp.indexOf(" ")) {
+	if (tmp[0] != '\"') {
+	  argsVec.push_back(tmp.left(tmp.indexOf("\"") -1));
+	  tmp = tmp.remove(0, tmp.indexOf("\"") -1);
+	}
+	argsVec.push_back(tmp.mid(1, tmp.indexOf("\"")-1));
+	tmp.remove(0,  tmp.indexOf("\"")-1);
+      }
+      else if (tmp.indexOf("`") < tmp.indexOf(" ")) {
+	if (tmp[0] != '`') {
+	  argsVec.push_back(tmp.left(tmp.indexOf("`") -1));
+	  tmp = tmp.remove(0, tmp.indexOf("`") -1);
+	}
+	argsVec.push_back(tmp.mid(1, tmp.indexOf("`")-1));
+	tmp.remove(0,  tmp.indexOf("`")-1);
+      }
+      else if (tmp.indexOf("'") < tmp.indexOf(" ")) {
+	if (tmp[0] != '\'') {
+	  argsVec.push_back(tmp.left(tmp.indexOf("'") -1));
+	  tmp = tmp.remove(0, tmp.indexOf("'") -1);
+	}
+	argsVec.push_back(tmp.mid(1, tmp.indexOf("'")-1));
+	tmp.remove(0,  tmp.indexOf("'")-1);
+      }
+    }
+    
+    char** paramArray = new char* [argsVec.count() + 2]; 
+
+    for (int j=0, j < argsVec.count(); j++) {
+      char* arg = new char[argsVec[j].count()];
+      strcpy(arg,argsVec[j].toStdString().c_str());
+    }
+    paramArray[argsVec.count() + 1] = NULL;
+    //END test
+
+    /*while (tmp.indexOf(" ") != -1) {
       counter++;
-      tmp = tmp.substr((tmp.find(" ") + 1), (tmp.length() - tmp.find(" ") - 1));
+      tmp = tmp.mid((tmp.indexOf(" ") + 1), (tmp.count() - tmp.indexOf(" ") - 1));
     }
     counter++;
 
-    char** paramArray = new char* [counter + 2]; 
+    char** paramArray = new char* [argsVec.count() + 2]; 
     paramNumber = counter + 2;
 
     i = 0;
@@ -425,7 +463,7 @@ using namespace std;
     char* param = new char[paramLenght + 1];
     strcpy(param, command.c_str());
     paramArray[i] = param;
-    paramArray[i+1] = NULL;
+    paramArray[i+1] = NULL;*/
 
     return paramArray;
   }
