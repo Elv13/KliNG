@@ -405,37 +405,49 @@ using namespace std;
 
     //BEGINING test exaustively
     while (!tmp.isEmpty()) {
-      if (tmp.indexOf("\"") < tmp.indexOf(" ")) {
+      if ((tmp.indexOf("\"") < tmp.indexOf(" ")) && (tmp.indexOf("\"") != -1)) {
 	if (tmp[0] != '\"') {
 	  argsVec.push_back(tmp.left(tmp.indexOf("\"") -1));
 	  tmp = tmp.remove(0, tmp.indexOf("\"") -1);
 	}
 	argsVec.push_back(tmp.mid(1, tmp.indexOf("\"")-1));
-	tmp.remove(0,  tmp.indexOf("\"")-1);
+	tmp.remove(0,  tmp.indexOf("\""));
       }
-      else if (tmp.indexOf("`") < tmp.indexOf(" ")) {
+      else if ((tmp.indexOf("`") < tmp.indexOf(" ")) && (tmp.indexOf("`") != -1)) {
 	if (tmp[0] != '`') {
 	  argsVec.push_back(tmp.left(tmp.indexOf("`") -1));
 	  tmp = tmp.remove(0, tmp.indexOf("`") -1);
 	}
 	argsVec.push_back(tmp.mid(1, tmp.indexOf("`")-1));
-	tmp.remove(0,  tmp.indexOf("`")-1);
+	tmp.remove(0,  tmp.indexOf("`"));
       }
-      else if (tmp.indexOf("'") < tmp.indexOf(" ")) {
+      else if ((tmp.indexOf("'") < tmp.indexOf(" ")) && (tmp.indexOf("'") != -1)) {
 	if (tmp[0] != '\'') {
 	  argsVec.push_back(tmp.left(tmp.indexOf("'") -1));
-	  tmp = tmp.remove(0, tmp.indexOf("'") -1);
+	  tmp = tmp.remove(0, tmp.indexOf("'"));
 	}
 	argsVec.push_back(tmp.mid(1, tmp.indexOf("'")-1));
-	tmp.remove(0,  tmp.indexOf("'")-1);
+	tmp.remove(0,  tmp.indexOf("'"));
+      }
+      else if (tmp.indexOf(" ") == -1) {
+        argsVec.push_back(tmp);
+        tmp.clear();
+      }
+      else if (tmp.indexOf(" ") == 0) {
+        tmp = tmp.trimmed();
+      }
+      else {
+        argsVec.push_back(tmp.left(tmp.indexOf(" ")));
+        tmp.remove(0,  tmp.indexOf("="));
       }
     }
-    
+    printf("I am here4");
     char** paramArray = new char* [argsVec.count() + 2]; 
 
-    for (int j=0, j < argsVec.count(); j++) {
+    for (int j=0; j < argsVec.count(); j++) {
       char* arg = new char[argsVec[j].count()];
       strcpy(arg,argsVec[j].toStdString().c_str());
+      paramArray[j] = arg;
     }
     paramArray[argsVec.count() + 1] = NULL;
     //END test
