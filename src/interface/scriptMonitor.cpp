@@ -28,7 +28,7 @@
 
 #include "scriptMonitor.h"
 
-#include "../Shell.h"
+#include "../virtTTY.h"
 #include "../thread.h"
 #include <QString>
 #include <QtCore/QVariant>
