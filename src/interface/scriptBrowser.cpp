@@ -30,7 +30,7 @@
 
 #include "addScript.h"
 #include "scriptMonitor.h"
-#include "../Shell.h"
+#include "../virtTTY.h"
 #include <QtGui/QDockWidget>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QTreeWidget>
