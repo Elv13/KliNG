@@ -13,7 +13,8 @@
         src/interface/commandList.cpp
         src/interface/man.cpp
         src/interface/setup.cpp
-        src/Shell.cpp
+        src/virtTTY.cpp
+        src/shell.cpp
         src/manParser.cpp
         src/thread.cpp
         src/interface/sideBar.cpp

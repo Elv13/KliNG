@@ -36,7 +36,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "Shell.h"
+#include "virtTTY.h"
 
 using namespace std;
 
@@ -264,7 +264,7 @@ using namespace std;
     aNewCronJob += " ";
     
     if (gui->rbScript->isChecked() == true) {
-      QString scriptPath = (Shell::getResult("echo $HOME").mid(0, Shell::getResult("echo $HOME").size()-1)) + "/.kling/script/" + gui->tblScript->item(gui->tblScript->currentRow(),0)->text() + ".sh ";
+      QString scriptPath = (VirtTTY::getResult("echo $HOME").mid(0, VirtTTY::getResult("echo $HOME").size()-1)) + "/.kling/script/" + gui->tblScript->item(gui->tblScript->currentRow(),0)->text() + ".sh ";
       aNewCronJob += scriptPath;
     }
     else

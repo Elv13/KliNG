@@ -42,12 +42,13 @@
 #include <QStringList>
 #include <QVector>
 #include "syntax/bash.h"
+#include "../shell.h"
 #include "sideBar.h"
 #include "debugTerm.h"
 
 QT_BEGIN_NAMESPACE
 
-  class ScriptEditor : public QWidget {
+  class ScriptEditor : public QWidget,Shell {
     Q_OBJECT
     
     public:
@@ -92,36 +93,16 @@ QT_BEGIN_NAMESPACE
             
     private:
       void sendCommand(QString command);
-      int countLine(QString script);
       void setDebuggerMode(bool value);
-      bool evalCondition(QString line);
       void highlightLine(int number);
-      void setNextSbLine();
-      QString* commandArray;
-      QString originalText;
+      bool doneStatement();
+      void signalNextLine();
       bool isDebugging;
-      int currentLine;
-      int lineNumber;
-      int sbLineNB2;
       int currentLineCount;
       SideBar* firstSBItem;
       SideBar* lastSBItem;
       SideBar* sbCurrentLine;
       DebugTerm* aDebugTerm;
-      
-      //Interpreter
-      QVector<bool*> ifVector;
-      QVector<int*> loopVector;
-      bool loopUntilCondition();
-      bool ifStatement();
-      bool whileLoop();
-      bool forLoop();
-      bool untilLoop();
-      bool doneStatement();
-      bool elseStatement();
-      bool elifStatement();
-      bool fiStatement();
-      bool evalCommand();
       
     private slots:
       void startDebugging();
@@ -141,28 +122,5 @@ QT_BEGIN_NAMESPACE
       void textChanged();
       void updateLineCount(int lineCount);
       void executeNextCommand();
-  };
-  
-  class EditorThread : public QThread {
-    Q_OBJECT
-
-    public:
-        EditorThread(QObject *parent = 0, QString script = "") : QThread(parent) {
-          this->script = script;
-        }
-        void run() {
-          int i =0;
-          script += "\n";
-          for (int j = 0; j <= script.size(); j++) //TODO this is not efficient at all
-                if ((script[j] == 0x0A)) 
-                  i++;
-          emit lineCount(i);
-        }
-        
-    private:
-          QString script;
-          
-    signals:
-      void lineCount(int);
   };
 #endif

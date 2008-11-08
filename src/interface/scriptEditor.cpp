@@ -1,5 +1,5 @@
 //include "../../mainwindow.h"
-#include "../Shell.h"
+#include "../virtTTY.h"
 #include "debugTerm.h"
 #include "scriptEditor.h"
 #include <KStandardDirs>
@@ -334,10 +334,6 @@
         sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
         
       sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      /*sendCommand(commandArray[currentLine].toStdString().c_str());
-      sbCurrentLine = sbCurrentLine->nextSBItem;
-      currentLine++;
-      highlightLine(currentLine);*/
       evalCommand();
     }
     if (currentLine == i) {
@@ -372,7 +368,7 @@
         sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
 
       if (commandArray[currentLine] != "")
-        sendCommand(commandArray[currentLine].toStdString().c_str());
+        this->sendCommand(commandArray[currentLine].toStdString().c_str());
       
       sbCurrentLine = sbCurrentLine->nextSBItem;
       currentLine++;
@@ -412,7 +408,7 @@
       else
         sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
 
-      sendCommand(commandArray[currentLine].toStdString().c_str());
+      this->sendCommand(commandArray[currentLine].toStdString().c_str());
       sbCurrentLine = sbCurrentLine->nextSBItem;
       currentLine++;
       highlightLine(currentLine);
@@ -431,7 +427,7 @@
       //cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
       if (sbCurrentLine->previousSBItem != NULL) sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
       sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      sendCommand(commandArray[currentLine].toStdString().c_str());
+      this->sendCommand(commandArray[currentLine].toStdString().c_str());
       sbCurrentLine = sbCurrentLine->nextSBItem;
       currentLine++;
       highlightLine(currentLine);
@@ -498,11 +494,11 @@
   }
     
   void ScriptEditor::sendCommand(QString command) {
-    ShellThread* aThread = new ShellThread(command);
+    VirtTtyThread* aThread = new VirtTtyThread(command);
     //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
     //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
-    QObject::connect(aThread->aShell, SIGNAL(newLine(QString)), aDebugTerm->rtfDegubTerm, SLOT(append(QString)));
-    QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(executeNextCommand()));
+    QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), aDebugTerm->rtfDegubTerm, SLOT(append(QString)));
+    QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(executeNextCommand()));
     //QObject::connect(aThread->aShell, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
     //QObject::connect(aThread->aShell, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
     aThread->start();
@@ -581,24 +577,11 @@
     txtScriptEditor->setPlainText(script.trimmed());
     int lineCount = countLine(script.trimmed());
     updateLineCount(lineCount);
-  }
-  
-  int ScriptEditor::countLine(QString script) {
-    int i =0;
-
-    script += "\n";
-
-    for (int j = 0; j <= script.size(); j++) { //Count the script line
-          if ((script[j] == 0x0A) && (script[j+1] != 0x0A)) 
-            i++;
-    } 
-    return i;
-  }
-  
+  }  
   
  void ScriptEditor::textChanged() {
    if (!txtScriptEditor->isReadOnly()) {
-    EditorThread* aThread = new EditorThread(this, txtScriptEditor->toPlainText());
+    LineCounter* aThread = new LineCounter(this, txtScriptEditor->toPlainText());
     QObject::connect(aThread, SIGNAL(lineCount(int)), this, SLOT(updateLineCount(int)));
     aThread->run();
    }
@@ -703,138 +686,24 @@
     txtScriptEditor->setText(output);
     bashHighlighter->rehighlight();
   }
-  
-  #include <iostream>
-  bool ScriptEditor::evalCondition(QString line) {
-    line = line.mid(line.indexOf("[")+1, (line.count() - (line.indexOf("[")+1)));
-    line = line.left(line.indexOf("]")).trimmed();
-
-    line = "test " + line;
-    char buffer[30];
-    FILE *JOB = popen(line.toStdString().c_str(), "r" );
     
-    if ( JOB != NULL ) {
-      while ( fgets( buffer, sizeof buffer, JOB ) != NULL ) {}
-    }
-    bool toReturn = pclose(JOB);
-    printf("\n \n %d \n \n",toReturn);
-    return !toReturn;
-  }
-
-  bool ScriptEditor::loopUntilCondition() {
-    currentLine++;
+  void ScriptEditor::signalNextLine() {
+    if (sbCurrentLine != NULL) 
+      if (sbCurrentLine->previousSBItem != NULL) 
+        sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
     highlightLine(currentLine);
-    while ((commandArray[currentLine].trimmed().left(2).toLower() != "fi") && (commandArray[currentLine].trimmed().left(4).toLower() != "elif") && (commandArray[currentLine].trimmed().left(4).toLower() != "else")) {
-      currentLine++;
-      highlightLine(currentLine);
-      setNextSbLine();
-    }
-    return false;
+    if (sbCurrentLine != NULL) 
+      sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
+    sbCurrentLine = sbCurrentLine->nextSBItem;
   }
   
-  bool ScriptEditor::ifStatement() {
-    bool* tmp = new bool;
-    *tmp = false;
-    ifVector.append(tmp);
-    if (evalCondition(commandArray[currentLine])) {
-      *ifVector.last() = true;
-      currentLine++;
-      highlightLine(currentLine);
-      setNextSbLine();
-      evalCommand();
-    }
-    else {
-      loopUntilCondition();
-      
-      if (commandArray[currentLine].trimmed().left(2).toLower() == "fi") {
-        fiStatement();
-      }
-      else if (commandArray[currentLine].trimmed().left(4).toLower() == "elif") {
-        elifStatement();
-      }
-      else if (commandArray[currentLine].trimmed().left(4).toLower() == "else") {
-        elseStatement();
-      }
-    }
-  }
-  
-  bool ScriptEditor::whileLoop() {
-    if (loopVector.count() == 0) {
-      int* tmp = new int;
-      *tmp = currentLine;
-      loopVector.append(tmp);
-    }
-    else if (*loopVector.last() != currentLine) {
-      int* tmp = new int;
-      *tmp = currentLine;
-      loopVector.append(tmp);
-    }
-    
-    if (evalCondition(commandArray[currentLine])) {
-      currentLine++;
-      highlightLine(currentLine);
-      setNextSbLine();
-      evalCommand();
-    }
-    else {
-      loopVector.pop_back();
-      while (commandArray[currentLine].trimmed().left(4).toLower() != "done") {
-        currentLine++;
-	setNextSbLine();
-      }
-      currentLine++;
-      setNextSbLine();
-      evalCommand();
-    }
-  }
-  
-  bool ScriptEditor::forLoop() {
-    
-  }
-  
-  bool ScriptEditor::untilLoop() {
-    if (loopVector.count() == 0) {
-      int* tmp = new int;
-      *tmp = currentLine;
-      loopVector.append(tmp);
-      currentLine++;
-      setNextSbLine();
-      evalCommand();
-    }
-    else if (*loopVector.last() != currentLine) {
-      int* tmp = new int;
-      *tmp = currentLine;
-      loopVector.append(tmp);
-      currentLine++;
-      setNextSbLine();
-      evalCommand();
-    }
-    
-    if (evalCondition(commandArray[currentLine])) {
-      currentLine++;
-      highlightLine(currentLine);
-      setNextSbLine();
-      evalCommand();
-    }
-    else {
-      loopVector.pop_back();
-      while (commandArray[currentLine].trimmed().left(4).toLower() != "done") {
-        currentLine++;
-	setNextSbLine();
-      }
-      currentLine++;
-      setNextSbLine();
-      evalCommand();
-    }
-  }
-  
-  bool ScriptEditor::doneStatement() { //TODO remove the crap, it is impossible that it go to the else if noting bug and the script is valid
+  bool ScriptEditor::doneStatement() { 
     if (loopVector.size() != 0) {
       sbCurrentLine = firstSBItem;
       for (int i =0; i < *loopVector.last();i++) {
         sbCurrentLine = sbCurrentLine->nextSBItem;
         if ((currentLine < lineNumber) && (sbCurrentLine->debugState == false))
-          setNextSbLine();
+          signalNextLine();
       }
       currentLine = *loopVector.last();
       evalCommand();
@@ -844,105 +713,4 @@
       evalCommand();
     }
     
-  }
-  
-  bool ScriptEditor::elseStatement() {
-    if (*ifVector.last() == true) {
-      while (commandArray[currentLine].trimmed().left(2).toLower() != "fi")
-        loopUntilCondition();
-      fiStatement();
-    }
-    else if (*ifVector.last() == false) {
-      currentLine++;
-      highlightLine(currentLine);
-      setNextSbLine();
-      evalCommand();
-    }
-    else {
-      loopUntilCondition();
-      if (commandArray[currentLine].trimmed().left(2).toLower() == "fi") {
-        fiStatement();
-      }
-    }
-  }
-  
-  bool ScriptEditor::elifStatement() {
-    if (*ifVector.last() == true) {
-      while (commandArray[currentLine].trimmed().left(2).toLower() != "fi")
-        loopUntilCondition();
-      fiStatement();
-    }
-    else if ((evalCondition(commandArray[currentLine])) && (*ifVector.last() == false)) {
-          *ifVector.last() = true;
-          currentLine++;
-          highlightLine(currentLine);
-          setNextSbLine();
-          evalCommand();
-    }
-    else {
-      loopUntilCondition();
-      
-      if (commandArray[currentLine].trimmed().left(2).toLower() == "fi") {
-        fiStatement();
-      }
-      else if (commandArray[currentLine].trimmed().left(4).toLower() == "elif") {
-        elifStatement();
-      }
-      else if (commandArray[currentLine].trimmed().left(4).toLower() == "else") {
-        elseStatement();
-      }
-    }
-  }
-  
-  bool ScriptEditor::fiStatement() {
-    ifVector.pop_back();
-    currentLine++;
-    highlightLine(currentLine);
-    setNextSbLine();
-    evalCommand();
-  }
-  
-  bool ScriptEditor::evalCommand() {
-    if (commandArray[currentLine].trimmed().left(1).toLower() == "#") { 
-      currentLine++;
-      highlightLine(currentLine);
-      setNextSbLine();
-      sendCommand(commandArray[currentLine].toStdString().c_str());
-    }
-    else if (commandArray[currentLine].trimmed().left(2).toLower() == "if") {                            
-      ifStatement();
-    }
-    else if (commandArray[currentLine].trimmed().left(5).toLower() == "while") {                            
-      whileLoop();
-    }
-    else if (commandArray[currentLine].trimmed().left(4).toLower() == "elif") {                            
-      elifStatement();
-    }
-    else if (commandArray[currentLine].trimmed().left(4).toLower() == "else") {            
-      elseStatement();
-    }
-    else if (commandArray[currentLine].trimmed().left(5).toLower() == "until") {                            
-      evalCondition(commandArray[currentLine]);
-    }
-    else if (commandArray[currentLine].trimmed().left(3).toLower() == "for") {                            
-      evalCondition(commandArray[currentLine]);
-    }
-    else if (commandArray[currentLine].trimmed().left(4).toLower() == "done") {                            
-      doneStatement();
-    }
-    else if (commandArray[currentLine].trimmed().left(2).toLower() == "fi") {                            
-      fiStatement();
-    }
-    else {
-      sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      sendCommand(commandArray[currentLine].toStdString().c_str());
-      sbCurrentLine = sbCurrentLine->nextSBItem;
-    }
-  }
-
-  void ScriptEditor::setNextSbLine() {
-    if (sbCurrentLine->previousSBItem != NULL) 
-      sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
-    sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-    sbCurrentLine = sbCurrentLine->nextSBItem;
   }

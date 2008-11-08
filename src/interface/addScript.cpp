@@ -28,7 +28,7 @@
 
 #include "addScript.h"
 
-#include "../Shell.h"
+#include "../virtTTY.h"
 #include <iostream>
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
