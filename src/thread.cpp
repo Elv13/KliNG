@@ -31,7 +31,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <QString>
-#include "Shell.h"
+#include "virtTTY.h"
 
 using namespace std;
 
