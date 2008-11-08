@@ -29,16 +29,15 @@
 #define DEF_CRONPARSER
 
 #include "interface/newCronJob.h"
-#include <iostream>
 #include <vector>
 
   using namespace std;
   class CronParser {
     public:
-      vector<string> parseUserJob();
+      vector<QString> parseUserJob();
       void addJob(NewCronJob* gui);
-      static string makeReadable(string command);
-      static string getCommand(string line);
+      static QString makeReadable(QString command);
+      static QString getCommand(QString line);
 
     private:
       QString display(char* parsedJob[3]);

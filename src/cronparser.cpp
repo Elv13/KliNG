@@ -45,7 +45,7 @@ using namespace std;
 
   @param[in] parent The parent widget (nothing)
 */
-  string CronParser::makeReadable(string command) {
+  QString CronParser::makeReadable(QString command) {
     //This function is not completed, when it will be it will return a string lloking like "Every friday at 10:00, Everymonth, Everyday at 3, Jan 25 at 6:00 and other string like that. DO NOT delete that actual useless code.
     int minute, hours, month, dow, dom;
     int i=0;
@@ -54,7 +54,7 @@ using namespace std;
     char tmp[5][2];
     bool UseMinuteAlternative, UseHoursAlternative, UseMonthAlternative, UseDowAlternative, UseDomAlternative = {false};
 
-    sscanf(command.c_str(),"%s %s %s %s %s",tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]);
+    sscanf(command.toStdString().c_str(),"%s %s %s %s %s",tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]);
 
     minute_str = tmp[0];
     minute_str=minute_str.left(2);
@@ -68,13 +68,13 @@ using namespace std;
     dom_str=dom_str.left(2);
 
     while (i < 5) {
-      iteration = command.find(" ", iteration+1);
+      iteration = command.indexOf(" ", iteration+1);
       i++;
     }
-    command = command.substr(0, iteration);
+    command = command.mid(0, iteration);
 
-    while (command.find("*") != -1) command = command.replace(command.find("*"), 1, "99");
-    sscanf(command.c_str(),"%d %d %d %d %d",&minute,&hours,&dom,&month,&dow);
+    while (command.indexOf("*") != -1) command = command.replace(command.indexOf("*"), 1, "99");
+    sscanf(command.toStdString().c_str(),"%d %d %d %d %d",&minute,&hours,&dom,&month,&dow);
 
 
     QString dayOfTheWeek[7] = {i18n("Mon"), i18n("Tue"), i18n("Wed"), i18n("Thu"), i18n("Fri"), i18n("Sat"), i18n("Sun")};
@@ -102,7 +102,7 @@ using namespace std;
       dow_str = "";
 
     QString output = month_str + " " + dom_str + " " + dow_str + i18n(" at ") + hours_str + ":" + minute_str;
-    return output.toStdString();
+    return output;
   }
 
 /**
@@ -163,11 +163,11 @@ using namespace std;
     @return a string vector that contian all jobs
 
 */
-  vector<string> CronParser::parseUserJob() {
+  vector<QString> CronParser::parseUserJob() {
     char* parsedJob[6];
-    vector<string> newCronFile;
+    vector<QString> newCronFile;
     int currentLine =0;
-    string tmp;
+    QString tmp;
     int counter =0;
     int start =0;
 
@@ -175,7 +175,7 @@ using namespace std;
     char buffer[3000];
     if ( JOB != NULL ) {
       while ( fgets( buffer, sizeof buffer, JOB ) != NULL ) {
-        string line = buffer;
+        QString line = buffer;
         int i =0;
         int j =0;
         //sscanf(buffer,"%s %s %s %s %s %s %s",minute,hours,month,day,user,command); //Would be better, but fail in most case.
@@ -191,13 +191,13 @@ using namespace std;
                 j++;
 
             parsedJob[i] = new char[j - start +1 ]; //FR pas delete, elles vont mourir avec l'application et c'est bien comme sa
-            strcpy(parsedJob[i], line.substr(start, (j - start)).c_str());
+            strcpy(parsedJob[i], line.mid(start, (j - start)).toStdString().c_str());
             i++;
           }
         }
 
         if (buffer[0] != '#') {
-            newCronFile.push_back(display(parsedJob).toStdString());
+            newCronFile.push_back(display(parsedJob));
             currentLine++;
         }
       }
@@ -213,22 +213,22 @@ using namespace std;
   @param[in] parent GUI
 */
   void CronParser::addJob(NewCronJob* gui) {
-    vector<string> newCronFile = parseUserJob();
+    vector<QString> newCronFile = parseUserJob();
     
-    string aNewCronJob;
-    string tmpStr;
-    string month[12] = {"1","2","3","4","5","6","7","8","9","10","11","12" };
-    string dow[7] = {"1","2","3","4","5","6","7"};
+    QString aNewCronJob;
+    QString tmpStr;
+    QString month[12] = {"1","2","3","4","5","6","7","8","9","10","11","12" };
+    QString dow[7] = {"1","2","3","4","5","6","7"};
 
     if (gui->chkMinute->checkState() == Qt::Checked)
-	aNewCronJob = gui->txtMinute->text().toStdString();
+	aNewCronJob = gui->txtMinute->text();
     else
       aNewCronJob = "*";
     
     aNewCronJob += " ";
     
     if (gui->chkHours->checkState()  == Qt::Checked) {
-      tmpStr = gui->txtHours->text().toStdString();
+      tmpStr = gui->txtHours->text();
       aNewCronJob +=tmpStr;
     }
     else
@@ -237,7 +237,7 @@ using namespace std;
     aNewCronJob += " ";
     
     if (gui->chkDom->checkState()  == Qt::Checked) {
-	tmpStr = gui->txtDom->text().toStdString();
+	tmpStr = gui->txtDom->text();
 	aNewCronJob += tmpStr;
     }
     else
@@ -264,16 +264,16 @@ using namespace std;
     aNewCronJob += " ";
     
     if (gui->rbScript->isChecked() == true) {
-      string scriptPath = (Shell::getResult("echo $HOME").substr(0, Shell::getResult("echo $HOME").size()-1)) + "/.kling/script/" + gui->tblScript->item(gui->tblScript->currentRow(),0)->text().toStdString() + ".sh ";
+      QString scriptPath = (Shell::getResult("echo $HOME").mid(0, Shell::getResult("echo $HOME").size()-1)) + "/.kling/script/" + gui->tblScript->item(gui->tblScript->currentRow(),0)->text() + ".sh ";
       aNewCronJob += scriptPath;
     }
     else
-      aNewCronJob += gui->txtCommand->text().toStdString();
+      aNewCronJob += gui->txtCommand->text();
     
     newCronFile.push_back(aNewCronJob);
     ofstream toWrite("/tmp/newCronFile.cron");
     for (int l =0; l < newCronFile.size(); l++) {
-        toWrite << newCronFile[l].substr(0, newCronFile[l].size() -1)  << endl;
+        toWrite << newCronFile[l].mid(0, newCronFile[l].size() -1).toStdString()  << endl; //TODO use a QFile
     }
     toWrite.close();
     system("crontab /tmp/newCronFile.cron");
@@ -286,12 +286,12 @@ using namespace std;
 
   @return the job command
 */
-  string CronParser::getCommand(string line) {
+  QString CronParser::getCommand(QString line) {
     size_t iteration =0;
     int i = 0;
     while (i < 5) {
-      iteration = line.find(" ", iteration+1);
+      iteration = line.indexOf(" ", iteration+1);
       i++;
     }
-    return line.substr(iteration, line.size() - iteration);
+    return line.mid(iteration, line.size() - iteration);
   }

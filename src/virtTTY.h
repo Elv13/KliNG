@@ -44,9 +44,9 @@ using namespace std;
       Shell(QCheckBox* showGUI);
       ~Shell();
       static void executeCommand();
-      void analyseCommand(string command);
+      void analyseCommand(QString command);
       void kill();
-      static string getResult(string command);
+      static QString getResult(string command);
       static bool executeOnly(string command);
       int fork_pid;
       QString key;
@@ -57,11 +57,11 @@ using namespace std;
       void fatal_error(const char *msg);
       bool executionExeptions(char* paramArray[], int paramNumber);
       void exeption_cd(char path[]);
-      int execute(string command, bool needPostAnalyse, string toHighlight, bool showAllLine);
-      string highLight(string line, string toHighlight);
-      string ajustSerialCode(string &line);
-      string replaceColorCode(string line, string code, string color, string bgcolor);
-      char** parseCommand(string command, int &paramNumber);
+      int execute(QString command, bool needPostAnalyse, QString toHighlight, bool showAllLine);
+      QString highLight(QString line, QString toHighlight);
+      QString ajustSerialCode(QString &line);
+      QString replaceColorCode(QString line, QString code, QString color, QString bgcolor);
+      char** parseCommand(QString command, int &paramNumber);
       void saveOutput(QString* output);
     signals:
       void newLine(QString line);
@@ -81,7 +81,7 @@ using namespace std;
       }
       ~ShellThread() {delete aShell;}
       void run() {
-        aShell->analyseCommand(aCommand.toStdString());
+        aShell->analyseCommand(aCommand);
       }
       Shell* aShell;
     private:

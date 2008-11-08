@@ -45,6 +45,7 @@
 #include <QPalette>
 
 #include <QThread>
+#include <QDebug>
 
 using namespace std;
 
@@ -122,9 +123,9 @@ using namespace std;
   @param[in] toHighlight if the command contain a | grep
   @param[in] showAllLine if it need to display line with a grep match only
 */
-  int Shell::execute(string command, bool needPostAnalyse, string toHighlight, bool showAllLine) {
-    string line;
-    string originalcommand = command;
+  int Shell::execute(QString command, bool needPostAnalyse, QString toHighlight, bool showAllLine) {
+    QString line;
+    QString originalcommand = command;
     int i = 0;
     pid_t pid, pidchild;
     int status;
@@ -164,7 +165,7 @@ using namespace std;
       i = 0;
 
       do { 
-        string closeFont;
+        QString closeFont;
         nr = read(from_cmd[0], bufferR, sizeof bufferR);
         if (nr == -1)
           fatal_error("read(bufferR)");
@@ -176,30 +177,30 @@ using namespace std;
         for (i = 0; i < nr; i++)  {
           // Traitement bateau de bufferR
           if (bufferR[i] == '\n') {
-            if (line.find("[") != -1)
+            if (line.indexOf("[") != -1)
               closeFont = ajustSerialCode(line);
                     
             if (needPostAnalyse == false) {
-              emit newLine(QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line));
-              commandOutput += QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line + "<br>" + closeFont + "\n");
+              emit newLine("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line);
+              commandOutput += "<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line + "<br>" + closeFont + "\n";
             }
             else {
               if (showAllLine == true) {
-                if (line.find(toHighlight) != -1) {
-                  emit newLine(QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight))));
-                  commandOutput += QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight)) + "<br>" + closeFont + "\n");
+                if (line.indexOf(toHighlight) != -1) {
+                  emit newLine("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight)));
+                  commandOutput += "<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight)) + "<br>" + closeFont + "\n";
                 }
                 else {
-                  emit newLine(QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line));
-                  commandOutput += QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line + "<br>" + closeFont + "\n");
+                  emit newLine("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line);
+                  commandOutput += "<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line + "<br>" + closeFont + "\n";
                 }
               }
               else
               {
-                if (line.find(toHighlight) != -1)
+                if (line.indexOf(toHighlight) != -1)
                 {
-                  emit newLine(QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight))));
-                  commandOutput += QString::fromStdString("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight)) + "<br>" + closeFont + "\n");
+                  emit newLine("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight)));
+                  commandOutput += "<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + (highLight(line, toHighlight)) + "<br>" + closeFont + "\n";
                 }
               }
             }
@@ -235,7 +236,6 @@ using namespace std;
 */
   bool Shell::executionExeptions(char* paramArray[], int paramNumber) {
     bool isExeption = false;
-    string commandName = paramArray[0];
 
     if (strcmp(paramArray[0], "cd") == 0) {
       if (showGUI == true)  {
@@ -286,33 +286,33 @@ using namespace std;
 
   @param[in] command the command
 */
-  void Shell::analyseCommand(string command) {
-    if (command.find("|") != -1) {
-      emit newLine("<b><font color=\"#008000\">" + QString::fromStdString(command.substr(0, command.find("|"))) + "</font> <font color=\"#000000\">|</font> <font color=\"#FF8000\">" + QString::fromStdString(command.substr((command.find("|") +1), ( command.size() - command.find("|"))))+ "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
-      if (command.substr(command.find("|"), (command.size() - command.find("|"))).find("grep ") == -1) {
+  void Shell::analyseCommand(QString command) {
+    if (command.indexOf("|") != -1) {
+      emit newLine("<b><font color=\"#008000\">" + command.left(command.indexOf("|")) + "</font> <font color=\"#000000\">|</font> <font color=\"#FF8000\">" + command.mid((command.indexOf("|") +1), ( command.size() - command.indexOf("|"))) + "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
+      if (command.mid(command.indexOf("|"), (command.size() - command.indexOf("|"))).indexOf("grep ") == -1) {
         //TODO
       }
       else {
-        string toHighlight = command.substr(command.find("|")+1, (command.size() - command.find("|")-1));
-        toHighlight = toHighlight.substr((toHighlight.find("grep ")+5), (toHighlight.size() - (toHighlight.find("grep ")+5)));
+        QString toHighlight = command.mid(command.indexOf("|")+1, (command.size() - command.indexOf("|")-1));
+        toHighlight = toHighlight.mid((toHighlight.indexOf("grep ")+5), (toHighlight.size() - (toHighlight.indexOf("grep ")+5)));
         if (toHighlight[0] == '\"') {
           //TODO
         }
         else {
-          toHighlight = toHighlight.substr(0, toHighlight.find(" "));
+          toHighlight = toHighlight.left(toHighlight.indexOf(" "));
         }
-        execute(command.substr(0, command.find("|")), true, toHighlight, false);
+        execute(command.left(command.indexOf("|")), true, toHighlight, false);
       }
     }
     else {
-      if (command.find(">>") != -1) {
-        emit newLine("<b><font color=\"#008000\">" + QString::fromStdString(command.substr(0, command.find(">>"))) + "</font> <font color=\"#000000\">>></font> <font color=\"#FF8000\">" + QString::fromStdString(command.substr((command.find(">>") +2), ( command.size() - command.find(">>"))))+ "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
+      if (command.indexOf(">>") != -1) {
+        emit newLine("<b><font color=\"#008000\">" + command.left(command.indexOf(">>")) + "</font> <font color=\"#000000\">>></font> <font color=\"#FF8000\">" + command.mid((command.indexOf(">>") +2), ( command.size() - command.indexOf(">>"))) + "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
       }
-      else if (command.find(">") != -1) {
-        emit newLine("<b><font color=\"#008000\">" + QString::fromStdString(command.substr(0, command.find(">"))) + "</font> <font color=\"#000000\">></font> <font color=\"#FF8000\">" + QString::fromStdString(command.substr((command.find(">") +1), ( command.size() - command.find(">"))))+ "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
+      else if (command.indexOf(">") != -1) {
+        emit newLine("<b><font color=\"#008000\">" + command.left(command.indexOf(">")) + "</font> <font color=\"#000000\">></font> <font color=\"#FF8000\">" + command.mid((command.indexOf(">") +1), ( command.size() - command.indexOf(">")))+ "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
       }
       else {
-        emit newLine("<b><font color=\"#008000\">" + QString::fromStdString(command) + "</font>" + "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
+        emit newLine("<b><font color=\"#008000\">" + command + "</font>" + "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
       }
       execute(command, false, "", true);
     }
@@ -324,11 +324,11 @@ using namespace std;
   @param[in] line the stdOut line
   @param[in] toHighlight the keyword(s)
 */
-  string Shell::highLight(string line, string toHighlight) {
+  QString Shell::highLight(QString line, QString toHighlight) {
     long cursorPosition = 0;
-    while (line.substr(cursorPosition, (line.size() - cursorPosition)).find(toHighlight) != -1) {
-      line = line.substr(0, (line.substr(cursorPosition, (line.size() - cursorPosition)).find(toHighlight) + cursorPosition)) + "<b style=\"background-color:red; \">" + toHighlight + "</b>" + line.substr((line.substr(cursorPosition, (line.size() - cursorPosition)).find(toHighlight) + cursorPosition + toHighlight.size()), (line.size() - (line.substr(cursorPosition, (line.size() - cursorPosition)).find(toHighlight) + cursorPosition + toHighlight.size())));
-      cursorPosition = line.substr(cursorPosition, (line.size() - cursorPosition)).find(toHighlight) + cursorPosition + toHighlight.size() + 4;
+    while (line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) != -1) {
+      line = line.left(line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) + cursorPosition) + "<b style=\"background-color:red; \">" + toHighlight + "</b>" + line.mid((line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) + cursorPosition + toHighlight.size()), (line.size() - (line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) + cursorPosition + toHighlight.size())));
+      cursorPosition = line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) + cursorPosition + toHighlight.size() + 4;
     }
     return line;
   }
@@ -338,37 +338,37 @@ using namespace std;
 
   @param[in] line the stdOut line
 */
-  string Shell::ajustSerialCode(string &line) {
+  QString Shell::ajustSerialCode(QString &line) {
     QPalette aPalette;
-    string defaultColor = aPalette.text().color().name ().toStdString();
+    QString defaultColor = aPalette.text().color().name ();
     int i =0;
     //Text color
-    while (line.find("[01;34m") != -1) { line = replaceColorCode(line, "[01;34m", "blue", ""); i++; }
-    while (line.find("[00m") != -1) { line = replaceColorCode(line, "[00m", defaultColor, ""); i++; }//TODO may be a bug
-    while (line.find("[01;35m") != -1) { line = replaceColorCode(line, "[01;35m", "#FF00FF", ""); i++; }
-    while (line.find("[01;31m") != -1) { line = replaceColorCode(line, "[01;31m", "green", ""); i++; }
-    while (line.find("[01;32m") != -1) { line = replaceColorCode(line, "[01;32m", "#00FF00", ""); i++; }
-    while (line.find("[01;36m") != -1) { line = replaceColorCode(line, "[01;36m", "cyan", ""); i++; }
+    while (line.indexOf("[01;34m") != -1) { line = replaceColorCode(line, "[01;34m", "blue", ""); i++; }
+    while (line.indexOf("[00m") != -1) { line = replaceColorCode(line, "[00m", defaultColor, ""); i++; }//TODO may be a bug
+    while (line.indexOf("[01;35m") != -1) { line = replaceColorCode(line, "[01;35m", "#FF00FF", ""); i++; }
+    while (line.indexOf("[01;31m") != -1) { line = replaceColorCode(line, "[01;31m", "green", ""); i++; }
+    while (line.indexOf("[01;32m") != -1) { line = replaceColorCode(line, "[01;32m", "#00FF00", ""); i++; }
+    while (line.indexOf("[01;36m") != -1) { line = replaceColorCode(line, "[01;36m", "cyan", ""); i++; }
     //Background color
-    while (line.find("[00;34m") != -1) { line = replaceColorCode(line, "[00;34m", "black", "blue"); i++; }
-    while (line.find("[00m") != -1) { line = replaceColorCode(line, "[00m", "white", "black"); i++; }
-    while (line.find("[00;35m") != -1) { line = replaceColorCode(line, "[00;35m", "black", "#FF00FF"); i++; }
-    while (line.find("[00;31m") != -1) { line = replaceColorCode(line, "[00;31m", "black", "green"); i++; }
-    while (line.find("[30;42") != -1) { line = replaceColorCode(line, "[30;42", "black", "green"); i++; }
-    while (line.find("[00;32m") != -1) { line = replaceColorCode(line, "[00;32m", "black", "#00FF00"); i++; }
-    while (line.find("[40;33m") != -1) { line = replaceColorCode(line, "[40;33m", "yellow", "black"); i++; }
-    while (line.find("[37;41m") != -1) { line = replaceColorCode(line, "[37;41m", "white", "red"); i++; }
-    while (line.find("[40;33;01m") != -1) { line = replaceColorCode(line, "[40;33;01m", "yellow", "black"); i++; }
-    while (line.find("[34;42m") != -1) { line = replaceColorCode(line, "[34;42m", "#5C5CFF", "#00FF00"); i++; }
-    while (line.find("[32m") != -1) { line = replaceColorCode(line, "[32m", "#00CD00", ""); i++; }
-    while (line.find("[33;01m") != -1) { line = replaceColorCode(line, "[33;01m", "yellow", "");  i++; }//bold
-    while (line.find("[31;01m") != -1) { line = replaceColorCode(line, "[31;01m", "red", "");  i++; }//bold
-    while (line.find("[34;01m") != -1) { line = replaceColorCode(line, "[34;01m", "#5C5CFF", ""); i++; } //bold //directory
-    while (line.find("[32;01m") != -1) { line = replaceColorCode(line, "[32;01m", "#00FF00", ""); i++; }
-    while (line.find("[39;49;00m") != -1) { line = replaceColorCode(line, "[39;49;00m", defaultColor, ""); i++; } //TODO may be a bug
-    while (line.find("[0m") != -1) { line = replaceColorCode(line, "[0m", defaultColor, ""); i++; }//TODO may be a bug
+    while (line.indexOf("[00;34m") != -1) { line = replaceColorCode(line, "[00;34m", "black", "blue"); i++; }
+    while (line.indexOf("[00m") != -1) { line = replaceColorCode(line, "[00m", "white", "black"); i++; }
+    while (line.indexOf("[00;35m") != -1) { line = replaceColorCode(line, "[00;35m", "black", "#FF00FF"); i++; }
+    while (line.indexOf("[00;31m") != -1) { line = replaceColorCode(line, "[00;31m", "black", "green"); i++; }
+    while (line.indexOf("[30;42") != -1) { line = replaceColorCode(line, "[30;42", "black", "green"); i++; }
+    while (line.indexOf("[00;32m") != -1) { line = replaceColorCode(line, "[00;32m", "black", "#00FF00"); i++; }
+    while (line.indexOf("[40;33m") != -1) { line = replaceColorCode(line, "[40;33m", "yellow", "black"); i++; }
+    while (line.indexOf("[37;41m") != -1) { line = replaceColorCode(line, "[37;41m", "white", "red"); i++; }
+    while (line.indexOf("[40;33;01m") != -1) { line = replaceColorCode(line, "[40;33;01m", "yellow", "black"); i++; }
+    while (line.indexOf("[34;42m") != -1) { line = replaceColorCode(line, "[34;42m", "#5C5CFF", "#00FF00"); i++; }
+    while (line.indexOf("[32m") != -1) { line = replaceColorCode(line, "[32m", "#00CD00", ""); i++; }
+    while (line.indexOf("[33;01m") != -1) { line = replaceColorCode(line, "[33;01m", "yellow", "");  i++; }//bold
+    while (line.indexOf("[31;01m") != -1) { line = replaceColorCode(line, "[31;01m", "red", "");  i++; }//bold
+    while (line.indexOf("[34;01m") != -1) { line = replaceColorCode(line, "[34;01m", "#5C5CFF", ""); i++; } //bold //directory
+    while (line.indexOf("[32;01m") != -1) { line = replaceColorCode(line, "[32;01m", "#00FF00", ""); i++; }
+    while (line.indexOf("[39;49;00m") != -1) { line = replaceColorCode(line, "[39;49;00m", defaultColor, ""); i++; } //TODO may be a bug
+    while (line.indexOf("[0m") != -1) { line = replaceColorCode(line, "[0m", defaultColor, ""); i++; }//TODO may be a bug
     
-    string toReturn;
+    QString toReturn;
     for (int j =0; j < i; j++) 
       toReturn += "</font>";
       
@@ -383,8 +383,8 @@ using namespace std;
   @param[in] color the text color to use
   @param[in] bgcolor the bg color to use
 */
-  string Shell::replaceColorCode(string line, string code, string color, string bgcolor) {
-    line = line.substr(0, line.find(code)) + "<font color=" + color + " style=\"background-color:" + bgcolor +"; \">" + line.substr((line.find(code)+code.size()),(line.size() -(line.find(code)+code.size())));
+  QString Shell::replaceColorCode(QString line, QString code, QString color, QString bgcolor) {
+    line = line.left(line.indexOf(code)) + "<font color=" + color + " style=\"background-color:" + bgcolor +"; \">" + line.mid((line.indexOf(code)+code.size()),(line.size() -(line.indexOf(code)+code.size())));
     return line;
   }
 
@@ -395,38 +395,43 @@ using namespace std;
   @param[in] command the command
   @param[in] paramNumber argc
 */
-  char** Shell::parseCommand(string command, int &paramNumber) {
+  char** Shell::parseCommand(QString command, int &paramNumber) {
+    qDebug() << "This is the command" << command;
     int counter;
     int i = 0;
     QString tmp;
     counter = 0;
-    tmp = QString::fromStdString(command);
+    tmp = command;
+    tmp = tmp.trimmed();
     QVector<QString> argsVec;
 
     //BEGINING test exaustively
     while (!tmp.isEmpty()) {
-      if ((tmp.indexOf("\"") < tmp.indexOf(" ")) && (tmp.indexOf("\"") != -1)) {
+      if (((tmp.indexOf("\"") < tmp.indexOf(" ")) && (tmp.indexOf("\"") != -1)) || ((tmp.indexOf("\"") != -1) && (tmp.indexOf(" ") == -1))) {
 	if (tmp[0] != '\"') {
 	  argsVec.push_back(tmp.left(tmp.indexOf("\"") -1));
 	  tmp = tmp.remove(0, tmp.indexOf("\"") -1);
 	}
-	argsVec.push_back(tmp.mid(1, tmp.indexOf("\"")-1));
-	tmp.remove(0,  tmp.indexOf("\""));
+        tmp = tmp.remove(0,1);
+	argsVec.push_back(tmp.left(tmp.indexOf("\"")));
+        tmp.remove(0,  tmp.indexOf("\""));
       }
-      else if ((tmp.indexOf("`") < tmp.indexOf(" ")) && (tmp.indexOf("`") != -1)) {
+      else if (((tmp.indexOf("`") < tmp.indexOf(" ")) && (tmp.indexOf("`") != -1)) || ((tmp.indexOf("`") != -1) && (tmp.indexOf(" ") == -1))) {
 	if (tmp[0] != '`') {
 	  argsVec.push_back(tmp.left(tmp.indexOf("`") -1));
 	  tmp = tmp.remove(0, tmp.indexOf("`") -1);
 	}
-	argsVec.push_back(tmp.mid(1, tmp.indexOf("`")-1));
+        tmp = tmp.remove(0,1);
+	argsVec.push_back(tmp.mid(1, tmp.indexOf("`")));
 	tmp.remove(0,  tmp.indexOf("`"));
       }
-      else if ((tmp.indexOf("'") < tmp.indexOf(" ")) && (tmp.indexOf("'") != -1)) {
+      else if (((tmp.indexOf("'") < tmp.indexOf(" ")) && (tmp.indexOf("'") != -1)) || ((tmp.indexOf("'") != -1) && (tmp.indexOf(" ") == -1))) {
 	if (tmp[0] != '\'') {
 	  argsVec.push_back(tmp.left(tmp.indexOf("'") -1));
 	  tmp = tmp.remove(0, tmp.indexOf("'"));
 	}
-	argsVec.push_back(tmp.mid(1, tmp.indexOf("'")-1));
+        tmp = tmp.remove(0,1);
+	argsVec.push_back(tmp.mid(1, tmp.indexOf("'")));
 	tmp.remove(0,  tmp.indexOf("'"));
       }
       else if (tmp.indexOf(" ") == -1) {
@@ -438,20 +443,23 @@ using namespace std;
       }
       else {
         argsVec.push_back(tmp.left(tmp.indexOf(" ")));
-        tmp.remove(0,  tmp.indexOf("="));
+        tmp.remove(0,  tmp.indexOf(" "));
       }
+      qDebug() << tmp;
     }
     printf("I am here4");
-    char** paramArray = new char* [argsVec.count() + 2]; 
+    char** paramArray = new char* [argsVec.count() + 1]; 
 
     for (int j=0; j < argsVec.count(); j++) {
       char* arg = new char[argsVec[j].count()];
       strcpy(arg,argsVec[j].toStdString().c_str());
+      qDebug() << "Arg:" << argsVec[j];
       paramArray[j] = arg;
     }
-    paramArray[argsVec.count() + 1] = NULL;
+    paramArray[argsVec.count()] = NULL;
     //END test
 
+    //TOREMOVE old code
     /*while (tmp.indexOf(" ") != -1) {
       counter++;
       tmp = tmp.mid((tmp.indexOf(" ") + 1), (tmp.count() - tmp.indexOf(" ") - 1));
@@ -486,8 +494,8 @@ using namespace std;
   @param[in] command the command to execute
   @return the stdOut
 */
-  string Shell::getResult(string command) {
-    string output;
+  QString Shell::getResult(string command) {
+    QString output;
     char buffer[3000];
     FILE *JOB = popen(command.c_str(), "r" );
     

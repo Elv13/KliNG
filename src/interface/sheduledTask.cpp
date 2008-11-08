@@ -150,18 +150,18 @@ using namespace std;
 */
   void SheduledTask::fillTable() {
     CronParser aCronParser;
-    vector<string> allJobs =aCronParser.parseUserJob();
+    vector<QString> allJobs = aCronParser.parseUserJob();
     tlbvSheduledTask->setRowCount(allJobs.size());
     for (int i = 0; i < allJobs.size(); i++) {
-      string thisJob = aCronParser.makeReadable(allJobs[i]); 
-      QTableWidgetItem* aTableWidget = new QTableWidgetItem(QString::fromStdString(thisJob));
+      QString thisJob = aCronParser.makeReadable(allJobs[i]); 
+      QTableWidgetItem* aTableWidget = new QTableWidgetItem(thisJob);
       tlbvSheduledTask->setItem((i), 0, aTableWidget);
-      aTableWidget->setToolTip(thisJob.c_str());
+      aTableWidget->setToolTip(thisJob.toStdString().c_str());
 
-      string thisJobCommand = aCronParser.getCommand(allJobs[i]); 
-      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(QString::fromStdString(thisJobCommand));
+      QString thisJobCommand = aCronParser.getCommand(allJobs[i]); 
+      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(thisJobCommand);
       tlbvSheduledTask->setItem((i), 1, aTableWidget1);
-      aTableWidget1->setToolTip(thisJobCommand.c_str());
+      aTableWidget1->setToolTip(thisJobCommand.toStdString().c_str());
     }
   }
   
