@@ -1,6 +1,5 @@
 #include "term.h"
 
-#include "../Shell.h"
 #include "history.h"
 #include "completer.h"
 #include <signal.h>
@@ -175,12 +174,12 @@
       cmdStatus->setPixmap(*pxmCmdInactive);
       txtCommand->setDisabled(true);
       kpushbutton_3->setDisabled(false);
-      aThread = new ShellThread(txtCommand->text(), 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
-      QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
-      QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
-      QObject::connect(aThread->aShell, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
-      QObject::connect(aThread->aShell, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
-      QObject::connect(aThread->aShell, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
+      aThread = new VirtTtyThread(txtCommand->text(), 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
+      QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
+      QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
+      QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
+      QObject::connect(aThread->aVirtTTY, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
+      QObject::connect(aThread->aVirtTTY, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
       aThread->start();
       QObject::connect(kpushbutton_3, SIGNAL(clicked()), this, SLOT(killPros()));
     }
@@ -217,8 +216,8 @@
   }
 
   void Term::killPros() {	
-    int aPid = aThread->aShell->fork_pid;
-    printf("I am going do kill prosess number: %i \n",aThread->aShell->fork_pid);
+    int aPid = aThread->aVirtTTY->fork_pid;
+    printf("I am going do kill prosess number: %i \n",aThread->aVirtTTY->fork_pid);
     aThread->terminate();
     kill(aPid, 9);
     resetCmdInputLine();
