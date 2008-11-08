@@ -1,4 +1,4 @@
-/**     @file Shell.h
+/**     @file VirtTTY.h
 
 	This file is part of the Kling project
 	Copyright (C) 2008 Emmanuel Lepage Vallee <elv1313@gmail.com>
@@ -19,15 +19,15 @@
 	Boston, MA 02111-1307, USA.
 	___________________
 
-        Header of Shell.cpp
+        Header of VirtTTY.cpp
 
         @author Emmanuel Lepage Vallée
         @date 14 May 2008
         @version 0.0.9
 */
 
-#ifndef DEF_SHELL
-#define DEF_SHELL
+#ifndef DEF_VIRT_TTY
+#define DEF_VIRT_TTY
 
 //#include "../mainwindow.h"
 #include <string>
@@ -38,11 +38,11 @@
 
 using namespace std;
 
-  class Shell : public QObject {
+  class VirtTTY : public QObject {
     Q_OBJECT
     public:
-      Shell(QCheckBox* showGUI);
-      ~Shell();
+      VirtTTY(QCheckBox* showGUI);
+      ~VirtTTY();
       static void executeCommand();
       void analyseCommand(QString command);
       void kill();
@@ -70,20 +70,20 @@ using namespace std;
       void showFileBrowser(QString path, bool setPath);
   };
 
-  class ShellThread : public QThread {
+  class VirtTtyThread : public QThread {
     Q_OBJECT
 
     public:
-      ShellThread(QString command, QObject *parent = 0, QCheckBox* showGUI = 0, QString key = 0) : QThread(parent) {
+      VirtTtyThread(QString command, QObject *parent = 0, QCheckBox* showGUI = 0, QString key = 0) : QThread(parent) {
         aCommand = command;
-        aShell = new Shell(showGUI);
-        aShell->key = key;
+        aVirtTTY = new VirtTTY(showGUI);
+        aVirtTTY->key = key;
       }
-      ~ShellThread() {delete aShell;}
+      ~VirtTtyThread() {delete aVirtTTY;}
       void run() {
-        aShell->analyseCommand(aCommand);
+        aVirtTTY->analyseCommand(aCommand);
       }
-      Shell* aShell;
+      VirtTTY* aVirtTTY;
     private:
       QString aCommand;
   };

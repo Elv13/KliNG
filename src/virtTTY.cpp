@@ -1,4 +1,4 @@
-/**     @file Shell.cpp
+/**     @file VirtTTY.cpp
 
 	This file is part of the Kling project
 	Copyright (C) 2008 Emmanuel Lepage Vallee <elv1313@gmail.com>
@@ -26,7 +26,7 @@
         @version 0.0.9
 */
 
-#include  "Shell.h"
+#include  "virtTTY.h"
 #include  <iostream>
 #include  <unistd.h>
 #include  <stdio.h>
@@ -47,14 +47,12 @@
 #include <QThread>
 #include <QDebug>
 
-using namespace std;
-
 /**
-  Shell constructor
+  VirtTTY constructor
 
   @param[in] parent The parent widget (nothing)
 */
-  Shell::Shell(QCheckBox* showGUI) {
+  VirtTTY::VirtTTY(QCheckBox* showGUI) {
     if (showGUI != 0) {
       if (showGUI->isChecked() == true) 
         this->showGUI = true;
@@ -68,9 +66,9 @@ using namespace std;
   }
 
 /**
-  Shell destructor
+  VirtTTY destructor
 */
-  Shell::~Shell() {
+  VirtTTY::~VirtTTY() {
     
   }
 
@@ -79,7 +77,7 @@ using namespace std;
 
   @param[in] *msg
 */
-  void Shell::fatal_error(const char *msg) {
+  void VirtTTY::fatal_error(const char *msg) {
     perror(msg);
     exit(EXIT_FAILURE);
   }
@@ -91,7 +89,7 @@ using namespace std;
   @param[in] *from_me stdOut
   @param[in] paramArray[] argv
 */
-  void Shell::forked_exec(int *to_me, int *from_me, char *paramArray[]) {
+  void VirtTTY::forked_exec(int *to_me, int *from_me, char *paramArray[]) {
     if (dup2(to_me[0], STDIN_FILENO) == -1)
       fatal_error("dup2(to_me[0])");
 
@@ -123,7 +121,7 @@ using namespace std;
   @param[in] toHighlight if the command contain a | grep
   @param[in] showAllLine if it need to display line with a grep match only
 */
-  int Shell::execute(QString command, bool needPostAnalyse, QString toHighlight, bool showAllLine) {
+  int VirtTTY::execute(QString command, bool needPostAnalyse, QString toHighlight, bool showAllLine) {
     QString line;
     QString originalcommand = command;
     int i = 0;
@@ -234,7 +232,7 @@ using namespace std;
   @param[in] paramNumber ARGC
   @return if the command was an exeption
 */
-  bool Shell::executionExeptions(char* paramArray[], int paramNumber) {
+  bool VirtTTY::executionExeptions(char* paramArray[], int paramNumber) {
     bool isExeption = false;
 
     if (strcmp(paramArray[0], "cd") == 0) {
@@ -264,7 +262,7 @@ using namespace std;
 
   @param[in] parent the path
 */
-  void Shell::exeption_cd(char path[]) {
+  void VirtTTY::exeption_cd(char path[]) {
     QString aString = "<b><font color=\"#008000\">cd ";
 
     if(chdir(path) == -1) {
@@ -286,7 +284,7 @@ using namespace std;
 
   @param[in] command the command
 */
-  void Shell::analyseCommand(QString command) {
+  void VirtTTY::analyseCommand(QString command) {
     if (command.indexOf("|") != -1) {
       emit newLine("<b><font color=\"#008000\">" + command.left(command.indexOf("|")) + "</font> <font color=\"#000000\">|</font> <font color=\"#FF8000\">" + command.mid((command.indexOf("|") +1), ( command.size() - command.indexOf("|"))) + "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
       if (command.mid(command.indexOf("|"), (command.size() - command.indexOf("|"))).indexOf("grep ") == -1) {
@@ -324,7 +322,7 @@ using namespace std;
   @param[in] line the stdOut line
   @param[in] toHighlight the keyword(s)
 */
-  QString Shell::highLight(QString line, QString toHighlight) {
+  QString VirtTTY::highLight(QString line, QString toHighlight) {
     long cursorPosition = 0;
     while (line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) != -1) {
       line = line.left(line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) + cursorPosition) + "<b style=\"background-color:red; \">" + toHighlight + "</b>" + line.mid((line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) + cursorPosition + toHighlight.size()), (line.size() - (line.mid(cursorPosition, (line.size() - cursorPosition)).indexOf(toHighlight) + cursorPosition + toHighlight.size())));
@@ -338,7 +336,7 @@ using namespace std;
 
   @param[in] line the stdOut line
 */
-  QString Shell::ajustSerialCode(QString &line) {
+  QString VirtTTY::ajustSerialCode(QString &line) {
     QPalette aPalette;
     QString defaultColor = aPalette.text().color().name ();
     int i =0;
@@ -383,7 +381,7 @@ using namespace std;
   @param[in] color the text color to use
   @param[in] bgcolor the bg color to use
 */
-  QString Shell::replaceColorCode(QString line, QString code, QString color, QString bgcolor) {
+  QString VirtTTY::replaceColorCode(QString line, QString code, QString color, QString bgcolor) {
     line = line.left(line.indexOf(code)) + "<font color=" + color + " style=\"background-color:" + bgcolor +"; \">" + line.mid((line.indexOf(code)+code.size()),(line.size() -(line.indexOf(code)+code.size())));
     return line;
   }
@@ -395,7 +393,7 @@ using namespace std;
   @param[in] command the command
   @param[in] paramNumber argc
 */
-  char** Shell::parseCommand(QString command, int &paramNumber) {
+  char** VirtTTY::parseCommand(QString command, int &paramNumber) {
     qDebug() << "This is the command" << command;
     int counter;
     int i = 0;
@@ -494,7 +492,7 @@ using namespace std;
   @param[in] command the command to execute
   @return the stdOut
 */
-  QString Shell::getResult(string command) {
+  QString VirtTTY::getResult(string command) {
     QString output;
     char buffer[3000];
     FILE *JOB = popen(command.c_str(), "r" );
@@ -514,7 +512,7 @@ using namespace std;
 
   @param[in] command the command
 */
-  bool Shell::executeOnly(string command) {
+  bool VirtTTY::executeOnly(string command) {
     pid_t pid;
     int status;
     switch (pid = fork()) { //Duplicate the prosess
@@ -530,7 +528,7 @@ using namespace std;
     return true; //TODO When the status will be impleted, return failure or success
   }
 
-  void Shell::saveOutput(QString* output) {
+  void VirtTTY::saveOutput(QString* output) {
     if ((output->trimmed().isEmpty() == false) && (output->trimmed() != "<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\"><br>")) {
       KSaveFile file(KStandardDirs::locateLocal("appdata", "/output/") + key);
       file.open();
@@ -542,3 +540,4 @@ using namespace std;
       file.close();
     }
   }
+  
