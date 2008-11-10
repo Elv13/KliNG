@@ -288,6 +288,20 @@
 
     pwiMode = addPage(generalCentralWidget, i18n("Mode") );
     pwiMode->setIcon( KIcon( "fork" ) );
+    
+    QTabWidget* termTabWidget = new QTabWidget();
+    
+    QWidget* aliasTab = new QWidget();
+    termTabWidget->addTab(aliasTab,"Alias");
+    
+    QWidget* defaultArgsTab = new QWidget();
+    termTabWidget->addTab(defaultArgsTab,"Default Args");
+    
+    QWidget* functionTab = new QWidget();
+    termTabWidget->addTab(functionTab,"Function");
+    
+    pwiTerm = addPage(termTabWidget, i18n("Terminal") );
+    pwiTerm->setIcon( KIcon( "utilities-terminal" ) );
 
     QWidget* loggingCentralWidget = new QWidget();
     gridLogging = new QGridLayout();
@@ -347,8 +361,7 @@
     anHLayout->addWidget(btnRemoveExcludedCommand);
     anHLayout->addItem(new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum));
     gridLogging->addLayout(anHLayout,7,0,1,2);
-
-
+   
     gridLogging->addItem(new QSpacerItem(38, 30, QSizePolicy::Minimum, QSizePolicy::Expanding),3,0);
     pwiLogging = addPage(loggingCentralWidget, i18n("Logging") );
     pwiLogging->setIcon( KIcon( "chronometer" ) );
