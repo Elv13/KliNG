@@ -33,6 +33,7 @@
       KlingConfigSkeleton* configSkeleton;
       KPageWidgetItem* pwiGeneral;
       KPageWidgetItem* pwiMode;
+      KPageWidgetItem* pwiTerm;
       KPageWidgetItem* pwiLogging;
       KPageWidgetItem* pwiAppearance;
       KPageWidgetItem* pwiPlugins;
