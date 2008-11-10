@@ -148,7 +148,7 @@
     QObject::connect(kpushbutton_4, SIGNAL(clicked()), frame, SLOT(hide()));
     QObject::connect(klineedit_3, SIGNAL(returnPressed()), this, SLOT(searchCmdOutput()));
     QObject::connect(kpushbutton_5, SIGNAL(clicked()), this, SLOT(searchCmdOutput()));
-    QObject::connect(txtCommand, SIGNAL(returnPressed()), this, SLOT(sendCommand()));
+    QObject::connect(txtCommand, SIGNAL(returnPressed()), this, SLOT(launchCommand()));
     QObject::connect(txtCommand, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)));
     QObject::connect(this, SIGNAL(showCompleter(QString)), this, SLOT(cmdInfoChanged(QString)));
     QObject::connect(this, SIGNAL(showCompleter(QString)), this, SLOT(resizeCompleter()));
@@ -167,14 +167,10 @@
 /**
   send the txtCommand text to the terminal emulator
 */
-  void Term::sendCommand() {
+  void Term::sendCommand(QString command) {
     completer->hide();
     if (txtCommand->text() != "") {
-      pxmCmdInactive->load("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/gearA.png");
-      cmdStatus->setPixmap(*pxmCmdInactive);
-      txtCommand->setDisabled(true);
-      kpushbutton_3->setDisabled(false);
-      aThread = new VirtTtyThread(txtCommand->text(), 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
+      aThread = new VirtTtyThread(txtCommand->text(), parseCommand(txtCommand->text()), 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
       QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
       QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
       QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
@@ -185,7 +181,13 @@
     }
   }
 
-
+  void Term::launchCommand() {
+    pxmCmdInactive->load("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/gearA.png");
+    cmdStatus->setPixmap(*pxmCmdInactive);
+    txtCommand->setDisabled(true);
+    kpushbutton_3->setDisabled(false);
+    analyseCommand(txtCommand->text(), parseCommand(txtCommand->text()));
+  }
 
 /**
   the command line tab search box function
@@ -254,4 +256,8 @@
       emit showCompleter(text);
     else 
       completer->hide();
+  }
+  
+  void Term::signalNewCommand(QString command){
+    rtfCmdOutput->append(command);
   }
