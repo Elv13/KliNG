@@ -494,7 +494,7 @@
   }
     
   void ScriptEditor::sendCommand(QString command) {
-    VirtTtyThread* aThread = new VirtTtyThread(command);
+    VirtTtyThread* aThread = new VirtTtyThread(command, parseCommand(command));
     //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
     //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
     QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), aDebugTerm->rtfDegubTerm, SLOT(append(QString)));

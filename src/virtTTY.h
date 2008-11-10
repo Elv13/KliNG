@@ -29,11 +29,10 @@
 #ifndef DEF_VIRT_TTY
 #define DEF_VIRT_TTY
 
-//#include "../mainwindow.h"
 #include <string>
 #include <QString>
 #include <QCheckBox>
-
+#include <QVector>
 #include <QThread>
 
 using namespace std;
@@ -44,7 +43,7 @@ using namespace std;
       VirtTTY(QCheckBox* showGUI);
       ~VirtTTY();
       static void executeCommand();
-      void analyseCommand(QString command);
+      int execute(QVector<QString> args);
       void kill();
       static QString getResult(string command);
       static bool executeOnly(string command);
@@ -52,16 +51,13 @@ using namespace std;
       QString key;
     private:
       bool showGUI;
-
       void forked_exec(int *to_me, int *from_me, char* paramArray[]);
       void fatal_error(const char *msg);
       bool executionExeptions(char* paramArray[], int paramNumber);
       void exeption_cd(char path[]);
-      int execute(QString command, bool needPostAnalyse, QString toHighlight, bool showAllLine);
-      QString highLight(QString line, QString toHighlight);
       QString ajustSerialCode(QString &line);
       QString replaceColorCode(QString line, QString code, QString color, QString bgcolor);
-      char** parseCommand(QString command, int &paramNumber);
+      char** parseCommand(QVector<QString> args);
       void saveOutput(QString* output);
     signals:
       void newLine(QString line);
@@ -74,18 +70,20 @@ using namespace std;
     Q_OBJECT
 
     public:
-      VirtTtyThread(QString command, QObject *parent = 0, QCheckBox* showGUI = 0, QString key = 0) : QThread(parent) {
+      VirtTtyThread(QString command, QVector<QString> args, QObject *parent = 0, QCheckBox* showGUI = 0, QString key = 0) : QThread(parent) {
         aCommand = command;
+        this->args = args;
         aVirtTTY = new VirtTTY(showGUI);
         aVirtTTY->key = key;
       }
       ~VirtTtyThread() {delete aVirtTTY;}
       void run() {
-        aVirtTTY->analyseCommand(aCommand);
+        aVirtTTY->execute(args);
       }
       VirtTTY* aVirtTTY;
     private:
       QString aCommand;
+      QVector<QString> args;
   };
 
 #endif
