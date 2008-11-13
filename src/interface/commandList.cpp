@@ -33,6 +33,8 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include <QStringList>
+#include <QtSql>
+#include <QSqlDatabase>
 #include "klistwidget.h"
 #include <KLocalizedString>
 #include <klistwidgetsearchline.h>
@@ -49,8 +51,11 @@ using namespace std;
   @param[in] commandStringList List of all system command availible used for autocompletion
   @todo Use double click to insert command
 */
-  CommandList::CommandList(QWidget* parent, QStringList* commandStringList) : QDockWidget ( 0 ) {
-    commandList = commandStringList;
+  CommandList::CommandList(QWidget* parent, QStringList* commandStringList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList) : QDockWidget ( 0 ) {
+    this->commandList = commandStringList;
+    this->aliasList = aliasList;
+    this->defaultArgsList = defaultArgsList;
+    this->functionList = functionList;
     setObjectName("CommandList");
     //setGeometry(QRect(0, 435, 200, 122));
     /*QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -137,6 +142,13 @@ using namespace std;
         }
         path = path.mid(path.indexOf(":")+1, (path.count() - path.indexOf(":") -1));
       }
+    }
+    
+    QSqlQuery query;
+    query.exec("SELECT ALIAS FROM TALIAS");
+    while (query.next())  {
+      *commandList << (query.value(0).toString());
+      *aliasList << (query.value(0).toString());
     }
 
     if (commandList->isEmpty() == false) {

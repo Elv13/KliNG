@@ -39,7 +39,7 @@
 
   class CommandList  : public QDockWidget {
     public:
-      CommandList(QWidget* parent, QStringList* commandStringList);
+      CommandList(QWidget* parent, QStringList* commandStringList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList);
       ~CommandList();
       void translateUi();
       void indexCommand();
@@ -49,5 +49,8 @@
       KListWidgetSearchLine *txtFindCommand;
       KListWidget *listCommand;
       QStringList* commandList;
+      QStringList* aliasList;
+      QStringList* defaultArgsList;
+      QStringList* functionList;
   };
 #endif
