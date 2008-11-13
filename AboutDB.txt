@@ -1,7 +1,7 @@
 #This is how the DB have been created:
 
 #sqlite3 kling.db
-#rm kling.db
+rm kling.db
 sqlite3 kling.db  "create table TMAN_PAGE (TMAN_PAGE_KEY  INTEGER PRIMARY KEY, TITLE TEXT, PATH TEXT);" 
 sqlite3 kling.db  "create table THISTORY (THISTORY_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, DATE TEXT, TIME_END TEXT, KEEP BOOL);" 
 sqlite3 kling.db  "create table TSCRIPT (TSCRIPT_KEY  INTEGER PRIMARY KEY, CATEGORIE TEXT, NAME TEXT, DATE_CRE TEXT, DATE_MOD TEXT, SCRIPT_DES TEXT );"
@@ -9,10 +9,19 @@ sqlite3 kling.db  "create table TSCRIPT_HISTORY (TSCRIPT_HISTORY_KEY  INTEGER PR
 sqlite3 kling.db  "create table TSCRIPT_VERSION (TSCRIPT_VERSION_KEY  INTEGER PRIMARY KEY, NAME TEXT, DATE TEXT);" 
 sqlite3 kling.db  "create table TOPTION (TOPTION_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, OPT_NAME TEXT, OPT_DES TEXT );" 
 sqlite3 kling.db  "create table TUSAGE (TUSAGE_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, USAGE TEXT, USAGE_DES TEXT);" 
+sqlite3 kling.db  "create table TALIAS (TALIAS_KEY  INTEGER PRIMARY KEY, ALIAS TEXT, COMMAND TEXT, ARGS TEXT);" 
+sqlite3 kling.db  "create table TDEFAULT_ARGS (TDEFAULT_ARGS_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, ARGS TEXT);" 
+sqlite3 kling.db  "create table TFUNCTION (TFUNCTION  INTEGER PRIMARY KEY, NAME TEXT, BODY TEXT);" 
 sqlite3 kling.db  "create table TCATEGORIES(TOPTION_KEY  INTEGER PRIMARY KEY, NAME TEXT );" 
+
+
 sqlite3 kling.db  "insert into TCATEGORIES (NAME) values ('Gestion');" 
 sqlite3 kling.db  "insert into TCATEGORIES (NAME) values ('Backup');" 
 sqlite3 kling.db  "insert into TCATEGORIES (NAME) values ('Check up');"
 sqlite3 kling.db  "insert into TCATEGORIES (NAME) values ('Log');" 
+
+sqlite3 kling.db  "insert into TALIAS (ALIAS,COMMAND,ARGS) values ('ll','ls','-lah');" 
+sqlite3 kling.db  "insert into TALIAS (ALIAS,COMMAND,ARGS) values ('la','ls','-a');" 
+sqlite3 kling.db  "insert into TDEFAULT_ARGS (COMMAND,ARGS) values ('ls','--color');" 
 
 chmod 777 kling.db
