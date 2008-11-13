@@ -20,7 +20,7 @@
 
 
 
-  Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandStringList, QStringList* historyStringList) : QWidget(parent) {
+  Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList) : QWidget(parent),Shell(commandList,aliasList,defaultArgsList,functionList) {
     dockHistory = aDockHistory;
     setObjectName(QString::fromUtf8("tabShell"));
     setGeometry(QRect(0, 0, 520, 609));
@@ -135,7 +135,7 @@
     kpushbutton_3->setIcon(icnKill);
     hlCommand->addWidget(kpushbutton_3);
 
-    completer = new Completer(this, commandStringList, historyStringList);
+    completer = new Completer(this, commandList, historyStringList);
     //completer->setMinimumSize(0,50);
     //completer->resize(completer->minimumSize());
     //completer->setMaximumSize(99999,70);
