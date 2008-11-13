@@ -34,7 +34,7 @@
 
   class Shell  {  
     public:
-      Shell();
+      Shell(QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList);
       ~Shell();
       int countLine(QString script);
       QVector<QString> parseCommand(QString command);
@@ -49,6 +49,10 @@
       int currentLineCount;
       QVector<bool*> ifVector;
       QVector<int*> loopVector;
+      QStringList* commandList;
+      QStringList* aliasList;
+      QStringList* defaultArgsList;
+      QStringList* functionList;
       bool loopUntilCondition();
       bool ifStatement();
       bool whileLoop();
@@ -61,7 +65,7 @@
       bool evalCommand();
       virtual void signalNextLine();
       virtual void signalNewCommand(QString command);
-      void checkAliases(QVector<QString> *args);
+      void checkCommand(QVector<QString> *args);
       void analyseCommand(QString command, QVector<QString> args);
   };
   

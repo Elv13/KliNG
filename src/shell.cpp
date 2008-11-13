@@ -1,9 +1,14 @@
 #include "shell.h"
 #include "virtTTY.h"
 #include <iostream>
+#include <QtSql>
+#include <QSqlDatabase>
 
-  Shell::Shell() {
-  
+  Shell::Shell(QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList) {
+    this->commandList = commandList;
+    this->aliasList = aliasList;
+    this->defaultArgsList = defaultArgsList;
+    this->functionList = functionList;
   }
   
   Shell::~Shell() {
@@ -309,19 +314,28 @@
     }
     //END test
 
-    checkAliases(&argsVec);
+    checkCommand(&argsVec);
     
     return argsVec;
   }
   
-  void Shell::checkAliases(QVector<QString> *args) {
-    if (args->at(0) == "ls")
-      args->push_back("--color");
-    else if (args->at(0) == "ll") {
-      args->pop_front();
-      args->push_front("--color");
-      args->push_front("-lah");
-      args->push_front("ls");
+  void Shell::checkCommand(QVector<QString> *args) {
+    if (commandList->indexOf(args->at(0)) != -1) {
+      if (args->at(0) == "ls")
+        args->push_back("--color");
+      else if (aliasList->indexOf(args->at(0)) != -1) {
+        QSqlQuery query;
+        query.exec("SELECT COMMAND,ARGS FROM TALIAS WHERE ALIAS = '"+ args->at(0) +"'");
+        args->pop_front();
+        while (query.next())  {
+          args->push_front(query.value(1).toString());
+          args->push_front(query.value(0).toString());
+        }
+      }
+    }
+    //TODO add file check here
+    else {
+      signalNewCommand("Command not found!");
     }
   }
   
