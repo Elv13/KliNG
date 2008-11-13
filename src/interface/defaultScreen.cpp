@@ -84,9 +84,12 @@
   void DefaultScreen::btnOpenTerminalPressed() {
     QStringList* anHistoryList = new QStringList;
     QStringList* aCommandList = new QStringList;
+    QStringList* aliasList = new QStringList();
+    QStringList* defaultArgsList = new QStringList();
+    QStringList* functionList = new QStringList();
     
     if (aCommandListDock == NULL)
-      aCommandListDock = new CommandList(0, aCommandList);
+      aCommandListDock = new CommandList(0, aCommandList,aliasList,defaultArgsList,functionList);
     if (anHistoryDock == NULL)
       anHistoryDock = new History(anHistoryList, config);
     
@@ -96,7 +99,7 @@
     aDialog->setLayout(aLayout);
     aDialog->setWindowTitle("Terminal");
     aDialog->resize(780,530);
-    Term* centralWidget = new Term(anHistoryDock, 0, aCommandListDock->commandList, anHistoryDock->historyStringList);
+    Term* centralWidget = new Term(anHistoryDock, 0, aCommandListDock->commandList,aliasList,defaultArgsList,functionList, anHistoryDock->historyStringList);
     aLayout->addWidget(centralWidget);
     aDialog->show();
   }
@@ -117,7 +120,7 @@
     QStringList* aCommandList = new QStringList;
     
     if (aCommandListDock == NULL)
-      aCommandListDock = new CommandList(0, aCommandList);
+      aCommandListDock = new CommandList(0, aCommandList,aCommandListDock->aliasList,aCommandListDock->defaultArgsList,aCommandListDock->functionList);
     if (anHistoryDock == NULL)
       anHistoryDock = new History(anHistoryList, config);
   
@@ -126,7 +129,7 @@
     aDialog->setLayout(aLayout);
     aDialog->setWindowTitle("Script Editor");
     aDialog->resize(780,530);
-    ScriptEditor* centralWidget = new ScriptEditor(0, *aCommandListDock->commandList);
+    ScriptEditor* centralWidget = new ScriptEditor(0, aCommandListDock->commandList,aCommandListDock->aliasList,aCommandListDock->defaultArgsList,aCommandListDock->functionList);
     aLayout->addWidget(centralWidget);
     aDialog->show();
   }
