@@ -28,7 +28,8 @@
 #ifndef DEF_TERM
 #define DEF_TERM
 
-#include "../Shell.h"
+#include "../virtTTY.h"
+#include "../shell.h"
 #include "kcombobox.h"
 #include "klineedit.h"
 #include "kpushbutton.h"
@@ -48,11 +49,11 @@
 
 QT_BEGIN_NAMESPACE
 
-  class Term : public QWidget {
+  class Term : public QWidget,Shell {
     Q_OBJECT
 
     public:
-      Term(History* aDockHistory, QWidget* parent, QStringList* commandStringList, QStringList* historyStringList);
+      Term(History* aDockHistory, QWidget* parent, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList);
       ~Term();
 
       QVBoxLayout *verticalLayout_6;
@@ -78,10 +79,12 @@ QT_BEGIN_NAMESPACE
       FileBrowser* fileBrowser;
 
     private:
-      ShellThread* aThread;
+      VirtTtyThread* aThread;
+      void sendCommand(QString command);
+      void signalNewCommand(QString command);
 
     private slots:
-      void sendCommand();
+      void launchCommand();
       void searchCmdOutput();
       void updateCmdOutput(QString line);
       void resetCmdInputLine();
