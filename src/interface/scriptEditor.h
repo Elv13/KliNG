@@ -52,7 +52,7 @@ QT_BEGIN_NAMESPACE
     Q_OBJECT
     
     public:
-      ScriptEditor(QWidget* parent, QStringList commandList);
+      ScriptEditor(QWidget* parent, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList);
       
       QVBoxLayout *verticalLayout_7;
       QHBoxLayout *hlControl2;
