@@ -97,17 +97,20 @@
     dockHistory = new History(historyStringList, klingConfigSkeleton); 
     
     commandStringList = new QStringList();
-    dockCommandList = new CommandList(this, commandStringList); 
+    aliasList = new QStringList();
+    defaultArgsList = new QStringList();
+    functionList = new QStringList();
+    dockCommandList = new CommandList(this, commandStringList, aliasList, defaultArgsList, functionList); 
 
     tabWebBrowser = new WebBrowser(0);
 
-    tabEditor = new ScriptEditor(0, *commandStringList);
+    tabEditor = new ScriptEditor(0, commandStringList, aliasList, defaultArgsList, functionList);
     
     tabAdvScripManager = new AdvancedScriptManager(0);
     
     tabGestion = new ExecutionMonitor(0);
     
-    tabShell = new Term (dockHistory ,0, commandStringList, historyStringList);
+    tabShell = new Term (dockHistory , 0, commandStringList, aliasList, defaultArgsList, commandStringList, historyStringList);
 
     setupActions();
     for (int l =0; l < 5; l++) {
@@ -901,7 +904,7 @@
 
   void MainWindow::newTerminal() {    
     if (dockCommandList == NULL)
-      dockCommandList = new CommandList(0, commandStringList);
+      dockCommandList = new CommandList(0, commandStringList, aliasList, defaultArgsList, functionList);
     if (dockHistory == NULL)
       dockHistory = new History(historyStringList, klingConfigSkeleton);
     
@@ -911,7 +914,7 @@
     aDialog->setLayout(aLayout);
     aDialog->setWindowTitle("Terminal");
     aDialog->resize(780,530);
-    Term* centralWidget = new Term(dockHistory, 0, commandStringList, historyStringList);
+    Term* centralWidget = new Term(dockHistory, 0, commandStringList, aliasList, defaultArgsList, functionList, historyStringList);
     aLayout->addWidget(centralWidget);
     aDialog->show();
   }
@@ -933,7 +936,7 @@
     aDialog->setLayout(aLayout);
     aDialog->setWindowTitle("Script Editor");
     aDialog->resize(780,530);
-    ScriptEditor* centralWidget = new ScriptEditor(0, *commandStringList);
+    ScriptEditor* centralWidget = new ScriptEditor(0, commandStringList, aliasList, defaultArgsList, functionList);
     aLayout->addWidget(centralWidget);
     aDialog->show();
   }

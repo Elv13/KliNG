@@ -87,6 +87,9 @@
       WebBrowser* tabWebBrowser;
       AdvancedScriptManager* tabAdvScripManager;
       QStringList* commandStringList;
+      QStringList* aliasList;
+      QStringList* defaultArgsList;
+      QStringList* functionList;
       QStringList* historyStringList;
       QProgressBar* statusProgressBar;
       QLabel* statusJobRunning;
