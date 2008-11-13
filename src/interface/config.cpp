@@ -6,6 +6,8 @@
 #include <QSpacerItem>
 #include <QInputDialog>
 #include <KLocalizedString>
+#include <QtSql>
+#include <QSqlDatabase>
 
   Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigDialog(parent, "settings", aConfigSkeleton) {
     configSkeleton = aConfigSkeleton;
@@ -292,13 +294,128 @@
     QTabWidget* termTabWidget = new QTabWidget();
     
     QWidget* aliasTab = new QWidget();
+    QGridLayout* gridAlias = new QGridLayout;
+    aliasTab->setLayout(gridAlias);
+    
+    QGridLayout* gridAliasList = new QGridLayout;
+    
+    QGroupBox* grbAliasList = new QGroupBox();
+    grbAliasList->setTitle("Alias list");
+    grbAliasList->setLayout(gridAliasList);
+    
+    btnAddAlias = new KPushButton();
+    btnAddAlias->setText("Add");
+    btnAddAlias->setIcon(KIcon("list-add"));
+    gridAliasList->addWidget(btnAddAlias,0,1);
+    
+    btnRemoveAlias = new KPushButton();
+    btnRemoveAlias->setText("Remove");
+    btnRemoveAlias->setIcon(KIcon("list-remove"));
+    gridAliasList->addWidget(btnRemoveAlias,1,1);
+    
+    tblAlias = new QTableWidget();
+    tblAlias->setColumnCount(2);
+    tblAlias->verticalHeader()->hide();
+    tblAlias->horizontalHeader()->hide();
+    tblAlias->setSelectionBehavior(QAbstractItemView::SelectRows);
+    QSqlQuery query;
+    query.exec("SELECT ALIAS,COMMAND,ARGS FROM TALIAS");
+    int i =1;
+    while (query.next())  {
+      tblAlias->setRowCount(i);
+      tblAlias->setRowHeight(i-1,20);
+      QTableWidgetItem* aTableWidget = new QTableWidgetItem(query.value(0).toString());
+      tblAlias->setItem(i-1,0,aTableWidget);
+      
+      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(query.value(1).toString() + " " + query.value(2).toString());
+      tblAlias->setItem(i-1,1,aTableWidget1);
+      
+      i++;
+    }
+    gridAliasList->addWidget(tblAlias,0,0,2,1);
+    
+    gridAlias->addWidget(grbAliasList,0,0);
+        
+    QGridLayout* gridAliasOpt = new QGridLayout;
+    
+    QGroupBox* grbAliasOpt = new QGroupBox();
+    grbAliasOpt->setTitle("Alias Options");
+    grbAliasOpt->setLayout(gridAliasOpt);
+    grbAliasOpt->setDisabled(true);
+    gridAlias->addWidget(grbAliasOpt,1,0);
+    
+    txtCommand = new KLineEdit();
+    gridAliasOpt->addWidget(txtCommand,0,0,1,2);
+    
+    lstAliasArgs = new QListWidget();
+    gridAliasOpt->addWidget(lstAliasArgs,1,0,1,2);
+    
+    btnAddAliasArgs = new KPushButton();
+    btnAddAliasArgs->setText("Add");
+    btnAddAliasArgs->setIcon(KIcon("list-add"));
+    gridAliasOpt->addWidget(btnAddAliasArgs,2,0);
+    
+    btnRemoveAliasArgs = new KPushButton();
+    btnRemoveAliasArgs->setText("Remove");
+    btnRemoveAliasArgs->setIcon(KIcon("list-remove"));
+    gridAliasOpt->addWidget(btnRemoveAliasArgs,2,1);
+    
     termTabWidget->addTab(aliasTab,"Alias");
     
-    QWidget* defaultArgsTab = new QWidget();
-    termTabWidget->addTab(defaultArgsTab,"Default Args");
+    tblCmdDefaultArgs = new QTableWidget();
+    tblCmdDefaultArgs->setColumnCount(5);
+    tblCmdDefaultArgs->setRowCount(5);
+    
+    QTableWidgetItem *__colItem = new QTableWidgetItem();
+    tblCmdDefaultArgs->setHorizontalHeaderItem(0, __colItem);
+    tblCmdDefaultArgs->horizontalHeaderItem(0)->setText("Command");
+    
+    QTableWidgetItem *__colItem1 = new QTableWidgetItem();
+    tblCmdDefaultArgs->setHorizontalHeaderItem(1, __colItem1);
+    tblCmdDefaultArgs->horizontalHeaderItem(1)->setText("Arg 1");
+    
+    QTableWidgetItem *__colItem2 = new QTableWidgetItem();
+    tblCmdDefaultArgs->setHorizontalHeaderItem(2, __colItem2);
+    tblCmdDefaultArgs->horizontalHeaderItem(2)->setText("Arg 2");
+    
+    QTableWidgetItem *__colItem3 = new QTableWidgetItem();
+    tblCmdDefaultArgs->setHorizontalHeaderItem(3, __colItem3);
+    tblCmdDefaultArgs->horizontalHeaderItem(3)->setText("Arg 3");
+    
+    QTableWidgetItem *__colItem4 = new QTableWidgetItem();
+    tblCmdDefaultArgs->setHorizontalHeaderItem(4, __colItem4);
+    tblCmdDefaultArgs->horizontalHeaderItem(4)->setText("Arg 4");
+    
+    termTabWidget->addTab(tblCmdDefaultArgs,"Default Args");
     
     QWidget* functionTab = new QWidget();
     termTabWidget->addTab(functionTab,"Function");
+    
+    QGridLayout* gridFunction = new QGridLayout();
+    functionTab->setLayout(gridFunction);
+    
+    lstFunctionList = new QListWidget();
+    gridFunction->addWidget(lstFunctionList,0,0,2,1);
+    
+    btnAddFunction = new KPushButton();
+    btnAddFunction->setText("Add");
+    btnAddFunction->setIcon(KIcon("list-add"));
+    gridFunction->addWidget(btnAddFunction,0,1);
+    
+    btnRemoveFunction = new KPushButton();
+    btnRemoveFunction->setText("Remove");
+    btnRemoveFunction->setIcon(KIcon("list-remove"));
+    gridFunction->addWidget(btnRemoveFunction,1,1);
+   
+    QGroupBox* grbFunctionBody = new QGroupBox;
+    grbFunctionBody->setTitle("Body");
+    gridFunction->addWidget(grbFunctionBody,2,0,1,2);
+    
+    QGridLayout* gridFunctionBody = new QGridLayout();
+    grbFunctionBody->setLayout(gridFunctionBody);
+    
+    rtfFunctionEditor = new KTextEdit();
+    gridFunctionBody->addWidget(rtfFunctionEditor,0,0);
     
     pwiTerm = addPage(termTabWidget, i18n("Terminal") );
     pwiTerm->setIcon( KIcon( "utilities-terminal" ) );

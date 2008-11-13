@@ -11,6 +11,8 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <KPushButton>
+#include <KTextEdit>
+#include <KLineEdit>
 #include <QCheckBox>
 #include <KIcon>
 #include <QTabWidget>
@@ -100,6 +102,21 @@
       QCheckBox* ckbEnableLogging;
       KPushButton* btnAddExcludedCommand;
       KPushButton* btnRemoveExcludedCommand;
+      
+      QTableWidget* tblAlias;
+      KLineEdit* txtCommand;
+      QListWidget* lstAliasArgs;
+      KPushButton* btnAddAliasArgs;
+      KPushButton* btnRemoveAliasArgs;
+      KPushButton* btnAddAlias;
+      KPushButton* btnRemoveAlias;
+      
+      QTableWidget* tblCmdDefaultArgs;
+      
+      QListWidget* lstFunctionList;
+      KPushButton* btnAddFunction;
+      KPushButton* btnRemoveFunction;
+      KTextEdit* rtfFunctionEditor;
       
       QListWidget* pluginList;
       KPushButton* btnAddPlugin;
