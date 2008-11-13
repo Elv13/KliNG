@@ -17,7 +17,7 @@
 #include <time.h>
 // count
 
-  ScriptEditor::ScriptEditor(QWidget* parent, QStringList commandList) : QWidget(parent) {
+  ScriptEditor::ScriptEditor(QWidget* parent, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList) : QWidget(parent), Shell(commandList,aliasList,defaultArgsList,functionList) {
     isDebugging = false;
     verticalLayout_7 = new QVBoxLayout(this);
     verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
@@ -223,7 +223,7 @@
     txtScriptEditor->setAcceptRichText(true);
     textEditLayout->addWidget(txtScriptEditor);
     
-    bashHighlighter = new BashSyntaxHighlighter(txtScriptEditor, commandList);
+    bashHighlighter = new BashSyntaxHighlighter(txtScriptEditor, *commandList);
 
     scrollArea->setWidget(scrollAreaWidgetContents_2);
 
