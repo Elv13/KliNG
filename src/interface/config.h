@@ -104,6 +104,7 @@
       KPushButton* btnRemoveExcludedCommand;
       
       QTableWidget* tblAlias;
+      QGroupBox* grbAliasOpt;
       KLineEdit* txtCommand;
       QListWidget* lstAliasArgs;
       KPushButton* btnAddAliasArgs;
@@ -135,6 +136,7 @@
       void addLogExclude();
       void moveTabUp();
       void moveTabDown();
+      void loadAlias(int x, int y);
       
     private:
       int countActiveMode();

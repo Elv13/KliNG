@@ -61,7 +61,7 @@ QT_BEGIN_NAMESPACE
       QHBoxLayout *horizontalLayout_3;
       KPushButton *kpushbutton_4;
       QLabel *label;
-      KLineEdit *klineedit_3; 
+      QLineEdit *klineedit_3; 
       KPushButton *kpushbutton_5;
       QLabel* cmdStatus;
       QPixmap* pxmCmdInactive;

@@ -241,7 +241,7 @@ QT_BEGIN_NAMESPACE
         btnView->setMinimumSize(80, 25);
         btnView->setMaximumSize(9999, 25);
         btnView->id = query.value(0).toInt();
-        if (KStandardDirs::exists(KStandardDirs::locateLocal("appdata", "/output/"+QString::number(query.value(0).toInt()))) == false)
+        if (KStandardDirs::exists(KStandardDirs::locateLocal("appdata", "/output/script/"+QString::number(query.value(0).toInt()))) == false)
           btnView->setDisabled(true);
         QObject::connect(btnView, SIGNAL(clicked(uint)), this, SLOT(showOutput(uint)));
 

@@ -255,10 +255,10 @@
     label_2->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0;padding:0px;min-height:15px;font-size:12px;padding-top:1px");
     horizontalLayout_5->addWidget(label_2);
 
-    klineedit_4 = new KLineEdit(frame_2);
+    klineedit_4 = new QLineEdit(frame_2);
     klineedit_4->setObjectName(QString::fromUtf8("klineedit_4"));
-    klineedit_4->setProperty("showClearButton", QVariant(true));
-    klineedit_4->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0px;padding:0px;border:1px;border-style:solid;border-color:#808000;spacing:0px;height:15px;min-height:15px;");
+    //klineedit_4->setProperty("showClearButton", QVariant(true));
+    //klineedit_4->setStyleSheet("background-color:  rgb(230, 255, 105);margin:0px;padding:0px;border:1px;border-style:solid;border-color:#808000;spacing:0px;height:15px;min-height:15px;");
     horizontalLayout_5->addWidget(klineedit_4);
 
     kpushbutton_7 = new KPushButton(frame_2);

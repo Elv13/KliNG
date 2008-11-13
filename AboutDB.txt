@@ -9,9 +9,10 @@ sqlite3 kling.db  "create table TSCRIPT_HISTORY (TSCRIPT_HISTORY_KEY  INTEGER PR
 sqlite3 kling.db  "create table TSCRIPT_VERSION (TSCRIPT_VERSION_KEY  INTEGER PRIMARY KEY, NAME TEXT, DATE TEXT);" 
 sqlite3 kling.db  "create table TOPTION (TOPTION_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, OPT_NAME TEXT, OPT_DES TEXT );" 
 sqlite3 kling.db  "create table TUSAGE (TUSAGE_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, USAGE TEXT, USAGE_DES TEXT);" 
-sqlite3 kling.db  "create table TALIAS (TALIAS_KEY  INTEGER PRIMARY KEY, ALIAS TEXT, COMMAND TEXT, ARGS TEXT);" 
-sqlite3 kling.db  "create table TDEFAULT_ARGS (TDEFAULT_ARGS_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, ARGS TEXT);" 
-sqlite3 kling.db  "create table TFUNCTION (TFUNCTION  INTEGER PRIMARY KEY, NAME TEXT, BODY TEXT);" 
+sqlite3 kling.db  "create table TALIAS (TALIAS_KEY  INTEGER PRIMARY KEY, ALIAS TEXT, COMMAND TEXT);" 
+sqlite3 kling.db  "create table TDEFAULT_ARGS (TDEFAULT_ARGS_KEY  INTEGER PRIMARY KEY, COMMAND TEXT);" 
+sqlite3 kling.db  "create table TFUNCTION (TFUNCTION_KEY  INTEGER PRIMARY KEY, NAME TEXT, BODY TEXT);" 
+sqlite3 kling.db  "create table TARGS (TARGS_KEY  INTEGER PRIMARY KEY, PARENT INTEGER, TYPE INTEGER, ARGS TEXT);" 
 sqlite3 kling.db  "create table TCATEGORIES(TOPTION_KEY  INTEGER PRIMARY KEY, NAME TEXT );" 
 
 
@@ -20,8 +21,12 @@ sqlite3 kling.db  "insert into TCATEGORIES (NAME) values ('Backup');"
 sqlite3 kling.db  "insert into TCATEGORIES (NAME) values ('Check up');"
 sqlite3 kling.db  "insert into TCATEGORIES (NAME) values ('Log');" 
 
-sqlite3 kling.db  "insert into TALIAS (ALIAS,COMMAND,ARGS) values ('ll','ls','-lah');" 
-sqlite3 kling.db  "insert into TALIAS (ALIAS,COMMAND,ARGS) values ('la','ls','-a');" 
-sqlite3 kling.db  "insert into TDEFAULT_ARGS (COMMAND,ARGS) values ('ls','--color');" 
+sqlite3 kling.db  "insert into TALIAS (ALIAS,COMMAND) values ('ll','ls');" 
+sqlite3 kling.db  "insert into TARGS (PARENT,TYPE,ARGS) values (1,1,'-lah');" 
+sqlite3 kling.db  "insert into TARGS (PARENT,TYPE,ARGS) values (1,1,'--color');" 
+sqlite3 kling.db  "insert into TARGS (PARENT,TYPE,ARGS) values (2,1,'-a');"  
+sqlite3 kling.db  "insert into TALIAS (ALIAS,COMMAND) values ('la','ls');" 
+sqlite3 kling.db  "insert into TARGS (PARENT,TYPE,ARGS) values (1,2,'--color');" 
+sqlite3 kling.db  "insert into TDEFAULT_ARGS (COMMAND) values ('ls');" 
 
 chmod 777 kling.db

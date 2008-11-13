@@ -319,15 +319,21 @@
     tblAlias->horizontalHeader()->hide();
     tblAlias->setSelectionBehavior(QAbstractItemView::SelectRows);
     QSqlQuery query;
-    query.exec("SELECT ALIAS,COMMAND,ARGS FROM TALIAS");
+    query.exec("SELECT ALIAS,COMMAND,TALIAS_KEY FROM TALIAS");
     int i =1;
     while (query.next())  {
       tblAlias->setRowCount(i);
       tblAlias->setRowHeight(i-1,20);
       QTableWidgetItem* aTableWidget = new QTableWidgetItem(query.value(0).toString());
       tblAlias->setItem(i-1,0,aTableWidget);
-      
-      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(query.value(1).toString() + " " + query.value(2).toString());
+      QString args;
+      QSqlQuery query2;
+      query2.exec("SELECT ARGS FROM TARGS WHERE PARENT = '"+ query.value(2).toString() +"' AND TYPE = 1");
+      while (query2.next()) {
+	args += " " + query2.value(0).toString();
+      }
+
+      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(query.value(1).toString() + " " + args);
       tblAlias->setItem(i-1,1,aTableWidget1);
       
       i++;
@@ -338,7 +344,7 @@
         
     QGridLayout* gridAliasOpt = new QGridLayout;
     
-    QGroupBox* grbAliasOpt = new QGroupBox();
+    grbAliasOpt = new QGroupBox();
     grbAliasOpt->setTitle("Alias Options");
     grbAliasOpt->setLayout(gridAliasOpt);
     grbAliasOpt->setDisabled(true);
@@ -364,7 +370,26 @@
     
     tblCmdDefaultArgs = new QTableWidget();
     tblCmdDefaultArgs->setColumnCount(5);
-    tblCmdDefaultArgs->setRowCount(5);
+    tblCmdDefaultArgs->verticalHeader()->hide();
+    tblCmdDefaultArgs->setSelectionBehavior(QAbstractItemView::SelectRows);
+    QSqlQuery query2;
+    query2.exec("SELECT COMMAND,TDEFAULT_ARGS_KEY FROM TDEFAULT_ARGS");
+    int j =1;
+    while (query2.next())  {
+      tblCmdDefaultArgs->setRowCount(j);
+      tblCmdDefaultArgs->setRowHeight(j-1,20);
+      QTableWidgetItem* aTableWidget = new QTableWidgetItem(query2.value(0).toString());
+      tblCmdDefaultArgs->setItem(j-1,0,aTableWidget);
+      QSqlQuery query3;
+      query3.exec("SELECT ARGS FROM TARGS WHERE PARENT = '"+ query2.value(1).toString() +"' AND TYPE = 2");
+      int k =1;
+      while (query3.next()) {
+	QTableWidgetItem* aTableWidget2 = new QTableWidgetItem(query3.value(0).toString());
+	tblCmdDefaultArgs->setItem(j-1,k,aTableWidget2);
+	k++;
+      }
+      j++;
+    }
     
     QTableWidgetItem *__colItem = new QTableWidgetItem();
     tblCmdDefaultArgs->setHorizontalHeaderItem(0, __colItem);
@@ -524,6 +549,7 @@
     connect( btnUp, SIGNAL( clicked() ), this, SLOT( moveTabUp() ) );
     connect( btnDown, SIGNAL( clicked() ), this, SLOT( moveTabDown() ) );
     connect( btnAddExcludedCommand, SIGNAL( pressed() ), this, SLOT( addLogExclude() ) );
+    connect( tblAlias, SIGNAL( cellClicked ( int, int)), this, SLOT(loadAlias(int, int)));
   }
   
   void Config::moveTabUp() {
@@ -653,4 +679,20 @@
     if (configSkeleton->scriptManagerTabOrder != -1)
       i++;
     return i;
+  }
+
+  void Config::loadAlias(int x, int y) {
+    lstAliasArgs->clear();
+    grbAliasOpt->setEnabled(true);
+    QString alias =tblAlias->item(x, 0)->text();
+    QSqlQuery query;
+    query.exec("SELECT COMMAND,TALIAS_KEY FROM TALIAS WHERE ALIAS = '"+ alias +"'");
+    while (query.next())  {
+      txtCommand->setText(query.value(0).toString());
+      QSqlQuery query2;
+      query2.exec("SELECT ARGS FROM TARGS WHERE PARENT = '"+ query.value(1).toString() +"' AND TYPE = 1");
+      while (query2.next()) {
+	lstAliasArgs->addItem(query2.value(0).toString());
+      }
+    }
   }

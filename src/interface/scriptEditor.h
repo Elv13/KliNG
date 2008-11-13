@@ -85,7 +85,7 @@ QT_BEGIN_NAMESPACE
       QHBoxLayout *horizontalLayout_5;
       KPushButton *kpushbutton_6;
       QLabel *label_2;
-      KLineEdit *klineedit_4;
+      QLineEdit *klineedit_4;
       KPushButton *kpushbutton_7;
       QTableWidget* lineNBSideBar;
       QString fileName;

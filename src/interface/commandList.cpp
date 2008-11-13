@@ -151,6 +151,12 @@ using namespace std;
       *aliasList << (query.value(0).toString());
     }
 
+    QSqlQuery query2;
+    query2.exec("SELECT COMMAND FROM TDEFAULT_ARGS");
+    while (query2.next())  {
+      *defaultArgsList << (query2.value(0).toString());
+    }
+
     if (commandList->isEmpty() == false) {
       commandList->sort();
       listCommand->addItem(commandList->at(0));

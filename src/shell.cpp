@@ -321,15 +321,28 @@
   
   void Shell::checkCommand(QVector<QString> *args) {
     if (commandList->indexOf(args->at(0)) != -1) {
-      if (args->at(0) == "ls")
-        args->push_back("--color");
+      if (defaultArgsList->indexOf(args->at(0)) != -1) {
+        QSqlQuery query;
+        query.exec("SELECT TDEFAULT_ARGS_KEY FROM TDEFAULT_ARGS WHERE COMMAND = '"+ args->at(0) +"'");
+        while (query.next()) {
+          QSqlQuery query2;
+	  query2.exec("SELECT ARGS FROM TARGS WHERE PARENT = '"+ query.value(0).toString() +"' AND TYPE = 2");
+          while (query2.next()) {
+	    args->push_back(query2.value(0).toString());
+	  }
+        }
+      }
       else if (aliasList->indexOf(args->at(0)) != -1) {
         QSqlQuery query;
-        query.exec("SELECT COMMAND,ARGS FROM TALIAS WHERE ALIAS = '"+ args->at(0) +"'");
+        query.exec("SELECT COMMAND,TALIAS_KEY FROM TALIAS WHERE ALIAS = '"+ args->at(0) +"'");
         args->pop_front();
-        while (query.next())  {
-          args->push_front(query.value(1).toString());
-          args->push_front(query.value(0).toString());
+        while (query.next()) {
+          QSqlQuery query2;
+	  query2.exec("SELECT ARGS FROM TARGS WHERE PARENT = '"+ query.value(1).toString() +"' AND TYPE = 1");
+          while (query2.next()) {
+	    args->push_front(query2.value(0).toString());
+	  }
+	  args->push_front(query.value(0).toString());
         }
       }
     }
