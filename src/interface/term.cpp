@@ -167,17 +167,37 @@
 /**
   send the txtCommand text to the terminal emulator
 */
-  void Term::sendCommand(QString command) {
-    completer->hide();
-    if (txtCommand->text() != "") {
-      aThread = new VirtTtyThread(txtCommand->text(), parseCommand(txtCommand->text()), 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
-      QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
-      QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
-      QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
-      QObject::connect(aThread->aVirtTTY, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
-      QObject::connect(aThread->aVirtTTY, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
-      aThread->start();
-      QObject::connect(kpushbutton_3, SIGNAL(clicked()), this, SLOT(killPros()));
+  void Term::sendCommand() {
+    if (executionQueue.count() != 0) {
+      completer->hide();
+      QVector<QString> command = executionQueue[0];
+      if (txtCommand->text() != "") {
+        aThread = new VirtTtyThread(txtCommand->text(), command, 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
+        QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(sendCommand()));
+        //QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
+        QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
+        QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
+        QObject::connect(aThread->aVirtTTY, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
+        QObject::connect(aThread->aVirtTTY, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
+        aThread->start();
+        QObject::connect(kpushbutton_3, SIGNAL(clicked()), this, SLOT(killPros()));
+        executionQueue.pop_front();
+        
+        if (executionQueue.count() != 0) {
+          if (executionQueue.first().first() == "&") {
+            executionQueue.first().pop_front();
+            VirtTtyThread* aThread2 = new VirtTtyThread("tralala",executionQueue.first());
+            QObject::connect(aThread2->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
+            executionQueue.pop_front();
+            aThread2->start();
+            if (executionQueue.count() == 0)
+              resetCmdInputLine();
+          }
+        }
+      }
+    }
+    else {
+      resetCmdInputLine();
     }
   }
 
