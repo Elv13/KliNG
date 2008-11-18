@@ -92,7 +92,6 @@ QT_BEGIN_NAMESPACE
       BashSyntaxHighlighter* bashHighlighter;
             
     private:
-      void sendCommand(QString command);
       void setDebuggerMode(bool value);
       void highlightLine(int number);
       bool doneStatement();
@@ -105,6 +104,7 @@ QT_BEGIN_NAMESPACE
       DebugTerm* aDebugTerm;
       
     private slots:
+      void sendCommand();
       void startDebugging();
       void stopDebugging();
       void dbgNextLine();
