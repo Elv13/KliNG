@@ -243,9 +243,12 @@
     }
   }
   
-  void Shell::sendCommand(QString command) {
-    VirtTtyThread* aThread = new VirtTtyThread(command,parseCommand(command));
-    aThread->start();
+  void Shell::sendCommand() {
+    if (executionQueue.count() != 0) {
+      VirtTtyThread* aThread = new VirtTtyThread("tralala",executionQueue.first());
+      executionQueue.pop_front();
+      aThread->start();
+    }
   }
   
   void Shell::signalNextLine(){}
@@ -270,7 +273,11 @@
     tmp = command;
     tmp = tmp.trimmed();
     QVector<QString> argsVec;
-
+    //TODO manager ";", They can be in the first part of a here"things"
+    /*BUG Does not work with much advanced commande, 
+      -"'" can be before """
+      -;,&& and & can be in the middle without spacing
+    */
     //BEGINING test exaustively
     while (!tmp.isEmpty()) {
        if (((tmp.indexOf("\"") < tmp.indexOf(" ")) && (tmp.indexOf("\"") != -1)) || ((tmp.indexOf("\"") != -1) && (tmp.indexOf(" ") == -1))) {
@@ -311,10 +318,23 @@
         argsVec.push_back(tmp.left(tmp.indexOf(" ")));
         tmp.remove(0,  tmp.indexOf(" "));
       }
+      
+      /*if ((argsVec.last().right(2) == "&&") && (argsVec.last().trimmed().count() != 2)) {
+        argsVec.last() = argsVec.last().left(argsVec.last().count() - 2);
+        argsVec.push_back("&&");
+      }
+      else if ((argsVec.last().right(1) == "&") && (argsVec.last().trimmed().count() != 1)) {
+        argsVec.last() = argsVec.last().left(argsVec.last().count() - 1);
+        argsVec.push_back("&");
+      }
+      else if ((argsVec.last().right(1) == "|") && (argsVec.last().trimmed().count() != 1)) {
+        argsVec.last() = argsVec.last().left(argsVec.last().count() - 1);
+        argsVec.push_back("|");
+      }*/
     }
     //END test
 
-    checkCommand(&argsVec);
+    //checkCommand(&argsVec);
     
     return argsVec;
   }
@@ -371,7 +391,6 @@
         else {
           toHighlight = toHighlight.left(toHighlight.indexOf(" "));
         }
-        sendCommand(command);
       }
     }
     else {
@@ -384,8 +403,45 @@
       else {
         signalNewCommand("<b><font color=\"#008000\">" + command + "</font>" + "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
       }
-      sendCommand(command);
     }
+    
+    executionQueue = splitCommand(args);
+    sendCommand();
+    /*for (int i =0; i < executionQueue.count(); i++) {
+      sendCommand(executionQueue[i]);
+    }*/
   }
   
   void Shell::signalNewCommand(QString command) {}
+  
+  QVector< QVector<QString> > Shell::splitCommand(QVector<QString> original) {
+    QVector< QVector<QString> > result;
+    int lastFind=0;
+    int j =0;
+    if ((original.indexOf("&&") != -1) || (original.indexOf("&") != -1)) {
+      QVector<QString> aCommand;
+      result.push_back(aCommand);
+      while (original.count() != 0) {
+        if ((original[0] != "&&") && (original[0] != "&")) {
+          result.last().push_back(original[0]);
+          original.pop_front();
+        }
+        else {
+          checkCommand(&(result.last()));
+          if (original.count() != 1) {
+            QVector<QString> aCommand2;
+            result.push_back(aCommand2);
+          }
+          if ((original[0] == "&") && (result.last().first() != "&"))
+            result.last().push_back("&");
+
+          original.pop_front();
+        }
+      }
+    }
+    else {
+      result.push_back(original);
+    }
+    checkCommand(&(result.last()));
+    return result;
+  }

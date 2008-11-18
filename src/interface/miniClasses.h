@@ -2,6 +2,7 @@
 #ifndef DEF_MINICLASSES
 #define DEF_MINICLASSES
 #include <KPushButton>
+#include <QCheckBox>
 
   class OutputViewerButton : public KPushButton {
     Q_OBJECT
@@ -46,12 +47,25 @@
     Q_OBJECT
     public:
       RemoveButton(QWidget* parent);
-      uint id;
+      int id;
   
     private slots:
       void launched();
       
     signals:
-      void clicked(uint);
+      void clicked(int);
+  };
+  
+  class AliasCheckBox : public QCheckBox {
+    Q_OBJECT
+    public:
+      AliasCheckBox(QWidget* parent);
+      int id;
+  
+    private slots:
+      void launched();
+      
+    signals:
+      void clicked(int);
   };
 #endif

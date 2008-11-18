@@ -14,6 +14,7 @@
     
   PlayButton::PlayButton(QWidget* parent =0) : KPushButton( parent ) {
     setIcon(KIcon("arrow-right"));
+    setToolTip("Execute");
     QObject::connect(this, SIGNAL(clicked()), this, SLOT(launched()));
   }
       
@@ -23,6 +24,7 @@
   
   EditButton::EditButton(QWidget* parent =0) : KPushButton( parent ) {
     setIcon(KIcon("draw-freehand"));
+    setToolTip("Edit");
     QObject::connect(this, SIGNAL(clicked()), this, SLOT(launched()));
   }
       
@@ -32,9 +34,18 @@
   
   RemoveButton::RemoveButton(QWidget* parent =0) : KPushButton( parent ) {
     setIcon(KIcon("list-remove"));
+    setToolTip("Remove");
     QObject::connect(this, SIGNAL(clicked()), this, SLOT(launched()));
   }
       
   void RemoveButton::launched() {
+    emit clicked(id); 
+  }
+  
+  AliasCheckBox::AliasCheckBox(QWidget* parent =0) : QCheckBox( parent ) {
+    QObject::connect(this, SIGNAL(clicked()), this, SLOT(launched()));
+  }
+      
+  void AliasCheckBox::launched() {
     emit clicked(id); 
   }

@@ -108,7 +108,10 @@
     if (close(from_me[1]) == -1)
       fatal_error("close(from_me[1])");
 
-    execvp(paramArray[0], paramArray);
+    //if (strcmp(paramArray[1],NULL) != 0) //Obselete and broken
+      execvp(paramArray[0], paramArray);
+    /*else
+      execl(paramArray[0],NULL);*/
     fatal_error("execvp(paramArray)");
     exit(EXIT_FAILURE);
   }

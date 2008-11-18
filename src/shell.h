@@ -40,7 +40,7 @@
       QVector<QString> parseCommand(QString command);
             
     protected:
-      virtual void sendCommand(QString command);
+      virtual void sendCommand();
       bool evalCondition(QString line);
       QString* commandArray;
       QString originalText;
@@ -53,6 +53,7 @@
       QStringList* aliasList;
       QStringList* defaultArgsList;
       QStringList* functionList;
+      QVector< QVector<QString> > executionQueue;
       bool loopUntilCondition();
       bool ifStatement();
       bool whileLoop();
@@ -67,6 +68,7 @@
       virtual void signalNewCommand(QString command);
       void checkCommand(QVector<QString> *args);
       void analyseCommand(QString command, QVector<QString> args);
+      QVector< QVector<QString> > splitCommand(QVector<QString> original);
   };
   
   class LineCounter : public QThread {
