@@ -368,7 +368,7 @@
         sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
 
       if (commandArray[currentLine] != "")
-        this->sendCommand(commandArray[currentLine].toStdString().c_str());
+        this->analyseCommand(commandArray[currentLine],parseCommand(commandArray[currentLine]));
       
       sbCurrentLine = sbCurrentLine->nextSBItem;
       currentLine++;
@@ -408,7 +408,7 @@
       else
         sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
 
-      this->sendCommand(commandArray[currentLine].toStdString().c_str());
+      this->analyseCommand(commandArray[currentLine],parseCommand(commandArray[currentLine]));
       sbCurrentLine = sbCurrentLine->nextSBItem;
       currentLine++;
       highlightLine(currentLine);
@@ -427,7 +427,7 @@
       //cout << &sbCurrentLine << ": "<< sbCurrentLine->debugState << endl;
       if (sbCurrentLine->previousSBItem != NULL) sbCurrentLine->previousSBItem->btnDebug->setIcon(*sbCurrentLine->icnEmpty);
       sbCurrentLine->btnDebug->setIcon(*sbCurrentLine->icnArrow);
-      this->sendCommand(commandArray[currentLine].toStdString().c_str());
+      this->analyseCommand(commandArray[currentLine],parseCommand(commandArray[currentLine]));
       sbCurrentLine = sbCurrentLine->nextSBItem;
       currentLine++;
       highlightLine(currentLine);
@@ -493,15 +493,23 @@
     txtScriptEditor->setFontPointSize ( 14 );
   }
     
-  void ScriptEditor::sendCommand(QString command) {
-    VirtTtyThread* aThread = new VirtTtyThread(command, parseCommand(command));
-    //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
-    //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
-    QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), aDebugTerm->rtfDegubTerm, SLOT(append(QString)));
-    QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(executeNextCommand()));
-    //QObject::connect(aThread->aShell, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
-    //QObject::connect(aThread->aShell, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
-    aThread->start();
+  void ScriptEditor::sendCommand() {
+    if (executionQueue.count() != 0) {
+      QVector<QString> command = executionQueue[0];
+      VirtTtyThread* aThread = new VirtTtyThread(commandArray[currentLine], command);
+      //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
+      //QObject::connect(aThread->aShell, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
+      QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), aDebugTerm->rtfDegubTerm, SLOT(append(QString)));
+      QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(sendCommand()));
+      //QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(executeNextCommand()));
+      //QObject::connect(aThread->aShell, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
+      //QObject::connect(aThread->aShell, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
+      executionQueue.pop_front();
+      aThread->start();
+    }
+    else {
+      executeNextCommand();
+    }
   }
   
   void ScriptEditor::saveFileAs(const QString &outputFileName) {
