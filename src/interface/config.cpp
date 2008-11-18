@@ -1,4 +1,5 @@
 #include "config.h"
+#include "miniClasses.h"
 
 #include <KLocale>
 #include <QVBoxLayout>
@@ -313,32 +314,49 @@
     btnRemoveAlias->setIcon(KIcon("list-remove"));
     gridAliasList->addWidget(btnRemoveAlias,1,1);
     
+    gridAliasList->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding),2,1);
+    
     tblAlias = new QTableWidget();
-    tblAlias->setColumnCount(2);
+    tblAlias->setColumnCount(3);
     tblAlias->verticalHeader()->hide();
     tblAlias->horizontalHeader()->hide();
     tblAlias->setSelectionBehavior(QAbstractItemView::SelectRows);
     QSqlQuery query;
-    query.exec("SELECT ALIAS,COMMAND,TALIAS_KEY FROM TALIAS");
+    query.exec("SELECT ALIAS,COMMAND,TALIAS_KEY,ENABLE FROM TALIAS");
     int i =1;
+    int largestAlias =0;
+    int largestArgsSet =0;
     while (query.next())  {
       tblAlias->setRowCount(i);
       tblAlias->setRowHeight(i-1,20);
+      if (query.value(0).toString().count() > largestAlias)
+        largestAlias = query.value(0).toString().count();
+      
+      QCheckBox* aCheckBox = new QCheckBox;
+      aCheckBox->setToolTip("Enable");
+      tblAlias->setCellWidget(i-1, 0, aCheckBox);
+      
       QTableWidgetItem* aTableWidget = new QTableWidgetItem(query.value(0).toString());
-      tblAlias->setItem(i-1,0,aTableWidget);
+      tblAlias->setItem(i-1,1,aTableWidget);
       QString args;
       QSqlQuery query2;
       query2.exec("SELECT ARGS FROM TARGS WHERE PARENT = '"+ query.value(2).toString() +"' AND TYPE = 1");
       while (query2.next()) {
 	args += " " + query2.value(0).toString();
       }
-
-      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(query.value(1).toString() + " " + args);
-      tblAlias->setItem(i-1,1,aTableWidget1);
       
+      if (args.count() > largestArgsSet)
+        largestArgsSet = args.count();
+      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(query.value(1).toString() + " " + args);
+      tblAlias->setItem(i-1,2,aTableWidget1);
+      
+      aCheckBox->setChecked(query.value(3).toBool());
       i++;
     }
-    gridAliasList->addWidget(tblAlias,0,0,2,1);
+    tblAlias->setColumnWidth(0,20);
+    tblAlias->setColumnWidth(1, largestAlias*10);
+    tblAlias->setColumnWidth(2, largestArgsSet*10);
+    gridAliasList->addWidget(tblAlias,0,0,3,1);
     
     gridAlias->addWidget(grbAliasList,0,0);
         
@@ -369,47 +387,62 @@
     termTabWidget->addTab(aliasTab,"Alias");
     
     tblCmdDefaultArgs = new QTableWidget();
-    tblCmdDefaultArgs->setColumnCount(5);
+    tblCmdDefaultArgs->setColumnCount(7);
     tblCmdDefaultArgs->verticalHeader()->hide();
     tblCmdDefaultArgs->setSelectionBehavior(QAbstractItemView::SelectRows);
     QSqlQuery query2;
-    query2.exec("SELECT COMMAND,TDEFAULT_ARGS_KEY FROM TDEFAULT_ARGS");
+    query2.exec("SELECT COMMAND,TDEFAULT_ARGS_KEY,ENABLE FROM TDEFAULT_ARGS");
     int j =1;
     while (query2.next())  {
       tblCmdDefaultArgs->setRowCount(j);
       tblCmdDefaultArgs->setRowHeight(j-1,20);
+      
+      RemoveButton* aRemoveButton = new RemoveButton(0);
+      aRemoveButton->id = j-1;
+      tblCmdDefaultArgs->setCellWidget(j-1,0,aRemoveButton);
+      connect(aRemoveButton , SIGNAL( clicked(int) ), tblCmdDefaultArgs, SLOT( removeRow(int) ));
+      
+      QCheckBox* aCheckBox = new QCheckBox;
+      aCheckBox->setToolTip("Enable");
+      tblCmdDefaultArgs->setCellWidget(j-1, 1, aCheckBox);
+      
       QTableWidgetItem* aTableWidget = new QTableWidgetItem(query2.value(0).toString());
-      tblCmdDefaultArgs->setItem(j-1,0,aTableWidget);
+      tblCmdDefaultArgs->setItem(j-1,2,aTableWidget);
       QSqlQuery query3;
       query3.exec("SELECT ARGS FROM TARGS WHERE PARENT = '"+ query2.value(1).toString() +"' AND TYPE = 2");
-      int k =1;
+      int k =3;
       while (query3.next()) {
 	QTableWidgetItem* aTableWidget2 = new QTableWidgetItem(query3.value(0).toString());
 	tblCmdDefaultArgs->setItem(j-1,k,aTableWidget2);
 	k++;
       }
+      
+      aCheckBox->setChecked(query2.value(2).toBool());
       j++;
     }
     
+    tblCmdDefaultArgs->setColumnWidth(0,25);
+    tblCmdDefaultArgs->setColumnWidth(1,25);
+    
     QTableWidgetItem *__colItem = new QTableWidgetItem();
-    tblCmdDefaultArgs->setHorizontalHeaderItem(0, __colItem);
-    tblCmdDefaultArgs->horizontalHeaderItem(0)->setText("Command");
+    tblCmdDefaultArgs->setHorizontalHeaderItem(2, __colItem);
+    tblCmdDefaultArgs->horizontalHeaderItem(2)->setText("Command");
     
     QTableWidgetItem *__colItem1 = new QTableWidgetItem();
-    tblCmdDefaultArgs->setHorizontalHeaderItem(1, __colItem1);
-    tblCmdDefaultArgs->horizontalHeaderItem(1)->setText("Arg 1");
+    tblCmdDefaultArgs->setHorizontalHeaderItem(3, __colItem1);
+    tblCmdDefaultArgs->horizontalHeaderItem(3)->setText("Arg 1");
     
     QTableWidgetItem *__colItem2 = new QTableWidgetItem();
-    tblCmdDefaultArgs->setHorizontalHeaderItem(2, __colItem2);
-    tblCmdDefaultArgs->horizontalHeaderItem(2)->setText("Arg 2");
+    tblCmdDefaultArgs->setHorizontalHeaderItem(4, __colItem2);
+    tblCmdDefaultArgs->horizontalHeaderItem(4)->setText("Arg 2");
     
     QTableWidgetItem *__colItem3 = new QTableWidgetItem();
-    tblCmdDefaultArgs->setHorizontalHeaderItem(3, __colItem3);
-    tblCmdDefaultArgs->horizontalHeaderItem(3)->setText("Arg 3");
+    tblCmdDefaultArgs->setHorizontalHeaderItem(5, __colItem3);
+    tblCmdDefaultArgs->horizontalHeaderItem(5)->setText("Arg 3");
     
     QTableWidgetItem *__colItem4 = new QTableWidgetItem();
-    tblCmdDefaultArgs->setHorizontalHeaderItem(4, __colItem4);
-    tblCmdDefaultArgs->horizontalHeaderItem(4)->setText("Arg 4");
+    tblCmdDefaultArgs->setHorizontalHeaderItem(6, __colItem4);
+    tblCmdDefaultArgs->horizontalHeaderItem(6)->setText("Arg 4");
     
     termTabWidget->addTab(tblCmdDefaultArgs,"Default Args");
     
@@ -431,6 +464,8 @@
     btnRemoveFunction->setText("Remove");
     btnRemoveFunction->setIcon(KIcon("list-remove"));
     gridFunction->addWidget(btnRemoveFunction,1,1);
+    
+    //gridFunction->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding),2,1);
    
     QGroupBox* grbFunctionBody = new QGroupBox;
     grbFunctionBody->setTitle("Body");
@@ -508,8 +543,55 @@
     pwiLogging = addPage(loggingCentralWidget, i18n("Logging") );
     pwiLogging->setIcon( KIcon( "chronometer" ) );
 
+    QTabWidget* tabAppearance = new QTabWidget();
+    
+    QWidget* tabTerminalAppearance = new QWidget();
+    tabAppearance->addTab(tabTerminalAppearance,"Terminal");
+    QVBoxLayout *terminal3Layout = new QVBoxLayout;
+    tabTerminalAppearance->setLayout(terminal3Layout);
+    
+    grbTerminalAppearence = new QGroupBox;
+    grbTerminalAppearence->setTitle("Skin");
+    grbTerminalAppearence->setCheckable(true);
+    QVBoxLayout *terminal2Layout = new QVBoxLayout;
+    grbTerminalAppearence->setLayout(terminal2Layout);
+    tblTerminalAppearence = new QTableWidget;
+    terminal2Layout->addWidget(tblTerminalAppearence);
+    terminal3Layout->addWidget(grbTerminalAppearence);
+    
+    grbCustomTerminalAppearence = new QGroupBox;
+    grbCustomTerminalAppearence->setTitle("Custom Skin");
+    grbCustomTerminalAppearence->setCheckable(true);
+    QVBoxLayout *customTerminalLayout = new QVBoxLayout;
+    grbCustomTerminalAppearence->setLayout(customTerminalLayout);
+    tblCustomTerminalAppearence = new QTableWidget;
+    customTerminalLayout->addWidget(tblCustomTerminalAppearence);
+    terminal3Layout->addWidget(grbCustomTerminalAppearence);
+        
+    QWidget* tabEditorAppearance = new QWidget();
+    tabAppearance->addTab(tabEditorAppearance,"Editor");
+    QVBoxLayout *editor3Layout = new QVBoxLayout;
+    tabEditorAppearance->setLayout(editor3Layout);
+    
+    grbEditorAppearence = new QGroupBox;
+    grbEditorAppearence->setTitle("Skin");
+    grbEditorAppearence->setCheckable(true);
+    QVBoxLayout *editor2Layout = new QVBoxLayout;
+    grbEditorAppearence->setLayout(editor2Layout);
+    tblEditorAppearence = new QTableWidget;
+    editor2Layout->addWidget(tblEditorAppearence);
+    editor3Layout->addWidget(grbEditorAppearence);
+    
+    grbCustomEditorAppearence = new QGroupBox;
+    grbCustomEditorAppearence->setTitle("Custom Skin");
+    grbCustomEditorAppearence->setCheckable(true);
+    QVBoxLayout *customEditorLayout = new QVBoxLayout;
+    grbCustomEditorAppearence->setLayout(customEditorLayout);
+    tblCustomEditorAppearence = new QTableWidget;
+    customEditorLayout->addWidget(tblCustomEditorAppearence);
+    editor3Layout->addWidget(grbCustomEditorAppearence);
 
-    pwiAppearance = addPage(new QLabel("test2"), i18n("Appearance") );
+    pwiAppearance = addPage(tabAppearance, i18n("Appearance") );
     pwiAppearance->setIcon( KIcon( "format-text-color" ) );
 
     QWidget* pluginCentralWidget = new QWidget();
@@ -550,6 +632,10 @@
     connect( btnDown, SIGNAL( clicked() ), this, SLOT( moveTabDown() ) );
     connect( btnAddExcludedCommand, SIGNAL( pressed() ), this, SLOT( addLogExclude() ) );
     connect( tblAlias, SIGNAL( cellClicked ( int, int)), this, SLOT(loadAlias(int, int)));
+    connect( btnAddAliasArgs, SIGNAL( clicked() ), this, SLOT(addAliasArgs()));
+    connect( btnRemoveAliasArgs, SIGNAL( clicked() ), this, SLOT(removeAliasArgs()));
+    connect( btnRemoveAlias, SIGNAL( clicked() ), this, SLOT(removeAlias()));
+    connect( btnAddAlias, SIGNAL( clicked() ), this, SLOT(addAlias()));
   }
   
   void Config::moveTabUp() {
@@ -684,7 +770,7 @@
   void Config::loadAlias(int x, int y) {
     lstAliasArgs->clear();
     grbAliasOpt->setEnabled(true);
-    QString alias =tblAlias->item(x, 0)->text();
+    QString alias =tblAlias->item(x, 1)->text();
     QSqlQuery query;
     query.exec("SELECT COMMAND,TALIAS_KEY FROM TALIAS WHERE ALIAS = '"+ alias +"'");
     while (query.next())  {
@@ -694,5 +780,35 @@
       while (query2.next()) {
 	lstAliasArgs->addItem(query2.value(0).toString());
       }
+    }
+  }
+  
+  void Config::addAliasArgs() {
+    bool ok;
+    QString result = QInputDialog::getText(this, "Add Argument", "Add a new argument:", QLineEdit::Normal, "", &ok);
+    if (ok && !result.isEmpty()) {
+      lstAliasArgs->addItem(result);
+    }
+  }
+  
+  void Config::removeAliasArgs() {
+    lstAliasArgs->takeItem(lstAliasArgs->currentRow());
+  }
+  
+  void Config::removeAlias() {
+    tblAlias->removeRow(tblAlias->currentRow());
+  }
+  
+  void Config::addAlias() {
+    bool ok;
+    QString result = QInputDialog::getText(this, "Add Alias", "Add a new alias:", QLineEdit::Normal, "", &ok);
+    if (ok && !result.isEmpty()) {
+      tblAlias->setRowCount(tblAlias->rowCount() + 1);
+      QCheckBox* aCheckBox = new QCheckBox;
+      aCheckBox->setToolTip("Enable");
+      tblAlias->setCellWidget(tblAlias->rowCount()-1, 0, aCheckBox);
+      tblAlias->setRowHeight(tblAlias->rowCount()-1,20);
+      QTableWidgetItem* aTableWidget = new QTableWidgetItem(result);
+      tblAlias->setItem(tblAlias->rowCount()-1,1,aTableWidget);
     }
   }
