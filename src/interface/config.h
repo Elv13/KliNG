@@ -20,6 +20,7 @@
 #include <QGridLayout>
 #include <QListWidget>
 #include <QSpinBox>
+#include "../shell/alias.h"
 #include "../configSkeleton.h"
 
   QT_BEGIN_NAMESPACE
@@ -131,12 +132,26 @@
       KPushButton* btnUp;
       KPushButton* btnDown;
       
+      QGroupBox* grbTerminalAppearence;
+      QGroupBox* grbCustomTerminalAppearence;
+      QGroupBox* grbEditorAppearence;
+      QGroupBox* grbCustomEditorAppearence;
+      QTableWidget* tblTerminalAppearence;
+      QTableWidget* tblCustomTerminalAppearence;
+      QTableWidget* tblEditorAppearence;
+      QTableWidget* tblCustomEditorAppearence;
+      
+      
     private slots:
       void saveConfig();
       void addLogExclude();
       void moveTabUp();
       void moveTabDown();
       void loadAlias(int x, int y);
+      void addAliasArgs();
+      void removeAliasArgs();
+      void removeAlias();
+      void addAlias();
       
     private:
       int countActiveMode();
