@@ -47,8 +47,6 @@
 #include "history.h"
 #include "fileBrowser.h"
 
-QT_BEGIN_NAMESPACE
-
   class Term : public QWidget,Shell {
     Q_OBJECT
 
@@ -80,7 +78,6 @@ QT_BEGIN_NAMESPACE
 
     private:
       VirtTtyThread* aThread;
-      void sendCommand(QString command);
       void signalNewCommand(QString command);
 
     private slots:
@@ -96,6 +93,9 @@ QT_BEGIN_NAMESPACE
       void addToHistory(QString line);
       void updateDate(QString date, QString key);
       void textChanged(QString text);
+      void sendCommand();
+      void setChildPid(int pid);
+      void updateMonitor(float cpup, float mem);
       
     signals:
       void cmdInfo(QString, int);
