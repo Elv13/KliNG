@@ -58,6 +58,16 @@
 #include <KLocalizedString>
 #include <sys/klog.h>
 
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsRectItem>
+#include <QBrush>
+#include <QColor>
+#include <QPen>
+#include <QFont>
+#include <QGraphicsTextItem>
+#include <QGraphicsEllipseItem>
+
 
 QT_BEGIN_NAMESPACE
 
@@ -70,11 +80,11 @@ QT_BEGIN_NAMESPACE
     setButtons( KDialog::Ok );
     if (objectName().isEmpty())
       setObjectName(QString::fromUtf8("logView"));
-    resize(674, 523);
+    resize(925, 750);
     setMinimumSize(QSize(568, 0));
     centralwidget = new QWidget(this);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-    centralwidget->setGeometry(QRect(0, 0, 674, 674));
+    centralwidget->setGeometry(QRect(0, 0, 925, 750));
     verticalLayout = new QVBoxLayout(centralwidget);
     verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
     setMainWidget(centralwidget);
@@ -132,8 +142,14 @@ QT_BEGIN_NAMESPACE
     horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout_2->addItem(horizontalSpacer);
     verticalLayout->addLayout(horizontalLayout_2);
+    
+    graphWidget = new QWidget();
+    graphWidget->setMaximumSize(99999,140);
+    setupGraph();
+    verticalLayout->addWidget(graphWidget);
 
     QObject::connect(cbbLog, SIGNAL(currentIndexChanged(int)), this, SLOT(switchMode(int)));
+    QObject::connect(sldLenght, SIGNAL(sliderMoved(int)), this, SLOT(delayChanged(int)));
     retranslateUi();
     displayCommandHistory(0);
   } // setupUi
@@ -273,7 +289,7 @@ QT_BEGIN_NAMESPACE
     tblViewer->setHorizontalHeaderItem(0, __colItem);
     tblViewer->setSelectionBehavior(QAbstractItemView::SelectRows);
     tblViewer->horizontalHeaderItem(0)->setText("Name");
-    tblViewer->setColumnWidth(0,312); //FIXME
+    tblViewer->setColumnWidth(0,540); //FIXME
     QTableWidgetItem *__colItem1 = new QTableWidgetItem();
     tblViewer->setHorizontalHeaderItem(1, __colItem1);
     tblViewer->horizontalHeaderItem(1)->setText("Start");
@@ -357,4 +373,101 @@ QT_BEGIN_NAMESPACE
   void LogView::addLog() {
     config->fileToWatch << KFileDialog::getOpenFileName();
     config->writeConfig();
+  }
+  
+  void LogView::setupGraph() {
+    QHBoxLayout* aLayout = new QHBoxLayout;
+    graphWidget->setLayout(aLayout);
+  
+    //Pie graph
+    QGraphicsScene* scene2 = new QGraphicsScene;
+    QGraphicsView* aGraphicView2 = new QGraphicsView(scene2);
+    aGraphicView2->setMaximumSize(200,131);
+    aGraphicView2->setMinimumSize(200,131);
+    aLayout->addWidget(aGraphicView2);
+    
+    QBrush brushArray[7] = {QBrush(QColor("#ffdd11")),QBrush(QColor("#ff1111")),QBrush(QColor("#f4a111")),QBrush(QColor("#00ff11")),QBrush(QColor("#ff1961")),QBrush(QColor("#ff00ff")),QBrush(QColor("#0000ff"))};
+    
+    for (int i =0; i < 7; i++) {
+      QGraphicsRectItem* anItem = new QGraphicsRectItem(110,(i*15),10,10);
+      anItem->setBrush(brushArray[i]);
+      scene2->addItem(anItem);
+      (scene2->addText("ls"))->setPos(125,(i*15)-6);
+    }
+    
+    QGraphicsRectItem* anItem2 = new QGraphicsRectItem(183,0,12,12);
+    scene2->addItem(anItem2);
+    
+    QGraphicsEllipseItem* anEclipse = new QGraphicsEllipseItem(5,0,100,100);
+    anEclipse->setBrush(brushArray[0]);
+    anEclipse->setStartAngle(180*16);
+    anEclipse->setSpanAngle(270*16);
+    scene2->addItem(anEclipse);
+    
+    QGraphicsEllipseItem* anEclipse2 = new QGraphicsEllipseItem(5,0,100,100);
+    anEclipse2->setBrush(brushArray[1]);
+    anEclipse2->setStartAngle(90*16);
+    anEclipse2->setSpanAngle(90*16);
+    scene2->addItem(anEclipse2);
+    
+
+    //Historygram
+    const int monthNumber = 12;
+    const int barWidth =25;
+    const int margin = 30;
+    const int spacing = 30;
+    
+    QGraphicsScene* scene = new QGraphicsScene;
+    QBrush aBrush(QColor("#3333dd"));
+    QBrush aBrush2(QColor("#cccccc"));
+    QFont aFont;
+    aFont.setPixelSize(8);
+    scene->addLine(25, 5, 25, 100,QPen(aBrush2,2));
+    scene->addLine(25, 103, monthNumber*spacing+margin, 103,QPen(aBrush2,2));
+    QGraphicsTextItem* cpuLabel = scene->addText("command");
+    cpuLabel->setPos(3,95);
+    cpuLabel->rotate(270);
+    char fakeProsess[monthNumber] = {74,82,68,57,25,58,82,90,26,92,90,90};
+    QString month[12] = {"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
+    for (int i =0; i < monthNumber; i++) {
+      QGraphicsRectItem* anItem = new QGraphicsRectItem((i*spacing)+margin,100 - fakeProsess[i],barWidth,fakeProsess[i]);
+      anItem->setBrush(aBrush);
+      anItem->setToolTip(QString::number(fakeProsess[i]));
+      scene->addItem(anItem);
+      scene->addLine((i*spacing)+margin+(barWidth/2), 101, (i*spacing)+margin+(barWidth/2), 105,QPen(aBrush2,2));
+      (scene->addText(month[i]))->setPos((i*spacing+margin)-2,103);
+    }
+    
+   
+   
+    
+    QGraphicsView* aGraphicView = new QGraphicsView(scene);
+    aGraphicView->setMaximumSize(99999,131);
+    aGraphicView->setMinimumSize(0,131);
+    aGraphicView->setAlignment(Qt::AlignLeft);
+    
+    aLayout->addWidget(aGraphicView);
+  }
+  
+  void LogView::delayChanged(int delay) {
+    if (delay == 0) {
+      sldLenght->setToolTip("Day");
+      //sldLenght->showToolTip();
+    }
+    else if (delay == 1) {
+      sldLenght->setToolTip("Week");
+      //sldLenght->showToolTip();
+    }
+    else if (delay == 2) {
+      sldLenght->setToolTip("Month");
+      //sldLenght->showToolTip();
+    }
+    else if (delay == 3) {
+      sldLenght->setToolTip("Year");
+      //sldLenght->showToolTip();
+    }
+    else if (delay == 4) {
+      sldLenght->setToolTip("Ever");
+      //sldLenght->showToolTip();
+    }
   }

@@ -183,6 +183,8 @@
         QObject::connect(kpushbutton_3, SIGNAL(clicked()), this, SLOT(killPros()));
         executionQueue.pop_front();
         
+        QObject::connect(aThread->aVirtTTY, SIGNAL(childPid(int)), this, SLOT(setChildPid(int)));
+        
         if (executionQueue.count() != 0) {
           if (executionQueue.first().first() == "&") {
             executionQueue.first().pop_front();
@@ -280,4 +282,14 @@
   
   void Term::signalNewCommand(QString command){
     rtfCmdOutput->append(command);
+  }
+
+  void Term::setChildPid(int pid) {
+    ProcessWatcher* aWatcher = new ProcessWatcher(0,pid);
+    QObject::connect(aWatcher, SIGNAL(ressource(float,float)), this, SLOT(updateMonitor(float,float)));
+    aWatcher->run();
+  }
+  
+  void Term::updateMonitor(float cpup, float mem) {
+    printf("\n%d\n",cpup);
   }

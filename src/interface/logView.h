@@ -77,6 +77,7 @@
       KPushButton *btnClose;
       QListWidget* lstLog;
       KListWidgetSearchLine *txtFindLine;
+      QWidget* graphWidget;
 
     private:
       QString getCommand(QString command);
@@ -85,12 +86,14 @@
       void showLog(QString path);
       void fillList(QString text);
       void addLog();
+      void setupGraph();
       
     private slots:
       void displayCommandHistory(char level);
       void displayScriptHistory(char level);
       void showOutput(uint id);
       void switchMode(int mode);
+      void delayChanged(int delay);
   };
 
 
