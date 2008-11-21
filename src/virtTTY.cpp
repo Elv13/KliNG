@@ -151,7 +151,8 @@
       }
 
       fork_pid = pid;
-
+      emit childPid(fork_pid);
+      
       char bufferW[256];
       if (close(from_cmd[1]) == -1)
         fatal_error("close(from_cmd[1])");
@@ -163,7 +164,6 @@
       char bufferR[4096];
       ssize_t nr;
       i = 0;
-
       do { 
         QString closeFont;
         nr = read(from_cmd[0], bufferR, sizeof bufferR);
@@ -198,7 +198,6 @@
               fatal_error("close(to_cmd[1])");
       if (close(from_cmd[0]) == -1)
               fatal_error("close(from_cmd[0])");
-
       pidchild = wait(NULL);
     }
     return 0;

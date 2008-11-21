@@ -31,6 +31,7 @@
 #include <QStringList>
 #include <QVector>
 #include <QThread>
+#include "shell/processWatcher.h"
 
   class Shell  {  
     public:

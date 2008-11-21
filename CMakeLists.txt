@@ -38,6 +38,7 @@
         src/interface/defaultScreen.cpp
         src/interface/syntax/bash.cpp
         src/shell/alias.cpp
+        src/shell/processWatcher.cpp
       )
 
       kde4_add_executable(kling ${kling_SRCS})

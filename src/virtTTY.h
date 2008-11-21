@@ -64,6 +64,7 @@ using namespace std;
       void isOver(QString time, QString key);
       void clearCmdOutput();
       void showFileBrowser(QString path, bool setPath);
+      void childPid(int pid);
   };
 
   class VirtTtyThread : public QThread {
