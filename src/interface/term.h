@@ -22,7 +22,7 @@
         term.cpp header
 
         @author Emmanuel Lepage Vallée
-        @date 14 May 2008
+        @date 15 May 2008
         @version 0.0.9
 */
 #ifndef DEF_TERM
