@@ -26,7 +26,7 @@
   }
   
   void Alias::setEnable(bool value) {
-    edited =true;
+    edited = true;
     enable = value;
   }
   
@@ -35,7 +35,7 @@
   }
   
   QString Alias::getCommand() {
-    return command;
+    return this->command;
   }
   
   QString Alias::getArg(int index) {
@@ -61,9 +61,11 @@
     this->name = name;
   }
   
-  void Alias::setCommand(QString command) {
-    edited =true;
-    this->command = command;
+  void Alias::setCommand(QString command2) {
+    if (command2 != "") {
+      this->edited = true;
+      this->command = command2;
+    }
   }
   
   void Alias::setArgs(QVector<QString> args) {
@@ -73,7 +75,16 @@
   void Alias::save() {
     if (edited == true) {
       QSqlQuery query;
-      query.exec("UPDATE TALIAS SET (ALIAS,COMMAND,ENABLE) = ('"+ this->name +"', '" + this->command +"', '"+ this->enable +"') WHERE TALIAS_KEY = "+ this->key); 
+      if (this->key >= 0) {
+        query.exec("update TALIAS SET COMMAND = '"+command.trimmed()+"', ENABLE = '"+QString::number(enable)+"', ALIAS = '"+name.trimmed()+"' WHERE TALIAS_KEY = "+QString::number(key)); 
+      }
+      else {
+        query.exec("insert into TALIAS (ALIAS,COMMAND,ENABLE) values ('"+ this->name +"', '" + this->command +"', '"+ QString::number(this->enable) +"')"); 
+        QSqlQuery query5;
+        query5.exec("SELECT TALIAS_KEY FROM TALIAS ORDER BY TALIAS_KEY DESC");
+        query5.next();
+        this->key = query5.value(0).toString().toInt();
+      }
       
       QVector<QString> oldArgs;
       QSqlQuery query2;
@@ -92,7 +103,7 @@
       for(int i =0; i < args.count(); i++) {
         if (oldArgs.indexOf(args[i]) == -1) {
           QSqlQuery query3;
-          query3.exec("INSERT INTO TARGS (PARENT,ARGS,TYPE) value ('"+QString::number(this->key)+"','"+args[i]+"',1");
+          query3.exec("INSERT INTO TARGS (PARENT,ARGS,TYPE) values ('"+QString::number(this->key)+"','"+args[i]+"',1)");
         }
       }
     }
@@ -114,5 +125,46 @@
       aliasList->push_back(*anAlias);
     }
     return aliasList;
+  }
+  
+  bool Alias::operator==(const QString& x) const {
+    return (x == this->name);
+  }
+  
+  bool Alias::operator==(const int& x) const {
+    return (x == this->key);
+  }
+  
+  bool operator==(Alias& x, QString& y) {
+    return (x.getName() == y);
+  }
+  
+  bool operator==(Alias& x, int y) {
+    return (x.getKey() == y);
+  }
+  
+  bool operator==(QString& y, Alias& x) {
+    return (x.getName() == y);
+  }
+  
+  bool operator==(int& y, Alias& x) {
+    return (x.getKey() == y);
+  }
+  
+  bool Alias::getEdited() {
+    return edited;
+  }
+  
+  int Alias::indexOf(QVector<Alias>* aliasList, int key) {
+    bool found = false;
+    int i =0;
+    while ((found == false) && (i < aliasList->count())) {
+      if ((*aliasList)[i] == key)
+        found = true;
+      else
+        i++;
+    }
+    if (found == false) i = -1;
+    return i;
   }
   

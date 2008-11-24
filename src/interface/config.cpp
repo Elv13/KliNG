@@ -1,5 +1,7 @@
 #include "config.h"
 #include "miniClasses.h"
+#include "../shell/alias.h"
+#include "miniClasses.h"
 
 #include <KLocale>
 #include <QVBoxLayout>
@@ -11,8 +13,10 @@
 #include <QSqlDatabase>
 
   Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigDialog(parent, "settings", aConfigSkeleton) {
+    currentAliasIndex = -1;
     configSkeleton = aConfigSkeleton;
     resize(600,500);
+    newAliasCount =0;
     
     generalCentral = new QWidget();
     
@@ -321,12 +325,12 @@
     tblAlias->verticalHeader()->hide();
     tblAlias->horizontalHeader()->hide();
     tblAlias->setSelectionBehavior(QAbstractItemView::SelectRows);
-    QSqlQuery query;
-    query.exec("SELECT ALIAS,COMMAND,TALIAS_KEY,ENABLE FROM TALIAS");
-    int i =1;
+    //QSqlQuery query;
+    //query.exec("SELECT ALIAS,COMMAND,TALIAS_KEY,ENABLE FROM TALIAS");
+    //int i =1;
     int largestAlias =0;
     int largestArgsSet =0;
-    while (query.next())  {
+    /*while (query.next())  {
       tblAlias->setRowCount(i);
       tblAlias->setRowHeight(i-1,20);
       if (query.value(0).toString().count() > largestAlias)
@@ -352,7 +356,39 @@
       
       aCheckBox->setChecked(query.value(3).toBool());
       i++;
+    }*/
+    
+          
+    aliasList = *Alias::getAlias();
+    
+    for (int i =0; i < aliasList.count(); i++) {
+      tblAlias->setRowCount(i);
+      tblAlias->setRowHeight(i-1,20);
+      if (aliasList[i].getName().count() > largestAlias)
+        largestAlias = aliasList[i].getName().count();
+      
+      AliasCheckBox* aCheckBox = new AliasCheckBox(0);
+      aCheckBox->id = aliasList[i].getKey();
+      aCheckBox->setToolTip("Enable");
+      tblAlias->setCellWidget(i-1, 0, aCheckBox);
+      
+      QTableWidgetItem* aTableWidget = new QTableWidgetItem(aliasList[i].getName());
+      tblAlias->setItem(i-1,1,aTableWidget);
+      
+      QString args;
+      QVector<QString> argList = aliasList[i].getArgs();
+      for (int j=0; j < argList.count(); j++) {
+        args += " " + argList[j];
+      }
+      
+      if (args.count() > largestArgsSet)
+        largestArgsSet = args.count();
+      QTableWidgetItem* aTableWidget1 = new QTableWidgetItem(aliasList[i].getCommand() + " " + args);
+      tblAlias->setItem(i-1,2,aTableWidget1);
+      
+      aCheckBox->setChecked(aliasList[i].getEnable());
     }
+    
     tblAlias->setColumnWidth(0,20);
     tblAlias->setColumnWidth(1, largestAlias*10);
     tblAlias->setColumnWidth(2, largestArgsSet*10);
@@ -738,7 +774,7 @@
     configSkeleton->ammountToKeep = spinMb->value();
     
     configSkeleton->writeConfig();
-    
+    saveAlias();
 
   }
 
@@ -768,9 +804,17 @@
   }
 
   void Config::loadAlias(int x, int y) {
+    updateArg();
+    
     lstAliasArgs->clear();
     grbAliasOpt->setEnabled(true);
-    QString alias =tblAlias->item(x, 1)->text();
+    int aliasIndex = Alias::indexOf(&aliasList, ((AliasCheckBox*) tblAlias->cellWidget(tblAlias->currentRow(),0))->id);
+    txtCommand->setText(aliasList[aliasIndex].getCommand());
+    QVector<QString> argsList = aliasList[aliasIndex].getArgs();
+    for (int i = 0; i < argsList.count(); i++) {
+      lstAliasArgs->addItem(argsList[i]);
+    }
+    /*QString alias =tblAlias->item(x, 1)->text();
     QSqlQuery query;
     query.exec("SELECT COMMAND,TALIAS_KEY FROM TALIAS WHERE ALIAS = '"+ alias +"'");
     while (query.next())  {
@@ -780,7 +824,8 @@
       while (query2.next()) {
 	lstAliasArgs->addItem(query2.value(0).toString());
       }
-    }
+    }*/
+    currentAliasIndex = tblAlias->currentRow();
   }
   
   void Config::addAliasArgs() {
@@ -803,12 +848,60 @@
     bool ok;
     QString result = QInputDialog::getText(this, "Add Alias", "Add a new alias:", QLineEdit::Normal, "", &ok);
     if (ok && !result.isEmpty()) {
+      Alias* aNewAlias = new Alias();
+      aNewAlias->setName(result);
+      aNewAlias->setKey(--newAliasCount);
+      aliasList.push_back(*aNewAlias);
+      
       tblAlias->setRowCount(tblAlias->rowCount() + 1);
-      QCheckBox* aCheckBox = new QCheckBox;
+      
+      AliasCheckBox* aCheckBox = new AliasCheckBox(0);
       aCheckBox->setToolTip("Enable");
+      aCheckBox->id = newAliasCount;
+      
       tblAlias->setCellWidget(tblAlias->rowCount()-1, 0, aCheckBox);
       tblAlias->setRowHeight(tblAlias->rowCount()-1,20);
       QTableWidgetItem* aTableWidget = new QTableWidgetItem(result);
       tblAlias->setItem(tblAlias->rowCount()-1,1,aTableWidget);
+    }
+  }
+  
+  void Config::saveAlias() {
+    updateArg();
+    for (int i=0; i < tblAlias->rowCount(); i++) {
+      int index = Alias::indexOf(&aliasList, ((AliasCheckBox*) tblAlias->cellWidget(i, 0))->id);
+      if(index != -1) {
+        if (aliasList[index].getEdited() == true) {
+          aliasList[index].save();
+        }
+      }
+    }
+  }
+  
+  void Config::updateArg() {
+    if (currentAliasIndex != -1) {
+      int aliasIndex = Alias::indexOf(&aliasList, ((AliasCheckBox*) tblAlias->cellWidget(currentAliasIndex,0))->id);
+      if (aliasIndex == -1)
+        return;
+      
+      aliasList[aliasIndex].setCommand(txtCommand->text());
+      QVector<QString> argsList = aliasList[aliasIndex].getArgs();
+      
+      for (int i = 0; i < lstAliasArgs->count(); i++) {
+        if (argsList.indexOf(lstAliasArgs->item(i)->text()) == -1)
+         argsList << lstAliasArgs->item(i)->text();
+      }
+      
+      QStringList newArgList;
+      for (int i = 0; i < lstAliasArgs->count(); i++) {
+        newArgList << lstAliasArgs->item(i)->text();
+      }
+      
+      for (int i = 0; i < argsList.count(); i++) {
+        if (newArgList.indexOf(argsList[i]) == -1)
+          argsList.remove(i);
+      }
+      aliasList[aliasIndex].setEnable(((AliasCheckBox*) tblAlias->cellWidget(currentAliasIndex,0))->isChecked());
+      aliasList[aliasIndex].setArgs(argsList);
     }
   }
