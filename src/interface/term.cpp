@@ -285,6 +285,7 @@
   }
 
   void Term::setChildPid(int pid) {
+    printf("\n This is the PID: %d\n",pid);
     ProcessWatcher* aWatcher = new ProcessWatcher(0,pid);
     QObject::connect(aWatcher, SIGNAL(ressource(float,float)), this, SLOT(updateMonitor(float,float)));
     aWatcher->run();
