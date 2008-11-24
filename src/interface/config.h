@@ -141,6 +141,10 @@
       QTableWidget* tblEditorAppearence;
       QTableWidget* tblCustomEditorAppearence;
       
+      QVector<Alias> aliasList;
+      signed int newAliasCount;
+      int currentAliasIndex;
+      
       
     private slots:
       void saveConfig();
@@ -155,5 +159,7 @@
       
     private:
       int countActiveMode();
+      void saveAlias();
+      void updateArg();
   };
 #endif
