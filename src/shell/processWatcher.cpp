@@ -16,12 +16,31 @@
   }
   
   void ProcessWatcher::run() {
-    Process aProcess;
+    /*Process aProcess;
     sleep(1);
     forever {
-      int file = open (QString("/proc/"+QString::number(pid)+"/stat").toStdString().c_str(), O_RDONLY, 0);
-      char buffer2[10000];
-      read(file, buffer2, 9999);
+      FILE * procInfo; 
+      
+      current->state = TASK_INTERRUPTIBLE;
+      procInfo = fopen(QString("/proc/"+QString::number(pid)+"/stat").toStdString().c_str(),"r");
+      if (procInfo==NULL) {
+        fputs ("File error",stderr); 
+        return;
+      }
+
+      fseek(procInfo, 0, SEEK_END);
+      int procInfoSize = ftell(procInfo);
+      rewind (procInfo);
+
+      
+      char* buffer2 = (char*) malloc (sizeof(char)*procInfoSize);
+      if (buffer2 == NULL) {
+        fputs ("Memory error",stderr); 
+        return;
+      }
+
+      fread(buffer2,1,procInfoSize,procInfo);
+      fclose(procInfo);
     
       sscanf (buffer2, "%d %s %c %d %d %d %d %d %lu %lu %lu %lu %lu %lu %lu"
       "%ld %ld %ld %ld %*ld %ld %lu %lu %ld %lu %lu %lu %lu %lu"
@@ -36,6 +55,8 @@
       &aProcess.kstkeip, &aProcess.signal, &aProcess.blocked, &aProcess.sigignore,
       &aProcess.sigcatch, &aProcess.wcham, &aProcess.nswap, &aProcess.cnswap,
       &aProcess.exit_signal, &aProcess.processor) ;
+      
+      free(buffer2);
       
       int procUptime = open("/proc/uptime", O_RDONLY);
       char buffer[256];
@@ -65,6 +86,6 @@
       emit ressource(pcpu/10,0);
       
       sleep(5);
-    }
+    }*/
   }
   
