@@ -37,6 +37,7 @@
         src/interface/webBrowser.cpp
         src/interface/defaultScreen.cpp
         src/interface/syntax/bash.cpp
+        src/interface/termSession.cpp
         src/shell/alias.cpp
         src/shell/processWatcher.cpp
       )
