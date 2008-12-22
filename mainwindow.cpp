@@ -110,7 +110,8 @@
     
     tabGestion = new ExecutionMonitor(0);
     
-    tabShell = new Term (dockHistory , 0, commandStringList, aliasList, defaultArgsList, commandStringList, historyStringList);
+    tabShell = new TermSession(this);
+    tabShell->addTerm(dockHistory, commandStringList, aliasList, defaultArgsList, commandStringList, historyStringList);
 
     setupActions();
     for (int l =0; l < 5; l++) {
@@ -405,12 +406,12 @@
     this, SLOT(newTerminal()));
     
     KAction* newTermTab = new KAction(this);
-    newTermTab->setText(i18n("Termianl Tab"));
+    newTermTab->setText(i18n("Terminal Tab"));
     newTermTab->setIcon(KIcon("utilities-terminal"));
     newTermTab->setShortcut(Qt::CTRL + Qt::Key_W);
     actionCollection()->addAction("newTermTab", newTermTab);
     connect(newTermTab, SIGNAL(triggered(bool)),
-    this, SLOT(newTerminal()));
+    this->tabShell, SLOT(addTerm()));
     
     KAction* newEditor = new KAction(this);
     newEditor->setText(i18n("Editor"));
@@ -530,9 +531,9 @@
 */
   void MainWindow::find() {
     if (tabCategories->currentIndex () == 0) {
-      tabShell->frame->show();
-      tabShell->klineedit_3->setFocus();
-      tabShell->klineedit_3->selectAll();
+      tabShell->getCurrentTerm()->frame->show();
+      tabShell->getCurrentTerm()->klineedit_3->setFocus();
+      tabShell->getCurrentTerm()->klineedit_3->selectAll();
     }
     else {
       tabEditor->frame_2->show();
