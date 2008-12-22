@@ -64,7 +64,7 @@
 #include "src/interface/commandList.h"
 #include "src/interface/man.h"
 #include "src/interface/debug.h"
-#include "src/interface/term.h"
+#include "src/interface/termSession.h"
 #include "src/interface/scriptEditor.h"
 #include "src/interface/executionMonitor.h"
 #include "src/interface/advancedScriptManager.h"
@@ -82,7 +82,7 @@
       ~MainWindow();
       QTabWidget *tabCategories;//
       ExecutionMonitor *tabGestion;
-      Term *tabShell;
+      TermSession *tabShell;
       ScriptEditor* tabEditor;
       WebBrowser* tabWebBrowser;
       AdvancedScriptManager* tabAdvScripManager;
