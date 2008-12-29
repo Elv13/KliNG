@@ -26,6 +26,7 @@ class TermSession : public QWidget {
       
     public:
       Term* getCurrentTerm();
+      void loadSession(QString name);
   
     public slots:
       void addTerm();
