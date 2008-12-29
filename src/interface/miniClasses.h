@@ -3,6 +3,8 @@
 #define DEF_MINICLASSES
 #include <KPushButton>
 #include <QCheckBox>
+#include <QListWidgetItem>
+#include "../session.h"
 
   class OutputViewerButton : public KPushButton {
     Q_OBJECT
@@ -67,5 +69,12 @@
       
     signals:
       void clicked(int);
+  };
+
+  class SessionListItem : public QListWidgetItem {
+    //Q_OBJECT
+    public:
+      SessionListItem();
+      Session* aSession;
   };
 #endif

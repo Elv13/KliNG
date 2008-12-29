@@ -31,6 +31,8 @@
   void EditButton::launched() {
     emit clicked(id); 
   }
+
+  SessionListItem::SessionListItem() : QListWidgetItem() {}
   
   RemoveButton::RemoveButton(QWidget* parent =0) : KPushButton( parent ) {
     setIcon(KIcon("list-remove"));
