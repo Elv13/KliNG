@@ -53,6 +53,8 @@
     public:
       Term(History* aDockHistory, QWidget* parent, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList);
       ~Term();
+      void setWorkingDirectory(QString name);
+      void execute(QString command);
 
       QVBoxLayout *verticalLayout_6;
       QFrame *frame;

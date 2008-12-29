@@ -1,7 +1,9 @@
 #include "config.h"
 #include "miniClasses.h"
 #include "../shell/alias.h"
+#include "../session.h"
 #include "miniClasses.h"
+#include "sessionEditor.h"
 
 #include <KLocale>
 #include <QVBoxLayout>
@@ -11,6 +13,8 @@
 #include <KLocalizedString>
 #include <QtSql>
 #include <QSqlDatabase>
+
+#include <KColorCombo>
 
   Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigDialog(parent, "settings", aConfigSkeleton) {
     currentAliasIndex = -1;
@@ -52,10 +56,10 @@
     pwiGeneral = addPage(generalCentral, i18n("General") );
     pwiGeneral->setIcon( KIcon( "configure" ) );
 
-    QWidget* generalCentralWidget = new QWidget();
-    QVBoxLayout *generalLayout = new QVBoxLayout;
-    generalCentralWidget->setLayout(generalLayout);
-    twGeneral = new QTabWidget(generalCentralWidget);
+    //QWidget* generalCentralWidget = new QWidget();
+    //QVBoxLayout *generalLayout = new QVBoxLayout;
+    //generalCentralWidget->setLayout(generalLayout);
+    twGeneral = new QTabWidget();
 
     termianlCentralWidget = new QWidget();
     QVBoxLayout *terminalLayout = new QVBoxLayout;
@@ -278,7 +282,7 @@
     ckbShowDebugWebBrowser->setChecked(aConfigSkeleton->showDebugWebBrowser);
     gridWebBrowser->addWidget(ckbShowDebugWebBrowser,2,1);
     webBrowserLayout->addItem(new QSpacerItem(38, 30, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    generalLayout->addWidget(twGeneral);
+    //generalLayout->addWidget(twGeneral);
     
     managerCentralWidget = new QWidget();
     
@@ -293,7 +297,7 @@
     twGeneral->addTab(managerCentralWidget,QString());
     twGeneral->setTabText(4, "Script Manager");
 
-    pwiMode = addPage(generalCentralWidget, i18n("Mode") );
+    pwiMode = addPage(twGeneral, i18n("Mode") );
     pwiMode->setIcon( KIcon( "fork" ) );
     
     QTabWidget* termTabWidget = new QTabWidget();
@@ -512,6 +516,87 @@
     
     rtfFunctionEditor = new KTextEdit();
     gridFunctionBody->addWidget(rtfFunctionEditor,0,0);
+
+    QSizePolicy sizePolicy1(QSizePolicy::Minimum,QSizePolicy::Minimum);
+    QSizePolicy sizePolicy2(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    
+    QWidget* completerTab = new QWidget();
+    termTabWidget->addTab(completerTab,"Completer");
+    
+    QGridLayout* gridCompleter = new QGridLayout();
+    completerTab->setLayout(gridCompleter);
+    
+    grbList = new QGroupBox();
+    grbList->setTitle("Strings");
+    gridCompleter->addWidget(grbList);
+    
+    QGridLayout* gridString = new QGridLayout();
+    grbList->setLayout(gridString);
+    
+    grbRules = new QGroupBox();
+    grbRules->setTitle("Rules");
+    gridCompleter->addWidget(grbRules);
+    
+    QGridLayout* gridRules = new QGridLayout();
+    grbRules->setLayout(gridRules);
+    
+    tblString = new QTableWidget();
+    gridString->addWidget(tblString,0,0,1,2);
+    
+    btnAddString = new QPushButton();
+    btnAddString->setText("Add");
+    gridString->addWidget(btnAddString,1,0);
+    
+    btnDelString = new QPushButton();
+    btnDelString->setText("Remove");
+    gridString->addWidget(btnDelString,1,1);
+    
+    lstRules = new QListWidget();
+    gridRules->addWidget(lstRules,0,0,1,3);
+    
+    btnAddRules = new QPushButton();
+    btnAddRules->setText("Add");
+    gridRules->addWidget(btnAddRules,1,0,1,1);
+    
+    btnDelRules = new QPushButton();
+    btnDelRules->setText("Remove");
+    gridRules->addWidget(btnDelRules,1,1,1,1);
+    
+    btnEditRules = new QPushButton();
+    btnEditRules->setText("Edit");
+    gridRules->addWidget(btnEditRules,1,2,1,1);
+    
+    QWidget* sessionTab = new QWidget();
+    termTabWidget->addTab(sessionTab,"Session");
+
+    QGridLayout* gridSession = new QGridLayout();
+    sessionTab->setLayout(gridSession);
+
+    lstSession = new QListWidget();
+    gridSession->addWidget(lstSession,0,0,1,3);
+    
+    QSqlQuery query55;
+    query55.exec("SELECT * FROM TSESSION");
+    
+    while (query55.next()) {
+      SessionListItem* anItem = new SessionListItem();
+      Session* aSession = new Session(query55.value(0).toString().toInt(),query55.value(1).toString());
+      anItem->aSession = aSession;
+      anItem->setText(query55.value(1).toString());
+      lstSession->addItem(anItem);
+    }
+    
+    btnAddSession = new QPushButton();
+    btnAddSession->setText("Add");
+    gridSession->addWidget(btnAddSession,1,0);
+    
+    btnDelSession = new QPushButton();
+    btnDelSession->setText("Remove");
+    gridSession->addWidget(btnDelSession,1,1);
+    
+    btnEditSession = new QPushButton();
+    btnEditSession->setText("Edit");
+    gridSession->addWidget(btnEditSession,1,2);
     
     pwiTerm = addPage(termTabWidget, i18n("Terminal") );
     pwiTerm->setIcon( KIcon( "utilities-terminal" ) );
@@ -591,6 +676,7 @@
     grbTerminalAppearence->setCheckable(true);
     QVBoxLayout *terminal2Layout = new QVBoxLayout;
     grbTerminalAppearence->setLayout(terminal2Layout);
+    
     tblTerminalAppearence = new QTableWidget;
     terminal2Layout->addWidget(tblTerminalAppearence);
     terminal3Layout->addWidget(grbTerminalAppearence);
@@ -600,10 +686,31 @@
     grbCustomTerminalAppearence->setCheckable(true);
     QVBoxLayout *customTerminalLayout = new QVBoxLayout;
     grbCustomTerminalAppearence->setLayout(customTerminalLayout);
+    
     tblCustomTerminalAppearence = new QTableWidget;
     customTerminalLayout->addWidget(tblCustomTerminalAppearence);
     terminal3Layout->addWidget(grbCustomTerminalAppearence);
-        
+    tblCustomTerminalAppearence->setRowCount(10);
+    tblCustomTerminalAppearence->setColumnCount(2);
+    tblCustomTerminalAppearence->setColumnWidth(0,310);
+    tblCustomTerminalAppearence->setColumnWidth(1,90);
+    tblCustomTerminalAppearence->verticalHeader()->hide();
+    tblCustomTerminalAppearence->horizontalHeader()->hide();
+    
+    QTableWidgetItem* aTableWidget = new QTableWidgetItem("Background color");
+    tblCustomTerminalAppearence->setItem(0,0,aTableWidget);
+    tblCustomTerminalAppearence->setRowHeight(0,18);
+    KColorCombo* backgroundColor = new KColorCombo();
+    tblCustomTerminalAppearence->setCellWidget(0,1,backgroundColor);
+    
+    QTableWidgetItem* aTableWidget1 = new QTableWidgetItem("Text color");
+    tblCustomTerminalAppearence->setItem(1,0,aTableWidget1);
+    tblCustomTerminalAppearence->setRowHeight(1,18);
+    KColorCombo* textColor = new KColorCombo();
+    tblCustomTerminalAppearence->setCellWidget(1,1,textColor);
+    textColor->setCurrentIndex(17);
+    textColor->repaint();
+    
     QWidget* tabEditorAppearance = new QWidget();
     tabAppearance->addTab(tabEditorAppearance,"Editor");
     QVBoxLayout *editor3Layout = new QVBoxLayout;
@@ -614,19 +721,89 @@
     grbEditorAppearence->setCheckable(true);
     QVBoxLayout *editor2Layout = new QVBoxLayout;
     grbEditorAppearence->setLayout(editor2Layout);
+    
     tblEditorAppearence = new QTableWidget;
     editor2Layout->addWidget(tblEditorAppearence);
     editor3Layout->addWidget(grbEditorAppearence);
+    tblEditorAppearence->setColumnCount(2);
+    tblEditorAppearence->setRowCount(10);
     
     grbCustomEditorAppearence = new QGroupBox;
     grbCustomEditorAppearence->setTitle("Custom Skin");
     grbCustomEditorAppearence->setCheckable(true);
     QVBoxLayout *customEditorLayout = new QVBoxLayout;
     grbCustomEditorAppearence->setLayout(customEditorLayout);
+    
     tblCustomEditorAppearence = new QTableWidget;
     customEditorLayout->addWidget(tblCustomEditorAppearence);
     editor3Layout->addWidget(grbCustomEditorAppearence);
-
+    tblCustomEditorAppearence->setRowCount(10);
+    tblCustomEditorAppearence->setColumnCount(2);
+    tblCustomEditorAppearence->setColumnWidth(0,310);
+    tblCustomEditorAppearence->setColumnWidth(1,90);
+    tblCustomEditorAppearence->verticalHeader()->hide();
+    tblCustomEditorAppearence->horizontalHeader()->hide();
+    
+    QTableWidgetItem* aTableWidget2 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(0,0,aTableWidget2);
+    tblCustomEditorAppearence->setRowHeight(0,18);
+    KColorCombo* backgroundColor2 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(0,1,backgroundColor2);
+    
+    QTableWidgetItem* aTableWidget3 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(1,0,aTableWidget3);
+    tblCustomEditorAppearence->setRowHeight(1,18);
+    KColorCombo* backgroundColor3 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(1,1,backgroundColor3);
+    
+    QTableWidgetItem* aTableWidget4 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(2,0,aTableWidget4);
+    tblCustomEditorAppearence->setRowHeight(2,18);
+    KColorCombo* backgroundColor4 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(2,1,backgroundColor4);
+    
+    QTableWidgetItem* aTableWidget5 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(3,0,aTableWidget5);
+    tblCustomEditorAppearence->setRowHeight(3,18);
+    KColorCombo* backgroundColor5 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(3,1,backgroundColor5);
+    
+    QTableWidgetItem* aTableWidget6 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(4,0,aTableWidget6);
+    tblCustomEditorAppearence->setRowHeight(4,18);
+    KColorCombo* backgroundColor6 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(4,1,backgroundColor6);
+    
+    QTableWidgetItem* aTableWidget7 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(5,0,aTableWidget7);
+    tblCustomEditorAppearence->setRowHeight(5,18);
+    KColorCombo* backgroundColor7 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(5,1,backgroundColor7);
+    
+    QTableWidgetItem* aTableWidget8 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(6,0,aTableWidget8);
+    tblCustomEditorAppearence->setRowHeight(6,18);
+    KColorCombo* backgroundColor8 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(6,1,backgroundColor8);
+    
+    QTableWidgetItem* aTableWidget9 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(7,0,aTableWidget9);
+    tblCustomEditorAppearence->setRowHeight(7,18);
+    KColorCombo* backgroundColor9 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(7,1,backgroundColor9);
+    
+    QTableWidgetItem* aTableWidget10 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(8,0,aTableWidget10);
+    tblCustomEditorAppearence->setRowHeight(8,18);
+    KColorCombo* backgroundColor10 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(8,1,backgroundColor10);
+    
+    QTableWidgetItem* aTableWidget11 = new QTableWidgetItem("Background color");
+    tblCustomEditorAppearence->setItem(9,0,aTableWidget11);
+    tblCustomEditorAppearence->setRowHeight(9,18);
+    KColorCombo* backgroundColor11 = new KColorCombo();
+    tblCustomEditorAppearence->setCellWidget(9,1,backgroundColor11);
+    
     pwiAppearance = addPage(tabAppearance, i18n("Appearance") );
     pwiAppearance->setIcon( KIcon( "format-text-color" ) );
 
@@ -641,22 +818,27 @@
     pluginLayout->addLayout(pluginButtonLayout);
     btnAddPlugin = new KPushButton();
     btnAddPlugin->setText("Add");
+    btnAddPlugin->setStyleSheet("text-align:left;");
     btnAddPlugin->setIcon(KIcon("list-add"));
     pluginButtonLayout->addWidget(btnAddPlugin);
     btnRemovePlugin = new KPushButton();
     btnRemovePlugin->setText("Remove");
+    btnRemovePlugin->setStyleSheet("text-align:left;");
     btnRemovePlugin->setIcon(KIcon("edit-delete"));
     pluginButtonLayout->addWidget(btnRemovePlugin);
     btnInfoPlugin = new KPushButton();
     btnInfoPlugin->setText("Information");
+    btnInfoPlugin->setStyleSheet("text-align:left;");
     btnInfoPlugin->setIcon(KIcon("help-about"));
     pluginButtonLayout->addWidget(btnInfoPlugin);
     btnPluginConfig = new KPushButton();
     btnPluginConfig->setText("Configure");
+    btnPluginConfig->setStyleSheet("text-align:left;");
     btnPluginConfig->setIcon(KIcon("configure"));
     pluginButtonLayout->addWidget(btnPluginConfig);
     btnDownloadPlugin = new KPushButton();
     btnDownloadPlugin->setText("Download new");
+    btnDownloadPlugin->setStyleSheet("text-align:left;");
     btnDownloadPlugin->setIcon(KIcon("document-open-remote"));
     pluginButtonLayout->addWidget(btnDownloadPlugin);
     pluginButtonLayout->addItem(new QSpacerItem(38, 30, QSizePolicy::Minimum, QSizePolicy::Expanding));
@@ -672,6 +854,8 @@
     connect( btnRemoveAliasArgs, SIGNAL( clicked() ), this, SLOT(removeAliasArgs()));
     connect( btnRemoveAlias, SIGNAL( clicked() ), this, SLOT(removeAlias()));
     connect( btnAddAlias, SIGNAL( clicked() ), this, SLOT(addAlias()));
+    connect( btnAddSession, SIGNAL( clicked() ), this, SLOT(addSession()));
+    connect( btnEditSession, SIGNAL( clicked() ), this, SLOT(editSession()));
   }
   
   void Config::moveTabUp() {
@@ -903,5 +1087,19 @@
       }
       aliasList[aliasIndex].setEnable(((AliasCheckBox*) tblAlias->cellWidget(currentAliasIndex,0))->isChecked());
       aliasList[aliasIndex].setArgs(argsList);
+    }
+  }
+  
+  void Config::addSession() {
+    SessionEditor* aSessionEditor = new SessionEditor(this,0);
+    aSessionEditor->show();
+  }
+  
+  void Config::editSession() {
+    if (lstSession->currentItem() != 0) {
+      SessionListItem* anItem = (SessionListItem*) lstSession->currentItem();
+      Session* aSession = anItem->aSession;
+      SessionEditor* aSessionEditor = new SessionEditor(this,aSession);
+      aSessionEditor->show();
     }
   }
