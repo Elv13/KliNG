@@ -19,6 +19,7 @@
         src/thread.cpp
         src/interface/sideBar.cpp
         src/cronparser.cpp
+	src/session.cpp
         src/interface/newCronJob.cpp
         src/interface/scriptMonitor.cpp
         src/interface/addScript.cpp
@@ -38,6 +39,8 @@
         src/interface/defaultScreen.cpp
         src/interface/syntax/bash.cpp
         src/interface/termSession.cpp
+	src/interface/sessionLoader.cpp
+	src/interface/sessionEditor.cpp
         src/shell/alias.cpp
         src/shell/processWatcher.cpp
       )

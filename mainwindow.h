@@ -143,6 +143,7 @@
       void newCronJob();
       void parseAllManPage();
       void cleanStatusBarTask();
+      void loadSession();
       
       void setViewScriptBrowser(bool value);
       void setViewScheduledTask(bool value);

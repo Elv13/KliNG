@@ -14,6 +14,8 @@ sqlite3 kling.db  "create table TDEFAULT_ARGS (TDEFAULT_ARGS_KEY  INTEGER PRIMAR
 sqlite3 kling.db  "create table TFUNCTION (TFUNCTION_KEY  INTEGER PRIMARY KEY, NAME TEXT, BODY TEXT, ENABLE BOOL);" 
 sqlite3 kling.db  "create table TARGS (TARGS_KEY  INTEGER PRIMARY KEY, PARENT INTEGER, TYPE INTEGER, ARGS TEXT);" 
 sqlite3 kling.db  "create table TCATEGORIES(TOPTION_KEY  INTEGER PRIMARY KEY, NAME TEXT );" 
+sqlite3 kling.db  "create table TSESSION(TSESSION_KEY  INTEGER PRIMARY KEY, NAME TEXT );" 
+sqlite3 kling.db  "create table TSESSION_ITEM(TOPTION_KEY  INTEGER PRIMARY KEY, NAME TEXT, ICON TEXT, PATH TEXT, TYPE INTEGER, INPUT INTEGER, SESSION INTEGER, COMMAND TEXT );" #TYPE: 0 = local, 1 = SSHv1, 2 = SSHv2, 3 = TELNET. INPUT: 0 = normal, 1 = python, 2 = pash, 3 = bash
 
 
 sqlite3 kling.db  "insert into TCATEGORIES (NAME) values ('Gestion');" 
@@ -32,5 +34,10 @@ sqlite3 kling.db  "insert into TALIAS (ALIAS,COMMAND,ENABLE) values ('delKlingDa
 sqlite3 kling.db  "insert into TALIAS (ALIAS,COMMAND,ENABLE) values ('disabledAlias','rm',0);" 
 sqlite3 kling.db  "insert into TARGS (PARENT,TYPE,ARGS) values (1,2,'--color');" 
 sqlite3 kling.db  "insert into TDEFAULT_ARGS (COMMAND,ENABLE) values ('ls',1);" 
+
+sqlite3 kling.db  "insert into TSESSION (NAME) values ('Test');"
+sqlite3 kling.db  "insert into TSESSION_ITEM (NAME,ICON,PATH,TYPE,INPUT,SESSION,COMMAND) values ('Test1','','/',0,0,1,'ls');"  
+sqlite3 kling.db  "insert into TSESSION_ITEM (NAME,ICON,PATH,TYPE,INPUT,SESSION,COMMAND) values ('Test2','','/home',0,0,1,'ls');"
+sqlite3 kling.db  "insert into TSESSION_ITEM (NAME,ICON,PATH,TYPE,INPUT,SESSION,COMMAND) values ('Test3','','/usr',0,0,1,'ll');"
 
 chmod 777 kling.db

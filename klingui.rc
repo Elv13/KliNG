@@ -23,6 +23,7 @@
         <Action name="newTermTab" />
         <Action name="newEditor" />
       </Menu>
+      <Action name="loadSession" />
       <Action name="importScript" />
       <Action name="saveScript" />
       <Action name="printScript" />

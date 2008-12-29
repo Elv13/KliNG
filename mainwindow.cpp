@@ -44,6 +44,7 @@
 #include "src/interface/logView.h"
 #include "src/interface/addScript.h"
 #include "src/interface/defaultScreen.h"
+#include "src/interface/sessionLoader.h"
 #include "src/manParser.h"
 
 #include <KFileDialog>
@@ -242,6 +243,14 @@
     actionCollection()->addAction("newScript", newScriptAction);
     connect(newScriptAction, SIGNAL(triggered(bool)),
     tabEditor->txtScriptEditor, SLOT(clear()));
+
+    KAction* loadSessionAction = new KAction(this);
+    loadSessionAction->setText(i18n("Load session"));
+    loadSessionAction->setIcon(KIcon("document-new"));
+    loadSessionAction->setShortcut(Qt::CTRL + Qt::Key_W);
+    actionCollection()->addAction("loadSession", loadSessionAction);
+    connect(loadSessionAction, SIGNAL(triggered(bool)),
+    this, SLOT(loadSession()));
     
     KAction* importScriptAction = new KAction(this);
     importScriptAction->setText(i18n("Import"));
@@ -1004,3 +1013,7 @@
     
   }
   
+  void MainWindow::loadSession() {
+    SessionLoader* aLoader = new SessionLoader(this, tabShell);
+    aLoader->show();
+  }
