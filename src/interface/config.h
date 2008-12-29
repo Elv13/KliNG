@@ -20,6 +20,7 @@
 #include <QGridLayout>
 #include <QListWidget>
 #include <QSpinBox>
+#include <QComboBox>
 #include "../shell/alias.h"
 #include "../configSkeleton.h"
 
@@ -144,7 +145,21 @@
       QVector<Alias> aliasList;
       signed int newAliasCount;
       int currentAliasIndex;
-      
+
+      QGroupBox* grbList;
+      QGroupBox* grbRules;
+      QTableWidget* tblString;
+      QPushButton* btnAddString;
+      QPushButton* btnDelString;
+      QListWidget* lstRules;
+      QPushButton* btnAddRules;
+      QPushButton* btnDelRules;
+      QPushButton* btnEditRules;
+
+      QListWidget* lstSession;
+      QPushButton* btnAddSession;
+      QPushButton* btnDelSession;
+      QPushButton* btnEditSession;
       
     private slots:
       void saveConfig();
@@ -156,6 +171,8 @@
       void removeAliasArgs();
       void removeAlias();
       void addAlias();
+      void addSession();
+      void editSession();
       
     private:
       int countActiveMode();
