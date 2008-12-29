@@ -17,6 +17,8 @@
 #include <QScrollBar>
 #include <QtSql>
 #include <QPoint>
+#include <QAction>
+#include <QMenu>
 
 
 
@@ -41,6 +43,27 @@
 
     QSpacerItem* horizontalSpacer = new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
     hlCkbLayout->addItem(horizontalSpacer);
+
+    /*QMenu* menuOptions = new QMenu();
+    hlCkbLayout->addWidget(menuOptions);
+    QAction* actionHiddenFiles = new QAction(this);
+    actionHiddenFiles->setText("Show hidden files");
+    actionHiddenFiles->setCheckable(true);
+    menuOptions->addAction(actionHiddenFiles);
+    
+    QAction* actionEnableCompleter = new QAction(this);
+    actionEnableCompleter->setText("Enable completer");
+    actionEnableCompleter->setCheckable(true);
+    menuOptions->addAction(actionEnableCompleter);
+    
+    QAction* actionEnableInterface = new QAction(this);
+    actionEnableInterface->setText("Enable command interface");
+    actionEnableInterface->setCheckable(true);
+    menuOptions->addAction(actionEnableInterface);*/
+    /*cbbOptions->addItem("Show Hidden files");
+    cbbOptions->insertSeparator(1);
+    cbbOptions->addItem("Enable completer");
+    cbbOptions->addItem("Enable command completer");*/
 
     frame = new QFrame(this);
     frame->setObjectName(QString::fromUtf8("frame"));
@@ -293,4 +316,14 @@
   
   void Term::updateMonitor(float cpup, float mem) {
     printf("\n%d\n",cpup);
+  }
+
+  void Term::setWorkingDirectory(QString name) {
+    txtCommand->setText("cd "+name);
+    analyseCommand("cd "+name, parseCommand("cd "+name));
+  }
+
+  void Term::execute(QString command) {
+    txtCommand->setText(command);
+    analyseCommand(command, parseCommand(command));
   }
