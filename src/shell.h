@@ -39,6 +39,7 @@
       ~Shell();
       int countLine(QString script);
       QVector<QString> parseCommand(QString command);
+      void analyseCommand(QString command, QVector<QString> args);
             
     protected:
       virtual void sendCommand();
@@ -54,6 +55,7 @@
       QStringList* aliasList;
       QStringList* defaultArgsList;
       QStringList* functionList;
+      QStringList builtIn;
       QVector< QVector<QString> > executionQueue;
       bool loopUntilCondition();
       bool ifStatement();
@@ -68,7 +70,6 @@
       virtual void signalNextLine();
       virtual void signalNewCommand(QString command);
       void checkCommand(QVector<QString> *args);
-      void analyseCommand(QString command, QVector<QString> args);
       QVector< QVector<QString> > splitCommand(QVector<QString> original);
   };
   

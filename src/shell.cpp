@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 
   Shell::Shell(QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList) {
+    builtIn << "cd" << "clear" << "seq";
     this->commandList = commandList;
     this->aliasList = aliasList;
     this->defaultArgsList = defaultArgsList;
@@ -244,6 +245,8 @@
   }
   
   void Shell::sendCommand() {
+        printf("Salut %s\n",executionQueue.first().first().toStdString().c_str());
+
     if (executionQueue.count() != 0) {
       VirtTtyThread* aThread = new VirtTtyThread("tralala",executionQueue.first());
       executionQueue.pop_front();
@@ -340,7 +343,7 @@
   }
   
   void Shell::checkCommand(QVector<QString> *args) {
-    if (commandList->indexOf(args->at(0)) != -1) {
+    if ((commandList->indexOf(args->at(0)) != -1) || (builtIn.indexOf(args->at(0)) != -1)) {
       if (defaultArgsList->indexOf(args->at(0)) != -1) {
         QSqlQuery query;
         query.exec("SELECT TDEFAULT_ARGS_KEY FROM TDEFAULT_ARGS WHERE COMMAND = '"+ args->at(0) +"'");
@@ -404,7 +407,6 @@
         signalNewCommand("<b><font color=\"#008000\">" + command + "</font>" + "<font color=\"#C5C5C5\"> ("+  get_current_dir_name() + ")</font>" + "</b>");
       }
     }
-    
     executionQueue = splitCommand(args);
     sendCommand();
     /*for (int i =0; i < executionQueue.count(); i++) {
