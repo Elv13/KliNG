@@ -1,6 +1,7 @@
 #include "sessionEditor.h"
 #include <QSizePolicy>
 #include <QVector>
+#include <QInputDialog>
 
 
   SessionEditor::SessionEditor(QWidget* parent, Session* aSession) : KDialog(parent) {
@@ -27,6 +28,7 @@
     grbSshField = new QGroupBox();
     grbSshField->setSizePolicy(sizePolicy1);
     grbSshField->setTitle("SSH options");
+    grbSshField->setHidden(true);
     gridSession->addWidget(grbSshField,5,0,1,3);
     
     QGridLayout* gridSsh = new QGridLayout();
@@ -85,14 +87,21 @@
     btnRemSession->setText("Remove");
     gridSession->addWidget(btnRemSession,1,2,1,1);
     
+    QWidget* wdgIcon = new QWidget();
+    QGridLayout* aLayout = new QGridLayout(wdgIcon);
+    aLayout->setContentsMargins(0,0,0,0);
     btnIcon = new QPushButton();
     btnIcon->setSizePolicy(sizePolicy2);
-    /*btnIcon->setMinimumSize(30,30);
-    btnIcon->setMaximumSize(30,30);*/
-    gridSession->addWidget(btnIcon,2,1,1,1);
+    btnIcon->setMinimumSize(30,30);
+    btnIcon->setMaximumSize(30,30);
+    aLayout->addWidget(btnIcon,0,0);
+    aLayout->addItem(new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum),0,1);
+    btnIcon->setDisabled(true);
+    gridSession->addWidget(wdgIcon,2,1,1,1);
     
     txtSessionName = new QLineEdit();
     txtSessionName->setSizePolicy(sizePolicy2);
+    txtSessionName->setDisabled(true);
     gridSession->addWidget(txtSessionName,3,1,1,2);
     
     cbbSessionType = new QComboBox();
@@ -101,6 +110,7 @@
     cbbSessionType->addItem("SSHv1");
     cbbSessionType->addItem("SSHv2");
     cbbSessionType->addItem("Telnet");
+    cbbSessionType->setDisabled(true);
     gridSession->addWidget(cbbSessionType,4,1,1,2);
     
     inputMethod = new QComboBox();
@@ -109,6 +119,7 @@
     inputMethod->addItem("Pash");
     inputMethod->addItem("Bash");
     inputMethod->setSizePolicy(sizePolicy2);
+    inputMethod->setDisabled(true);
     gridSession->addWidget(inputMethod,6,1,1,2);
     
     cbbConnectionMethod = new QComboBox();
@@ -129,18 +140,22 @@
     
     txtDefaultPath = new QLineEdit();
     txtDefaultPath->setSizePolicy(sizePolicy2);
+    txtDefaultPath->setDisabled(true);
     gridSession->addWidget(txtDefaultPath,7,1,1,2);
     
     txtDefaultCommand = new QLineEdit();
     txtDefaultCommand->setSizePolicy(sizePolicy2);
+    txtDefaultCommand->setDisabled(true);
     gridSession->addWidget(txtDefaultCommand,8,1,1,2);
     
     /*txtDefaultPath = new QLineEdit();
-    txtDefaultPath->setSizePolicy(sizePolicy2);
-    gridSession->addItem(new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Minimum),7,1,1,2);*/
+    txtDefaultPath->setSizePolicy(sizePolicy2);*/
+    gridSession->addItem(new QSpacerItem(38, 30, QSizePolicy::Expanding, QSizePolicy::Expanding),9,1,1,2);
     
     QObject::connect(lstSessionList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(itemChanged(QListWidgetItem*, QListWidgetItem*)));
     connect( this, SIGNAL( okClicked() ), this, SLOT( apply() ) );
+    connect( btnAddSession, SIGNAL( clicked() ), this, SLOT( addItem() ) );
+    connect( txtSessionName, SIGNAL( textChanged(QString) ), this, SLOT( updateCurrentName(QString) ) );
     
     if (aSession != 0) {
       itemList = aSession->getItem();
@@ -151,23 +166,34 @@
       }
       itemList = aSession->getItem();
     }
+    
+    if (lstSessionList->count() != 0) {
+      lstSessionList->setCurrentRow(0);
+    }
   }
   
   void SessionEditor::itemChanged(QListWidgetItem* item1, QListWidgetItem* item2) {
+    btnIcon->setEnabled(true);
+    txtSessionName->setEnabled(true); 
+    cbbSessionType->setEnabled(true); 
+    inputMethod->setEnabled(true); 
+    txtDefaultPath->setEnabled(true); 
+    txtDefaultCommand->setEnabled(true);
+    
     if (currentItem != NULL ) {
-      currentListItem->setText(currentItem->name);
+      //currentListItem->setText(currentItem->name);
       currentItem->name = txtSessionName->text();
       currentItem->path = txtDefaultPath->text();
       currentItem->command = txtDefaultCommand->text();
       currentItem->type = cbbSessionType->currentIndex();
       currentItem->input = inputMethod->currentIndex();
     }
-    currentListItem = lstSessionList->currentItem();
+    //currentListItem = lstSessionList->currentItem();
     sessionItem* aSessionItem = NULL;
     
     if (itemList.count() != 0) {
       for (int i =0; i < itemList.count(); i++) {
-	if (itemList[i].name == currentListItem->text())
+	if (itemList[i].name == lstSessionList->currentItem()->text())
 	  aSessionItem = &(itemList[i]);
       }
     }
@@ -187,7 +213,7 @@
   
   void SessionEditor::apply() {
     if (currentItem != NULL ) {
-      currentListItem->setText(currentItem->name);
+      //currentListItem->setText(currentItem->name);
       currentItem->name = txtSessionName->text();
       currentItem->path = txtDefaultPath->text();
       currentItem->command = txtDefaultCommand->text();
@@ -195,4 +221,21 @@
       currentItem->input = inputMethod->currentIndex();
     }
     aSession->setItem(this->itemList);
+  }
+  
+  void SessionEditor::updateCurrentName(QString text) {
+    lstSessionList->currentItem()->setText(text);
+  }
+  
+  void SessionEditor::addItem() {
+    bool ok;
+    QString text = QInputDialog::getText(this, "Add a tab", "Add a new tab to this session", QLineEdit::Normal, "", &ok);
+    if (ok && !text.isEmpty()) {
+      itemChanged(0, 0);
+      lstSessionList->addItem(text);
+      sessionItem* aSessionItem2 = new sessionItem;
+      aSessionItem2->name = text;
+      itemList.push_back(*aSessionItem2);
+      currentItem = aSessionItem2;
+    }
   }
