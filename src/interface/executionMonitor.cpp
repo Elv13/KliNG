@@ -19,7 +19,7 @@
     display = new QWidget;
     display->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     QPalette aPalette;
-    display->setStyleSheet(QString::fromUtf8("background-color:") + aPalette.base().color().name () +";");
+    display->setStyleSheet(QString::fromUtf8("background-color:") + aPalette.base().color().name() +";");
     scrollArea->setWidget(display);
     mainLayout->addWidget(scrollArea);
     
