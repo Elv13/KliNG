@@ -51,10 +51,11 @@ class SessionEditor : public KDialog {
       Session* aSession;
       QVector<sessionItem> itemList;
       sessionItem* currentItem;
-      QListWidgetItem* currentListItem;
       
     private slots:
       void itemChanged(QListWidgetItem* item1, QListWidgetItem* item2);
       void apply();
+      void updateCurrentName(QString text);
+      void addItem();
   };
 #endif
