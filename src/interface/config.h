@@ -171,8 +171,9 @@
       void removeAliasArgs();
       void removeAlias();
       void addAlias();
-      void addSession();
       void editSession();
+      void addSession();
+      void saveSession();
       
     private:
       int countActiveMode();
