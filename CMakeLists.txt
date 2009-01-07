@@ -41,6 +41,7 @@
         src/interface/termSession.cpp
 	src/interface/sessionLoader.cpp
 	src/interface/sessionEditor.cpp
+        src/interface/skinDemo.cpp
         src/shell/alias.cpp
         src/shell/processWatcher.cpp
       )
