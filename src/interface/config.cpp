@@ -4,6 +4,7 @@
 #include "../session.h"
 #include "miniClasses.h"
 #include "sessionEditor.h"
+#include "skinDemo.h"
 
 #include <KLocale>
 #include <QVBoxLayout>
@@ -15,6 +16,9 @@
 #include <QSqlDatabase>
 
 #include <KColorCombo>
+#include <QColor>
+#include <QBrush>
+#include <QPalette>
 
   Config::Config(QWidget* parent, KlingConfigSkeleton* aConfigSkeleton) : KConfigDialog(parent, "settings", aConfigSkeleton) {
     currentAliasIndex = -1;
@@ -678,8 +682,47 @@
     grbTerminalAppearence->setLayout(terminal2Layout);
     
     tblTerminalAppearence = new QTableWidget;
+    tblTerminalAppearence->setRowCount(10);
+    tblTerminalAppearence->setColumnCount(2);
+    tblTerminalAppearence->setColumnWidth(0,230);
+    tblTerminalAppearence->setColumnWidth(1,140);
+    tblTerminalAppearence->verticalHeader()->hide();
+    tblTerminalAppearence->horizontalHeader()->hide();
+    
+    QPalette aPalette;
+    SkinDemo* aSkinDemo1 = new SkinDemo(this,aPalette.base().color().name(),aPalette.text().color().name(),12,"arial",false,"#008000","#C5C5C5");
+    tblTerminalAppearence->setCellWidget(0,1,aSkinDemo1);
+    QTableWidgetItem* aTableWidget343 = new QTableWidgetItem("Default");
+    tblTerminalAppearence->setItem(0,0,aTableWidget343);
+    
+    SkinDemo* aSkinDemo5 = new SkinDemo(this,"#FFFFFF","#000000",12,"courrier",false,"#008000","#252525");
+    tblTerminalAppearence->setCellWidget(1,1,aSkinDemo5);
+    QTableWidgetItem* aTableWidget349 = new QTableWidgetItem("Light");
+    tblTerminalAppearence->setItem(1,0,aTableWidget349);
+    
+    SkinDemo* aSkinDemo2 = new SkinDemo(this,"#000000","#00FF00",12,"courrier",false,"#FFFFFF","#FFFFFF");
+    tblTerminalAppearence->setCellWidget(2,1,aSkinDemo2);
+    QTableWidgetItem* aTableWidget344 = new QTableWidgetItem("Old School");
+    tblTerminalAppearence->setItem(2,0,aTableWidget344);
+    
+    SkinDemo* aSkinDemo3 = new SkinDemo(this,"#000000","#FF4400",12,"courrier",false,"#FF0000","#BB0000");
+    tblTerminalAppearence->setCellWidget(3,1,aSkinDemo3);
+    QTableWidgetItem* aTableWidget345 = new QTableWidgetItem("Blood");
+    tblTerminalAppearence->setItem(3,0,aTableWidget345);
+    
+    SkinDemo* aSkinDemo6 = new SkinDemo(this,"#000000","#DDDDDD",12,"courrier",false,"#008000","#C5C5C5");
+    tblTerminalAppearence->setCellWidget(4,1,aSkinDemo6);
+    QTableWidgetItem* aTableWidget346 = new QTableWidgetItem("Dark");
+    tblTerminalAppearence->setItem(4,0,aTableWidget346);
+    
+    SkinDemo* aSkinDemo7 = new SkinDemo(this,"#F7F799","#111111",12,"courrier",false,"#008000","#252525");
+    tblTerminalAppearence->setCellWidget(5,1,aSkinDemo7);
+    QTableWidgetItem* aTableWidget347 = new QTableWidgetItem("Soft");
+    tblTerminalAppearence->setItem(5,0,aTableWidget347);
+    
     terminal2Layout->addWidget(tblTerminalAppearence);
     terminal3Layout->addWidget(grbTerminalAppearence);
+    
     
     grbCustomTerminalAppearence = new QGroupBox;
     grbCustomTerminalAppearence->setTitle("Custom Skin");
@@ -692,7 +735,7 @@
     terminal3Layout->addWidget(grbCustomTerminalAppearence);
     tblCustomTerminalAppearence->setRowCount(10);
     tblCustomTerminalAppearence->setColumnCount(2);
-    tblCustomTerminalAppearence->setColumnWidth(0,310);
+    tblCustomTerminalAppearence->setColumnWidth(0,280);
     tblCustomTerminalAppearence->setColumnWidth(1,90);
     tblCustomTerminalAppearence->verticalHeader()->hide();
     tblCustomTerminalAppearence->horizontalHeader()->hide();
@@ -739,7 +782,7 @@
     editor3Layout->addWidget(grbCustomEditorAppearence);
     tblCustomEditorAppearence->setRowCount(10);
     tblCustomEditorAppearence->setColumnCount(2);
-    tblCustomEditorAppearence->setColumnWidth(0,310);
+    tblCustomEditorAppearence->setColumnWidth(0,280);
     tblCustomEditorAppearence->setColumnWidth(1,90);
     tblCustomEditorAppearence->verticalHeader()->hide();
     tblCustomEditorAppearence->horizontalHeader()->hide();
@@ -959,6 +1002,7 @@
     
     configSkeleton->writeConfig();
     saveAlias();
+    saveSession();
 
   }
 
@@ -1090,11 +1134,6 @@
     }
   }
   
-  void Config::addSession() {
-    SessionEditor* aSessionEditor = new SessionEditor(this,0);
-    aSessionEditor->show();
-  }
-  
   void Config::editSession() {
     if (lstSession->currentItem() != 0) {
       SessionListItem* anItem = (SessionListItem*) lstSession->currentItem();
@@ -1102,4 +1141,25 @@
       SessionEditor* aSessionEditor = new SessionEditor(this,aSession);
       aSessionEditor->show();
     }
+  }
+  
+  void Config::addSession() {
+    bool ok;
+    QString text = QInputDialog::getText(this, "Exclude a command", "Exclude the following command from advance logging", QLineEdit::Normal, "", &ok);
+    if (ok && !text.isEmpty()) {
+      SessionListItem* anItem = new SessionListItem();
+      anItem->setText(text);
+      Session* aSession = new Session();
+      aSession->setName(text);
+      anItem->aSession = aSession;
+      lstSession->addItem(anItem);
+      lstSession->setCurrentItem(anItem);
+      SessionEditor* aSessionEditor = new SessionEditor(this,aSession);
+      aSessionEditor->show();
+    }
+  }
+  
+  void Config::saveSession() {
+    for (int i =0; i < lstSession->count();i++)
+      ((SessionListItem*)lstSession->item(i))->aSession->save();
   }

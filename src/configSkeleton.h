@@ -98,6 +98,10 @@
           addItemInt("monitorTabOrder", monitorTabOrder, 2);
           addItemInt("webbrowserTabOrder", webbrowserTabOrder, 3);
           addItemInt("scriptManagerTabOrder", scriptManagerTabOrder, 4);
+          
+          setCurrentGroup("Appearance");
+          addItemString("strTermSkin", strTermSkin, "");
+          addItemString("strEditorSkin", strEditorSkin, "");
       }
 
       bool isConfigured;
@@ -184,6 +188,10 @@
       int monitorTabOrder;
       int webbrowserTabOrder;
       int scriptManagerTabOrder;
+      
+      //Apearance
+      QString strTermSkin;
+      QString strEditorSkin;
   };
 #endif
 
