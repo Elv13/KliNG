@@ -19,7 +19,7 @@
 #include <QPoint>
 #include <QAction>
 #include <QMenu>
-
+#include <KStandardDirs>
 
 
   Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList) : QWidget(parent),Shell(commandList,aliasList,defaultArgsList,functionList) {
@@ -128,7 +128,7 @@
 
     cmdStatus = new QLabel(this);
     cmdStatus->setObjectName(QString::fromUtf8("cmdStatus"));
-    pxmCmdInactive = new QPixmap("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/gearI.png");
+    pxmCmdInactive = new QPixmap(KStandardDirs::locate( "appdata", "pixmap/22x22/gearI.png"));
 
     cmdStatus->setPixmap(*pxmCmdInactive);
     cmdStatus->setMaximumSize(QSize(22, 22));
@@ -154,7 +154,7 @@
     kpushbutton_3 = new KPushButton(this);
     kpushbutton_3->setObjectName(QString::fromUtf8("kpushbutton_3"));
     kpushbutton_3->setMaximumSize(QSize(27, 27));
-    KIcon icnKill("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/kill.png");
+    KIcon icnKill(KStandardDirs::locate( "appdata", "pixmap/22x22/kill.png"));
     kpushbutton_3->setIcon(icnKill);
     hlCommand->addWidget(kpushbutton_3);
 
@@ -227,7 +227,7 @@
   }
 
   void Term::launchCommand() {
-    pxmCmdInactive->load("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/gearA.png");
+    pxmCmdInactive->load(KStandardDirs::locate( "appdata", "pixmap/22x22/gearA.png"));
     cmdStatus->setPixmap(*pxmCmdInactive);
     txtCommand->setDisabled(true);
     kpushbutton_3->setDisabled(false);
@@ -251,7 +251,7 @@
   void Term::resetCmdInputLine() {
     rtfCmdOutput->verticalScrollBar()->setValue(rtfCmdOutput->verticalScrollBar()->maximum());
     txtCommand->clear();
-    pxmCmdInactive->load("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/gearI.png");
+    pxmCmdInactive->load(KStandardDirs::locate( "appdata", "pixmap/22x22/gearI.png"));
     cmdStatus->setPixmap(*pxmCmdInactive);
     kpushbutton_3->setDisabled(true);
     txtCommand->setEnabled(true);
