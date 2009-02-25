@@ -180,8 +180,8 @@
             if (line.indexOf("[") != -1)
               closeFont = ajustSerialCode(line);
               
-            emit newLine("<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line);
-            commandOutput += "<img src=\"/home/lepagee/dev/tp3-prog_sess2/pixmap/margin.png\">" + line + "<br>" + closeFont + "\n";
+            emit newLine("<img src=\""+KStandardDirs::locate( "appdata", "pixmap/22x22/margin.png")+"\">" + line);
+            commandOutput += "<img src=\""+KStandardDirs::locate( "appdata", "pixmap/22x22/margin.png")+"\">" + line + "<br>" + closeFont + "\n";
             line.clear();
           }
           else {

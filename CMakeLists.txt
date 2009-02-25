@@ -73,6 +73,7 @@
                      pixmap/22x22/uncomment.png
                      pixmap/22x22/pause.png
                      pixmap/22x22/eye.png
+		     pixmap/margin.png
                      
       DESTINATION ${DATA_INSTALL_DIR}/kling/pixmap/22x22 )
 
