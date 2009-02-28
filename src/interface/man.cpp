@@ -21,7 +21,7 @@
 
         Dock man GUI
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
 */
@@ -226,7 +226,10 @@
           name = name.substr(0, name.find(".bz2"));
       }
       else {
-
+	name = query.value(0).toString().toStdString().substr( query.value(0).toString().toStdString().find_last_of("/") +1, (query.value(0).toString().toStdString().size() - query.value(0).toString().toStdString().find_last_of("/") -1));
+	//unGz(name);
+	command =  "gunzip /tmp/man/" + name;
+	name = name.substr(0, name.find(".gz"));
       }
       system(command.c_str());
       rtfManPage->setHtml(ManParser::parseManPage(name).c_str());

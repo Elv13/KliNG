@@ -3,6 +3,7 @@
 #include <iostream>
 #include <QtSql>
 #include <QSqlDatabase>
+#include <QtDebug>
 
   Shell::Shell(QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList) {
     builtIn << "cd" << "clear" << "seq";
@@ -21,6 +22,7 @@
     line = line.left(line.indexOf("]")).trimmed();
 
     line = "test " + line;
+    qDebug() << line << "\n";
     char buffer[30];
     FILE *JOB = popen(line.toStdString().c_str(), "r" );
     
@@ -28,6 +30,7 @@
       while ( fgets( buffer, sizeof buffer, JOB ) != NULL ) {}
       
     bool toReturn = pclose(JOB);
+    qDebug() << "Return: " << toReturn << "\n";
     return !toReturn;
   }
 

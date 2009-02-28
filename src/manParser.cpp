@@ -21,7 +21,7 @@
 
         Index, download, read, parse and extract informations from manpage
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
 */
@@ -356,7 +356,11 @@ using namespace std;
                   }
                   else if (manName.find(".gz") != -1) {
                     name = name.substr(0, name.find(".gz"));
-                    unGz(name);
+                    //unGz(name);
+		    command =  "gunzip /tmp/man/";
+                    command += namelist2[n2]->d_name;
+                    name = name.substr(0, name.find(".gz"));
+                    system(command.c_str());
                   }
                   
                   QSqlQuery query;

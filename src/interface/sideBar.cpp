@@ -21,7 +21,7 @@
 
         Editor sideBar widget
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
 */
@@ -36,7 +36,7 @@
 #include <KLocalizedString>
 #include "kpushbutton.h"
 #include <kicon.h>
-
+#include <KStandardDirs>
 
 /**
   SideBar constructor
@@ -64,10 +64,10 @@
     aFrame->setFrameShape(QFrame::NoFrame);
     aFrame->setFrameStyle ( 0 );
 
-    icnBP = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/bp.png");
-    icnEmpty = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/null.png");
-    icnArrow = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/arrow.png");
-    icnArrowBP = new  KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/arrowBP.png");
+    icnBP = new  KIcon(KStandardDirs::locate( "appdata", "pixmap/22x22/bp.png"));
+    icnEmpty = new  KIcon(KStandardDirs::locate( "appdata", "pixmap/null.png"));
+    icnArrow = new  KIcon(KStandardDirs::locate( "appdata", "pixmap/22x22/arrow.png"));
+    icnArrowBP = new  KIcon(KStandardDirs::locate( "appdata", "pixmap/22x22/arrowBP.png"));
 
   
     if (previousItem != NULL) {
