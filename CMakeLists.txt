@@ -20,6 +20,7 @@
         src/interface/sideBar.cpp
         src/cronparser.cpp
 	src/session.cpp
+	src/dbusBridge.cpp
         src/interface/newCronJob.cpp
         src/interface/scriptMonitor.cpp
         src/interface/addScript.cpp
@@ -49,7 +50,7 @@
       kde4_add_executable(kling ${kling_SRCS})
 
       target_link_libraries(kling ${KDE4_KDEUI_LIBS}
-      ${KDE4_KIO_LIBS} ${QT_QTSQL_LIBRARY} ${QT_WEBKIT_LIBRARY}${QT_LIBRARIES} QtWebKit)
+      ${KDE4_KIO_LIBS} ${QT_QTSQL_LIBRARY} ${QT_WEBKIT_LIBRARY}${QT_LIBRARIES} QtWebKit dbus-1 QtSql)
 
       install(TARGETS kling DESTINATION ${BIN_INSTALL_DIR})
       install( FILES klingui.rc

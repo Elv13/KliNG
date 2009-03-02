@@ -78,3 +78,15 @@
   void ExecutionMonitor::incrCommand() {
     lblCommandExecutedValue->setText(QString::number(++cmdExecutedScriptNb));
   }
+  
+  void ExecutionMonitor::addMonitor(int jobId, QString title) {
+    if (cronJobHash.find(jobId) == cronJobHash.end()) {
+      cronJobHash[jobId] = new ScriptMonitor(this, title);
+      horizontalLayout_4->addWidget(cronJobHash[jobId]);
+      lblExecutedValue->setText(QString::number(++executedScriptNb));
+    }
+  }
+  
+  void ExecutionMonitor::updateMonitor(int jobId, int secondLeft) {
+    cronJobHash[jobId]->lblTime->setText(QString::number(0-secondLeft));
+  }

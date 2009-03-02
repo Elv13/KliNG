@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QtGui/QVBoxLayout>
 #include <QScrollArea>
+#include <QHash>
 
 QT_BEGIN_NAMESPACE
 
@@ -27,9 +28,12 @@ QT_BEGIN_NAMESPACE
     private:
       int executedScriptNb;
       int cmdExecutedScriptNb;
+      QHash<int, ScriptMonitor*> cronJobHash;
       
     public slots:
       void launchScript(QString name, QString content);
+      void addMonitor(int jobId, QString title);
+      void updateMonitor(int jobId, int secondLeft);
       void incrCommand();
       
   };

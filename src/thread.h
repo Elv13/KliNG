@@ -29,13 +29,10 @@
 #define DEF_THREAD
 
 #include <QThread>
-#include <string>
 #include <QString>
-#include <iostream>
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
-using namespace std;
 
   class ThreadExec : public QThread {
     Q_OBJECT

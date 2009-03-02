@@ -46,6 +46,7 @@
 #include "src/interface/defaultScreen.h"
 #include "src/interface/sessionLoader.h"
 #include "src/manParser.h"
+#include "src/dbusBridge.h"
 
 #include <KFileDialog>
 #include <KMessageBox>
@@ -189,6 +190,11 @@
     statusProgressBar->setMinimumSize(100,0);
     //statusBar()->setItemAlignment(3, Qt::AlignRight);
     statusBar()->addWidget(statusProgressBar);
+    
+    if (tabGestion != NULL){
+      DbusListener* aListener = new DbusListener(this,tabGestion);
+      aListener->start();
+    }
 
     if (tabCategories != NULL)
       QObject::connect(tabCategories, SIGNAL(currentChanged(int)), this, SLOT(modeChanged(int)));

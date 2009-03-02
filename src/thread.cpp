@@ -28,13 +28,8 @@
 
 #include "thread.h"
 
-#include <iostream>
-#include <cstdlib>
 #include <QString>
 #include "virtTTY.h"
-
-using namespace std;
-
 /**
   ThreadExec constructor
 

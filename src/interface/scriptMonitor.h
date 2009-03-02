@@ -43,37 +43,37 @@
 #include <QtGui/QSpacerItem>
 #include <QtGui/QVBoxLayout>
 #include "kled.h"
-using namespace std;
-  class ScriptMonitor : public QFrame {
-    Q_OBJECT
-    public:
-      ScriptMonitor(QWidget* parent, QString scriptName);
-      ~ScriptMonitor();
-      void retranslateUi();
-      QVBoxLayout *verticalLayout_2;
-      QVBoxLayout *verticalLayout;
-      QHBoxLayout *horizontalLayout;
-      KLed *isRunning;
-      QLabel *lblCmd;
-      QSpacerItem *horizontalSpacer;
-      QLabel *lblNextCmd;
-      QSpacerItem *verticalSpacer;
-      QLabel *lblTitle;
-      QLabel *lblTime;
-      QProgressBar *progressBar;
-      void launchScript(QString script);
-    private:
-      ThreadExec* aThread;
-      int second;
-      QString scriptName;
-      int key;
-    private slots:
-      void endMe();
-      void disCurrentLine(QString line);
-      void disNextLine(QString line);
-      void increment();
-      void cmdExecuted();
-    signals:
-      void newCommand();
-  };
+
+class ScriptMonitor : public QFrame {
+  Q_OBJECT
+  public:
+    ScriptMonitor(QWidget* parent, QString scriptName);
+    ~ScriptMonitor();
+    void retranslateUi();
+    QVBoxLayout *verticalLayout_2;
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout;
+    KLed *isRunning;
+    QLabel *lblCmd;
+    QSpacerItem *horizontalSpacer;
+    QLabel *lblNextCmd;
+    QSpacerItem *verticalSpacer;
+    QLabel *lblTitle;
+    QLabel *lblTime;
+    QProgressBar *progressBar;
+    void launchScript(QString script);
+  private:
+    ThreadExec* aThread;
+    int second;
+    QString scriptName;
+    int key;
+  private slots:
+    void endMe();
+    void disCurrentLine(QString line);
+    void disNextLine(QString line);
+    void increment();
+    void cmdExecuted();
+  signals:
+    void newCommand();
+};
 #endif
