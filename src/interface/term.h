@@ -21,7 +21,7 @@
 
         term.cpp header
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 15 May 2008
         @version 0.0.9
 */
@@ -102,6 +102,7 @@
     signals:
       void cmdInfo(QString, int);
       void showCompleter(QString);
+      void newCommand(QString name, VirtTtyThread* aThread);
 
   };
 #endif

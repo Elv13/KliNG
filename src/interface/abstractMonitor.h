@@ -21,7 +21,7 @@
 
         scriptMonitor.cpp header file
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
 */
@@ -66,10 +66,11 @@ class AbstractMonitorItem : public QFrame {
     QString scriptName;
     int key;
     virtual void setupActions();
-  private slots:
-    virtual void endMe();
+  protected slots:
+    virtual void endMe()=0;
     void updateCurrentLine(QString line);
     void updateNextLine(QString line);
     void incrementTimer();
+    //virtual void connectTerm(){};
 };
 #endif

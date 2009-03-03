@@ -2,6 +2,7 @@
 #define DEF_EXECUTION_MONITOR
 #include "scriptMonitor.h"
 #include "cronMonitorItem.h"
+#include "../virtTTY.h"
 #include <QWidget>
 #include <QLabel>
 #include <QtGui/QVBoxLayout>
@@ -30,11 +31,13 @@ QT_BEGIN_NAMESPACE
       int executedScriptNb;
       int cmdExecutedScriptNb;
       QHash<int, CronMonitorItem*> cronJobHash;
+      //QHash<int, CronMonitorItem*> commandHash;
       
     public slots:
       void launchScript(QString name, QString content);
       void addMonitor(int jobId, QString title);
-      void updateMonitor(int jobId, int secondLeft);
+      void updateCronMonitorItem(int jobId, int secondLeft);
+      void addCommandMonitorItem(QString name, VirtTtyThread* aTty);
       void incrCommand();
       
   };

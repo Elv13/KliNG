@@ -21,7 +21,7 @@
 
         degubTerm.cpp header file
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
 */
@@ -35,6 +35,7 @@
 #include <KTextBrowser>
 
   class DebugTerm : public QDockWidget {
+    Q_OBJECT
     public:
       DebugTerm(QWidget* parent);
       ~DebugTerm();
@@ -43,5 +44,7 @@
       QWidget *dockDebugTermContents;
       QVBoxLayout *verticalLayout_12;
       KTextBrowser *rtfDegubTerm;
+    public slots:
+      void signalEnd();
   };
 #endif

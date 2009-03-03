@@ -1,5 +1,6 @@
 #include "executionMonitor.h"
 #include "cronMonitorItem.h"
+#include "commandMonitorItem.h"
 #include <QSizePolicy>
 #include <QGridLayout>
 #include <QtGui/QSpacerItem>
@@ -87,7 +88,14 @@
       lblExecutedValue->setText(QString::number(++executedScriptNb));
     }
   }
+
+  void ExecutionMonitor::addCommandMonitorItem(QString name, VirtTtyThread* aTty) {
+    CommandMonitorItem* aMonitor = new CommandMonitorItem(this, name);
+    horizontalLayout_4->addWidget(aMonitor);
+    aMonitor->setTty(aTty);
+    lblExecutedValue->setText(QString::number(++executedScriptNb));
+  }
   
-  void ExecutionMonitor::updateMonitor(int jobId, int secondLeft) {
+  void ExecutionMonitor::updateCronMonitorItem(int jobId, int secondLeft) {
     cronJobHash[jobId]->lblTime->setText(QString::number(0-secondLeft));
   }

@@ -33,6 +33,8 @@
         src/interface/outputViewer.cpp
 	src/interface/abstractMonitor.cpp
 	src/interface/cronMonitorItem.cpp
+	src/interface/commandMonitorItem.cpp
+	src/interface/scriptMonitorItem.cpp
         src/interface/debugTerm.cpp
         src/interface/scriptEditor.cpp
         src/interface/executionMonitor.cpp

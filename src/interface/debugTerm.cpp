@@ -23,7 +23,7 @@
 
         Display the stdout when in debug mode.
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
 */
@@ -72,3 +72,6 @@
       setWindowTitle("Output");
   }
 
+void DebugTerm::signalEnd() {
+  rtfDegubTerm->append("<font style=\"background-color:red;\">--Transmission Over--</font>");
+}

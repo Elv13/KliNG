@@ -21,7 +21,7 @@
 
         newCronJob.cpp header file
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
 */
@@ -87,7 +87,7 @@
       QSpacerItem *verticalSpacer;
       QDialogButtonBox *buttonBox;
     
-    private:
+    //private:
 
     private slots:
       void addAJob();

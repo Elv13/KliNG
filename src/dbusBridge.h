@@ -20,7 +20,7 @@ class DbusListener : public QThread {
   public:
     DbusListener(QObject* parent, ExecutionMonitor* aMonitor):QThread(parent){
       QObject::connect(this, SIGNAL(newMonitor(int, QString)), aMonitor, SLOT(addMonitor(int, QString)));
-      QObject::connect(this, SIGNAL(updateMon(int, int)), aMonitor, SLOT(updateMonitor(int, int)));
+      QObject::connect(this, SIGNAL(updateMon(int, int)), aMonitor, SLOT(updateCronMonitorItem(int, int)));
 
     };
     void run();

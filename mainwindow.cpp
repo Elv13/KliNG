@@ -21,7 +21,7 @@
 
         The Main Window GUI and SLOTS functions
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
 */
@@ -112,7 +112,7 @@
     
     tabGestion = new ExecutionMonitor(0);
     
-    tabShell = new TermSession(this);
+    tabShell = new TermSession(this,tabGestion);
     tabShell->addTerm(dockHistory, commandStringList, aliasList, defaultArgsList, commandStringList, historyStringList);
 
     setupActions();
@@ -196,8 +196,10 @@
       aListener->start();
     }
 
-    if (tabCategories != NULL)
+    if (tabCategories != NULL) {
       QObject::connect(tabCategories, SIGNAL(currentChanged(int)), this, SLOT(modeChanged(int)));
+      QObject::connect(tabShell, SIGNAL(newCommand(QString, VirtTtyThread*)), tabGestion, SLOT(addCommandMonitorItem(QString, VirtTtyThread*)));
+    }
     if (dockScriptBrowser != NULL)
       QObject::connect(dockScriptBrowser, SIGNAL(enableEditor(bool)), tabEditor->txtScriptEditor, SLOT(setEnabled(bool)));
     if (dockScriptBrowser != NULL)

@@ -202,7 +202,8 @@
         QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
         QObject::connect(aThread->aVirtTTY, SIGNAL(clearCmdOutput()), this, SLOT(clearCmdOutput()));
         QObject::connect(aThread->aVirtTTY, SIGNAL(showFileBrowser(QString, bool)), this, SLOT(showFileBrowser(QString, bool)));
-        aThread->start();
+        emit newCommand(txtCommand->text(), aThread);
+	aThread->start();
         QObject::connect(kpushbutton_3, SIGNAL(clicked()), this, SLOT(killPros()));
         executionQueue.pop_front();
         
@@ -213,6 +214,7 @@
             executionQueue.first().pop_front();
             VirtTtyThread* aThread2 = new VirtTtyThread("tralala",executionQueue.first());
             QObject::connect(aThread2->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
+	    emit newCommand(txtCommand->text(), aThread2);
             executionQueue.pop_front();
             aThread2->start();
             if (executionQueue.count() == 0)
@@ -231,6 +233,7 @@
     cmdStatus->setPixmap(*pxmCmdInactive);
     txtCommand->setDisabled(true);
     kpushbutton_3->setDisabled(false);
+    //emit newCommand(txtCommand->text(), aThread);
     analyseCommand(txtCommand->text(), parseCommand(txtCommand->text()));
   }
 

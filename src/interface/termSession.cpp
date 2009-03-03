@@ -2,7 +2,7 @@
 #include <QtSql>
 #include <QSqlDatabase>
 
-TermSession::TermSession(QWidget* parent =0) : QWidget( parent ) {
+TermSession::TermSession(QWidget* parent =0, ExecutionMonitor* anExecMonitor) : QWidget( parent ),mainExecutionMonitor(anExecMonitor) {
     termTab = 0;
     count = 0;
     aDockHistory = 0;
@@ -17,7 +17,7 @@ TermSession::TermSession(QWidget* parent =0) : QWidget( parent ) {
 
 void TermSession::addTerm() {
   Term* aTerm = new Term(aDockHistory, this, commandList, aliasList, defaultArgsList, functionList, historyStringList);
-
+  
   if (count == 0) {
     this->baseTerm = aTerm;
     this->aLayout->addWidget(baseTerm);
@@ -39,6 +39,9 @@ void TermSession::addTerm() {
   else {
     termTab->addTab(aTerm,QString("Term "+ QString::number(++count)));
   }
+  //if (mainExecutionMonitor != NULL) {
+    connect(aTerm , SIGNAL( newCommand(QString,VirtTtyThread*) ), this, SLOT( fowardSignals(QString,VirtTtyThread*) ));
+  //}
 }
 
 void TermSession::addTerm(History* aDockHistory, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList) {
@@ -74,7 +77,9 @@ void TermSession::addTerm(History* aDockHistory, QStringList* commandList, QStri
   else {
     termTab->addTab(aTerm,QString("Term "+ QString::number(++count)));
   }
-
+  //if (mainExecutionMonitor != NULL) {
+    connect(aTerm , SIGNAL( newCommand(QString,VirtTtyThread*) ), this, SLOT( fowardSignals(QString,VirtTtyThread*)));
+  //}
 }
 
 void TermSession::remTerm() {
@@ -112,4 +117,14 @@ void TermSession::loadSession(QString name) {
     aTerm->setWorkingDirectory(query2.value(2).toString());
     aTerm->execute(query2.value(5).toString());
   }
+}
+
+void TermSession::fowardSignals(QString name, VirtTtyThread* aThread) {
+  printf("je suis la233 \n");
+  emit newCommand(name, aThread);
+  QObject::connect(aThread->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(testConnect(QString)));
+}
+
+void TermSession::testConnect(QString text) {
+  printf("salut");
 }

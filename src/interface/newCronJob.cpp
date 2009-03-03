@@ -21,12 +21,13 @@
 
          newCronJob dialog GUI
 
-        @author Emmanuel Lepage Vallée
+        @author Emmanuel Lepage Vallï¿½e
         @date 14 May 2008
         @version 0.0.9
-*/#include "newCronJob.h"
+*/
+#include "newCronJob.h"
 
-#include <iostream> //TODO useless
+//#include <iostream> //TODO useless
 
 
 #include "../cronparser.h"
