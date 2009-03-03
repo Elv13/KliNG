@@ -19,6 +19,7 @@
 #include <QColor>
 #include <QStringList>
 #include <KLocalizedString>
+#include <KStandardDirs>
 
   Completer::Completer(QWidget* parent, QStringList* slCommandList, QStringList* slHistory) : QWidget(parent) {
     stringListCommand = slCommandList;
@@ -32,8 +33,8 @@
 
     icnFolder = new KIcon("folder");
     icnFile = new KIcon("text-x-generic");
-    icnClock = new KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/clock.png");
-    icnExec = new KIcon("/home/lepagee/dev/tp3-prog_sess2/pixmap/22x22/gearI.png");
+    icnClock = new KIcon(KStandardDirs::locate( "appdata", "pixmap/22x22/clock.png"));
+    icnExec = new KIcon(KStandardDirs::locate( "appdata", "pixmap/22x22/gearI.png"));
     verticalLayout = new QVBoxLayout(this);
     verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
     horizontalLayout = new QHBoxLayout();

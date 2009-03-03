@@ -1,6 +1,7 @@
 #ifndef DEF_EXECUTION_MONITOR
 #define DEF_EXECUTION_MONITOR
 #include "scriptMonitor.h"
+#include "cronMonitorItem.h"
 #include <QWidget>
 #include <QLabel>
 #include <QtGui/QVBoxLayout>
@@ -28,7 +29,7 @@ QT_BEGIN_NAMESPACE
     private:
       int executedScriptNb;
       int cmdExecutedScriptNb;
-      QHash<int, ScriptMonitor*> cronJobHash;
+      QHash<int, CronMonitorItem*> cronJobHash;
       
     public slots:
       void launchScript(QString name, QString content);

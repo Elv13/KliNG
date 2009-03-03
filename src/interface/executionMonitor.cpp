@@ -1,4 +1,5 @@
 #include "executionMonitor.h"
+#include "cronMonitorItem.h"
 #include <QSizePolicy>
 #include <QGridLayout>
 #include <QtGui/QSpacerItem>
@@ -81,7 +82,7 @@
   
   void ExecutionMonitor::addMonitor(int jobId, QString title) {
     if (cronJobHash.find(jobId) == cronJobHash.end()) {
-      cronJobHash[jobId] = new ScriptMonitor(this, title);
+      cronJobHash[jobId] = new CronMonitorItem(this, title);
       horizontalLayout_4->addWidget(cronJobHash[jobId]);
       lblExecutedValue->setText(QString::number(++executedScriptNb));
     }

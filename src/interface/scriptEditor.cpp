@@ -582,9 +582,11 @@
   }
   
   void ScriptEditor::setText(QString script) {
+    qDebug() << "here";
     txtScriptEditor->setPlainText(script.trimmed());
-    int lineCount = countLine(script.trimmed());
-    updateLineCount(lineCount);
+    qDebug() << "here2";
+    int lineCount = countLine(script.trimmed());qDebug() << "here3";
+    updateLineCount(lineCount);qDebug() << "here4";
   }  
   
  void ScriptEditor::textChanged() {
