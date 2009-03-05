@@ -42,7 +42,7 @@
 
   class History  : public QDockWidget {
     public:
-      History(QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton);
+      History(QStringList* aStringList);
       ~History();
       void translateUi();
       QString addItem(QString command, bool insertDB);
@@ -53,7 +53,7 @@
       KListWidget *listHistory;
       QStringList* historyStringList;
       KListWidgetSearchLine *txtFindHistory;
-      KlingConfigSkeleton* config;
+      //KlingConfigSkeleton* config;
     private:
       QString getCommand(QString command);
   };

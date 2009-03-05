@@ -91,7 +91,7 @@
     if (aCommandListDock == NULL)
       aCommandListDock = new CommandList(0, aCommandList,aliasList,defaultArgsList,functionList);
     if (anHistoryDock == NULL)
-      anHistoryDock = new History(anHistoryList, config);
+      anHistoryDock = new History(anHistoryList);
     
     
     QDialog* aDialog = new QDialog;
@@ -99,7 +99,7 @@
     aDialog->setLayout(aLayout);
     aDialog->setWindowTitle("Terminal");
     aDialog->resize(780,530);
-    Term* centralWidget = new Term(anHistoryDock, 0, aCommandListDock->commandList,aliasList,defaultArgsList,functionList, anHistoryDock->historyStringList);
+    Term* centralWidget = new Term(0);
     aLayout->addWidget(centralWidget);
     aDialog->show();
   }
@@ -122,7 +122,7 @@
     if (aCommandListDock == NULL)
       aCommandListDock = new CommandList(0, aCommandList,aCommandListDock->aliasList,aCommandListDock->defaultArgsList,aCommandListDock->functionList);
     if (anHistoryDock == NULL)
-      anHistoryDock = new History(anHistoryList, config);
+      anHistoryDock = new History(anHistoryList);
   
     QDialog* aDialog = new QDialog;
     QVBoxLayout* aLayout = new QVBoxLayout;

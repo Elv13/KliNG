@@ -70,10 +70,10 @@
   }
   
   void ExecutionMonitor::launchScript(QString name, QString content) {
-    ScriptMonitor* aNewScriptMonitor = new ScriptMonitor(display, name );
+    ScriptMonitorItem* aNewScriptMonitor = new ScriptMonitorItem(display, name);
     horizontalLayout_4->addWidget(aNewScriptMonitor);
     QObject::connect(aNewScriptMonitor, SIGNAL(newCommand()), this, SLOT(incrCommand()));
-    aNewScriptMonitor->launchScript(content);
+    //aNewScriptMonitor->launchScript(content);
     lblExecutedValue->setText(QString::number(++executedScriptNb));
   }
   

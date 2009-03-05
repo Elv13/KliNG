@@ -95,25 +95,27 @@
     setCentralWidget(tabCategories);
     
     //These dock need to exist, they manage the completer and the logging
-    historyStringList = new QStringList();
-    dockHistory = new History(historyStringList, klingConfigSkeleton); 
+    //historyStringList = new QStringList();
+    tabShell = new TermSession(this,tabGestion);
+    tabShell->addTerm();
+    History* aNewHistory = new History(Term::historyStringList);
+    Term::aDockHistory = &aNewHistory; 
     
-    commandStringList = new QStringList();
-    aliasList = new QStringList();
-    defaultArgsList = new QStringList();
-    functionList = new QStringList();
-    dockCommandList = new CommandList(this, commandStringList, aliasList, defaultArgsList, functionList); 
+    //commandStringList = new QStringList();
+    //aliasList = new QStringList();
+    //defaultArgsList = new QStringList();
+    //functionList = new QStringList();
+    dockCommandList = new CommandList(this, Term::commandList, Term::aliasList, Term::defaultArgsList, Term::functionList); 
 
     tabWebBrowser = new WebBrowser(0);
 
-    tabEditor = new ScriptEditor(0, commandStringList, aliasList, defaultArgsList, functionList);
+    tabEditor = new ScriptEditor(0, Term::commandList, Term::aliasList, Term::defaultArgsList, Term::functionList);
     
     tabAdvScripManager = new AdvancedScriptManager(0);
     
     tabGestion = new ExecutionMonitor(0);
     
-    tabShell = new TermSession(this,tabGestion);
-    tabShell->addTerm(dockHistory, commandStringList, aliasList, defaultArgsList, commandStringList, historyStringList);
+    
 
     setupActions();
     for (int l =0; l < 5; l++) {
@@ -138,7 +140,7 @@
       dockDebug =  NULL;
       dockCommandList =  NULL;
       dockManual =  NULL;
-      dockHistory =  NULL;
+      (*Term::aDockHistory) =  NULL;
       viewManPage->setEnabled(false);
       viewHistory->setEnabled(false);
       viewCommandList->setEnabled(false);
@@ -161,7 +163,7 @@
       dockManual = new Man(this); 
       addDockWidget(Qt::RightDockWidgetArea, dockManual);
 
-      addDockWidget(Qt::LeftDockWidgetArea, dockHistory);
+      addDockWidget(Qt::LeftDockWidgetArea, *Term::aDockHistory);
     }
     
     //Status bar stuff
@@ -575,7 +577,7 @@
   void MainWindow::modeChanged(int index) {
     saveDockState();
     if (index == klingConfigSkeleton->terminalTabOrder) {
-      dockHistory->setVisible(klingConfigSkeleton->showHistoryTerminal);
+      (*Term::aDockHistory)->setVisible(klingConfigSkeleton->showHistoryTerminal);
       dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserTerminal);
       dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskTerminal);
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListTerminal);
@@ -604,11 +606,11 @@
         dockCommandList->setMinimumSize(0, 0);*/
       }
       if (klingConfigSkeleton->historyHeightTerminal != -1) {
-        dockHistory->resize(dockHistory->width(), klingConfigSkeleton->historyHeightTerminal);
-        /*dockHistory->setMaximumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
-        dockHistory->setMinimumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
-        dockHistory->setMaximumSize(99999, 99999);
-        dockHistory->setMinimumSize(0, 0);*/
+        (*Term::aDockHistory)->resize((*Term::aDockHistory)->width(), klingConfigSkeleton->historyHeightTerminal);
+        /*(*Term::aDockHistory)->setMaximumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        (*Term::aDockHistory)->setMinimumSize(dockScriptBrowser->width(), klingConfigSkeleton->scriptBrowserHeightTerminal);
+        (*Term::aDockHistory)->setMaximumSize(99999, 99999);
+        (*Term::aDockHistory)->setMinimumSize(0, 0);*/
       }
       if (klingConfigSkeleton->manPageHeightTerminal != -1) {
         dockManual->resize(dockManual->width(), klingConfigSkeleton->manPageHeightTerminal);
@@ -633,7 +635,7 @@
       viewDebug->setChecked(klingConfigSkeleton->showDebugTerminal);
     }
     else if (index == klingConfigSkeleton->monitorTabOrder) {
-      dockHistory->setVisible(klingConfigSkeleton->showHistoryMonitor);
+      (*Term::aDockHistory)->setVisible(klingConfigSkeleton->showHistoryMonitor);
       dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserMonitor);
       dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskMonitor);
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListMonitor);
@@ -647,7 +649,7 @@
       if (klingConfigSkeleton->commandListHeightMonitor != -1)
         dockCommandList->resize(dockCommandList->width(), klingConfigSkeleton->commandListHeightMonitor);
       if (klingConfigSkeleton->historyHeightMonitor != -1)
-        dockHistory->resize(dockHistory->width(), klingConfigSkeleton->historyHeightMonitor);
+        (*Term::aDockHistory)->resize((*Term::aDockHistory)->width(), klingConfigSkeleton->historyHeightMonitor);
       if (klingConfigSkeleton->manPageHeightMonitor != -1)
         dockManual->resize(dockManual->width(), klingConfigSkeleton->manPageHeightMonitor);
       if (klingConfigSkeleton->debugHeightMonitor != -1)
@@ -661,7 +663,7 @@
       viewDebug->setChecked(klingConfigSkeleton->showDebugMonitor);
     }
     else if (index == klingConfigSkeleton->editorTabOrder) {
-      dockHistory->setVisible(klingConfigSkeleton->showHistoryEditor);
+      (*Term::aDockHistory)->setVisible(klingConfigSkeleton->showHistoryEditor);
       dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserEditor);
       dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskEditor);
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListEditor);
@@ -675,7 +677,7 @@
       if (klingConfigSkeleton->commandListHeightEditor != -1)
         dockCommandList->resize(dockCommandList->width(), klingConfigSkeleton->commandListHeightEditor);
       if (klingConfigSkeleton->historyHeightEditor != -1)
-        dockHistory->resize(dockHistory->width(), klingConfigSkeleton->historyHeightEditor);
+        (*Term::aDockHistory)->resize((*Term::aDockHistory)->width(), klingConfigSkeleton->historyHeightEditor);
       if (klingConfigSkeleton->manPageHeightEditor != -1)
         dockManual->resize(dockManual->width(), klingConfigSkeleton->manPageHeightEditor);
       if (klingConfigSkeleton->debugHeightEditor != -1)
@@ -689,7 +691,7 @@
       viewDebug->setChecked(klingConfigSkeleton->showDebugEditor);
     }
     else if (index == klingConfigSkeleton->webbrowserTabOrder) {
-      dockHistory->setVisible(klingConfigSkeleton->showHistoryrWebBrowser); //TODO typo
+      (*Term::aDockHistory)->setVisible(klingConfigSkeleton->showHistoryrWebBrowser); //TODO typo
       dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserWebBrowser);
       dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskrWebBrowser);
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListrWebBrowser);
@@ -703,7 +705,7 @@
       if (klingConfigSkeleton->commandListHeightWebBrowser != -1)
         dockCommandList->resize(dockCommandList->width(), klingConfigSkeleton->commandListHeightWebBrowser);
       if (klingConfigSkeleton->historyHeightWebBrowser != -1)
-        dockHistory->resize(dockHistory->width(), klingConfigSkeleton->historyHeightWebBrowser);
+        (*Term::aDockHistory)->resize((*Term::aDockHistory)->width(), klingConfigSkeleton->historyHeightWebBrowser);
       if (klingConfigSkeleton->manPageHeightWebBrowser != -1)
         dockManual->resize(dockManual->width(), klingConfigSkeleton->manPageHeightWebBrowser);
       if (klingConfigSkeleton->debugHeightWebBrowser != -1)
@@ -717,7 +719,7 @@
       viewDebug->setChecked(klingConfigSkeleton->showDebugWebBrowser);
     }
     else if (index == klingConfigSkeleton->scriptManagerTabOrder) {
-      dockHistory->setVisible(klingConfigSkeleton->showHistoryAdvScriptManager);
+      (*Term::aDockHistory)->setVisible(klingConfigSkeleton->showHistoryAdvScriptManager);
       dockScriptBrowser->setVisible(klingConfigSkeleton->showScriptBrowserAdvScriptManager);
       dockSheduledTask->setVisible(klingConfigSkeleton->showScheduledTaskAdvScriptManager);
       dockCommandList->setVisible(klingConfigSkeleton->showCommandListAdvScriptManager);
@@ -790,7 +792,7 @@
   }
 
   void MainWindow::setViewHistory(bool value) {
-    dockHistory->setVisible(value);
+    (*Term::aDockHistory)->setVisible(value);
     if (tabCategories->currentIndex() == klingConfigSkeleton->terminalTabOrder) {
       klingConfigSkeleton->showHistoryTerminal = value;
     }
@@ -845,7 +847,7 @@
       klingConfigSkeleton->scriptBrowserHeightTerminal = dockScriptBrowser->height();
       klingConfigSkeleton->scheduledTaskHeightTerminal = dockSheduledTask->height();
       klingConfigSkeleton->commandListTHeighterminal = dockCommandList->height();
-      klingConfigSkeleton->historyHeightTerminal = dockHistory->height();
+      klingConfigSkeleton->historyHeightTerminal = (*Term::aDockHistory)->height();
       klingConfigSkeleton->manPageHeightTerminal = dockManual->height();
       klingConfigSkeleton->debugHeightTerminal = dockDebug->height();
     }
@@ -853,7 +855,7 @@
       klingConfigSkeleton->scriptBrowserHeightMonitor = dockScriptBrowser->height();
       klingConfigSkeleton->scheduledTaskHeightMonitor = dockSheduledTask->height();
       klingConfigSkeleton->commandListHeightMonitor = dockCommandList->height();
-      klingConfigSkeleton->historyHeightMonitor = dockHistory->height();
+      klingConfigSkeleton->historyHeightMonitor = (*Term::aDockHistory)->height();
       klingConfigSkeleton->manPageHeightMonitor = dockManual->height();
       klingConfigSkeleton->debugHeightMonitor = dockDebug->height();
     }
@@ -861,7 +863,7 @@
       klingConfigSkeleton->scriptBrowserHeightEditor = dockScriptBrowser->height();
       klingConfigSkeleton->scheduledTaskHeightEditor = dockSheduledTask->height();
       klingConfigSkeleton->commandListHeightEditor = dockCommandList->height();
-      klingConfigSkeleton->historyHeightEditor = dockHistory->height();
+      klingConfigSkeleton->historyHeightEditor = (*Term::aDockHistory)->height();
       klingConfigSkeleton->manPageHeightEditor = dockManual->height();
       klingConfigSkeleton->debugHeightEditor = dockDebug->height();
     }
@@ -869,7 +871,7 @@
       klingConfigSkeleton->scriptBrowserHeightWebBrowser = dockScriptBrowser->height();
       klingConfigSkeleton->scheduledTaskHeightWebBrowser = dockSheduledTask->height();
       klingConfigSkeleton->commandListHeightWebBrowser = dockCommandList->height();
-      klingConfigSkeleton->historyHeightWebBrowser = dockHistory->height();
+      klingConfigSkeleton->historyHeightWebBrowser = (*Term::aDockHistory)->height();
       klingConfigSkeleton->manPageHeightWebBrowser = dockManual->height();
       klingConfigSkeleton->debugHeightWebBrowser = dockDebug->height();
     }
@@ -922,9 +924,9 @@
 
   void MainWindow::newTerminal() {    
     if (dockCommandList == NULL)
-      dockCommandList = new CommandList(0, commandStringList, aliasList, defaultArgsList, functionList);
-    if (dockHistory == NULL)
-      dockHistory = new History(historyStringList, klingConfigSkeleton);
+      dockCommandList = new CommandList(0, Term::commandList, Term::aliasList, Term::defaultArgsList, Term::functionList);
+    if ((*Term::aDockHistory) == NULL)
+      (*Term::aDockHistory) = new History(Term::historyStringList);
     
     
     QDialog* aDialog = new QDialog;
@@ -932,7 +934,7 @@
     aDialog->setLayout(aLayout);
     aDialog->setWindowTitle("Terminal");
     aDialog->resize(780,530);
-    Term* centralWidget = new Term(dockHistory, 0, commandStringList, aliasList, defaultArgsList, functionList, historyStringList);
+    Term* centralWidget = new Term(0);
     aLayout->addWidget(centralWidget);
     aDialog->show();
   }
@@ -954,7 +956,7 @@
     aDialog->setLayout(aLayout);
     aDialog->setWindowTitle("Script Editor");
     aDialog->resize(780,530);
-    ScriptEditor* centralWidget = new ScriptEditor(0, commandStringList, aliasList, defaultArgsList, functionList);
+    ScriptEditor* centralWidget = new ScriptEditor(0, Term::commandList, Term::aliasList, Term::defaultArgsList, Term::functionList);
     aLayout->addWidget(centralWidget);
     aDialog->show();
   }
