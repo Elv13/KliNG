@@ -86,11 +86,11 @@
       ScriptEditor* tabEditor;
       WebBrowser* tabWebBrowser;
       AdvancedScriptManager* tabAdvScripManager;
-      QStringList* commandStringList;
+      /*QStringList* commandStringList;
       QStringList* aliasList;
       QStringList* defaultArgsList;
       QStringList* functionList;
-      QStringList* historyStringList;
+      QStringList* historyStringList;*/
       QProgressBar* statusProgressBar;
       QLabel* statusJobRunning;
       QLabel* statusCurrentDir;
@@ -98,7 +98,7 @@
       QCompleter *cmdLineCompleter;
       QSqlDatabase* db;
       KlingConfigSkeleton* klingConfigSkeleton;
-      History* dockHistory;
+      //History* dockHistory;
       Debug* dockDebug;
       ScriptBrowser* dockScriptBrowser;
       SheduledTask* dockSheduledTask;
@@ -160,4 +160,5 @@
       void newWebBrowser();
       void newMonitor();
   };
+  
 #endif
