@@ -51,7 +51,7 @@
     Q_OBJECT
 
     public:
-      Term(History* aDockHistory, QWidget* parent, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList);
+      Term(QWidget* parent);
       ~Term();
       void setWorkingDirectory(QString name);
       void execute(QString command);
@@ -74,7 +74,12 @@
       QCheckBox* ckbShowGUI;
       QCheckBox* ckbShowHiddenFile;
       QSplitter* completerSplitter;
-      History* dockHistory;
+      static QStringList* commandList;
+      static History** aDockHistory;
+      static QStringList* aliasList;
+      static QStringList* defaultArgsList;
+      static QStringList* functionList;
+      static QStringList* historyStringList;
       Completer* completer;
       FileBrowser* fileBrowser;
 

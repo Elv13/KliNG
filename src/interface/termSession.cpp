@@ -16,7 +16,7 @@ TermSession::TermSession(QWidget* parent =0, ExecutionMonitor* anExecMonitor) : 
 }
 
 void TermSession::addTerm() {
-  Term* aTerm = new Term(aDockHistory, this, commandList, aliasList, defaultArgsList, functionList, historyStringList);
+  Term* aTerm = new Term(0);
   
   if (count == 0) {
     this->baseTerm = aTerm;
@@ -44,7 +44,7 @@ void TermSession::addTerm() {
   //}
 }
 
-void TermSession::addTerm(History* aDockHistory, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList) {
+/*void TermSession::addTerm() {
   if (this->commandList == 0) {
     printf("\n\nI am here \n\n");
     this->aDockHistory = aDockHistory;
@@ -55,7 +55,7 @@ void TermSession::addTerm(History* aDockHistory, QStringList* commandList, QStri
     this->historyStringList = historyStringList;
   }
   
-  Term* aTerm = new Term(aDockHistory, this, commandList, aliasList, defaultArgsList, functionList, historyStringList);
+  Term* aTerm = new Term(0);
   
   if (count == 0) {
     this->baseTerm = aTerm;
@@ -80,7 +80,7 @@ void TermSession::addTerm(History* aDockHistory, QStringList* commandList, QStri
   //if (mainExecutionMonitor != NULL) {
     connect(aTerm , SIGNAL( newCommand(QString,VirtTtyThread*) ), this, SLOT( fowardSignals(QString,VirtTtyThread*)));
   //}
-}
+}*/
 
 void TermSession::remTerm() {
   
@@ -112,7 +112,7 @@ void TermSession::loadSession(QString name) {
   query2.exec("SELECT NAME,ICON,PATH,TYPE,INPUT,COMMAND FROM TSESSION_ITEM WHERE SESSION =" + QString::number(index));
   printf("SELECT NAME,ICON,PATH,TYPE,INPUT,COMMAND FROM TSESSION_ITEM WHERE SESSION = %d\n",index);
   while (query2.next())  {
-    Term* aTerm = new Term(aDockHistory, this, commandList, aliasList, defaultArgsList, functionList, historyStringList);
+    Term* aTerm = new Term(this);
     termTab->addTab(aTerm,query2.value(0).toString());
     aTerm->setWorkingDirectory(query2.value(2).toString());
     aTerm->execute(query2.value(5).toString());

@@ -1,6 +1,7 @@
 #ifndef DEF_EXECUTION_MONITOR
 #define DEF_EXECUTION_MONITOR
 #include "scriptMonitor.h"
+#include "scriptMonitorItem.h"
 #include "cronMonitorItem.h"
 #include "../virtTTY.h"
 #include <QWidget>

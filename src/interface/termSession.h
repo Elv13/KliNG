@@ -33,7 +33,7 @@ class TermSession : public QWidget {
   
     public slots:
       void addTerm();
-      void addTerm(History* aDockHistory, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList);
+      //void addTerm(History* aDockHistory, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList);
       void remTerm();
       void testConnect(QString text);
       

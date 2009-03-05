@@ -46,9 +46,9 @@
 /**
   History constructor
 */
-  History::History(QStringList* aStringList, KlingConfigSkeleton* aConfigSkeleton) : QDockWidget ( 0 ) {
+  History::History(QStringList* aStringList) : QDockWidget ( 0 ) {
     setObjectName("History");
-    config = aConfigSkeleton;
+    //config = aConfigSkeleton;
     historyStringList = aStringList;
     QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sizePolicy3.setHorizontalStretch(0);
@@ -115,7 +115,7 @@ void History::translateUi()
 */
 QString History::addItem(QString command, bool insertDB)
 {
-  listHistory->addItem(command);
+  /*listHistory->addItem(command);
   *historyStringList << command;
   //while (listHistory->item(listHistory->count() -1)->text() != command) {} //BUG Try to fix a bug, but it fail...
   listHistory->verticalScrollBar()->setValue(listHistory->verticalScrollBar()->maximum());
@@ -131,7 +131,7 @@ QString History::addItem(QString command, bool insertDB)
     return query2.value(0).toString();
   }
   //THISTORY (THISTORY_KEY  INTEGER PRIMARY KEY, COMMAND TEXT, DATE DATE, TIME double)
-
+*/
   return NULL;
 }
 

@@ -11,11 +11,12 @@
 #include "completer.h"
 #include "history.h"
 #include "fileBrowser.h"
+#include "term.h"
 
 class ScriptMonitorItem: public AbstractMonitorItem, public Shell {
   Q_OBJECT
   public:
-    ScriptMonitorItem(QWidget* parent, QString command, History* aDockHistory, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList) : AbstractMonitorItem(parent,command),Shell(commandList,aliasList,defaultArgsList,functionList) {
+    ScriptMonitorItem(QWidget* parent, QString command) : AbstractMonitorItem(parent,command),Shell(Term::commandList,Term::aliasList,Term::defaultArgsList,Term::functionList) {
       setupActions();
       QTimer *timer = new QTimer(this);
       connect(timer, SIGNAL(timeout()), this, SLOT(incrementTimer()));
