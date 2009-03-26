@@ -21,9 +21,16 @@
 #include <QMenu>
 #include <KStandardDirs>
 
+QStringList* Term::historyStringList= new QStringList();
+//History** Term::aDockHistory;
+QStringList* Term::aliasList= new QStringList();
+QStringList* Term::defaultArgsList= new QStringList();
+QStringList* Term::functionList= new QStringList();
+QStringList* Term::commandList= new QStringList();
 
-  Term::Term(History* aDockHistory, QWidget* parent, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList) : QWidget(parent),Shell(commandList,aliasList,defaultArgsList,functionList) {
-    dockHistory = aDockHistory;
+
+  Term::Term(QWidget* parent) : QWidget(parent),Shell(Term::commandList,Term::aliasList,Term::defaultArgsList,Term::functionList) {
+    //dockHistory = aDockHistory;
     setObjectName(QString::fromUtf8("tabShell"));
     setGeometry(QRect(0, 0, 520, 609));
     verticalLayout_6 = new QVBoxLayout(this);
@@ -195,7 +202,8 @@
       completer->hide();
       QVector<QString> command = executionQueue[0];
       if (txtCommand->text() != "") {
-        aThread = new VirtTtyThread(txtCommand->text(), command, 0, ckbShowGUI, dockHistory->addItem(txtCommand->text(), true));
+	emit addToHistory(txtCommand->text(), true);
+        aThread = new VirtTtyThread(txtCommand->text(), command, 0, ckbShowGUI, QString());
         QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(sendCommand()));
         //QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(resetCmdInputLine()));
         QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(updateDate(QString, QString)));
@@ -212,7 +220,7 @@
         if (executionQueue.count() != 0) {
           if (executionQueue.first().first() == "&") {
             executionQueue.first().pop_front();
-            VirtTtyThread* aThread2 = new VirtTtyThread("tralala",executionQueue.first());
+            VirtTtyThread* aThread2 = new VirtTtyThread(executionQueue.first());
             QObject::connect(aThread2->aVirtTTY, SIGNAL(newLine(QString)), this, SLOT(updateCmdOutput(QString)));
 	    emit newCommand(txtCommand->text(), aThread2);
             executionQueue.pop_front();
@@ -291,7 +299,7 @@
   }
 
   void Term::addToHistory(QString line) {
-    dockHistory->addItem(line, true);
+    emit addToHistory(line, true);
   }
 
   void Term::updateDate(QString date, QString key) {
