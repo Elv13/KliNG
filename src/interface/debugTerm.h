@@ -46,5 +46,6 @@
       KTextBrowser *rtfDegubTerm;
     public slots:
       void signalEnd();
+      void signalNewCommand(QString name);
   };
 #endif

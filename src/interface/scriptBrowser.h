@@ -30,7 +30,6 @@
 #define DEF_SCRIPTBROWSER
 
 #include <QtGui/QDockWidget>
-#include <QtGui/QDockWidget>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QTreeWidget>
 #include <QtGui/QVBoxLayout>

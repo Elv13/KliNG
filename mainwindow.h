@@ -98,7 +98,7 @@
       QCompleter *cmdLineCompleter;
       QSqlDatabase* db;
       KlingConfigSkeleton* klingConfigSkeleton;
-      //History* dockHistory;
+      History* dockHistory;
       Debug* dockDebug;
       ScriptBrowser* dockScriptBrowser;
       SheduledTask* dockSheduledTask;

@@ -73,5 +73,9 @@
   }
 
 void DebugTerm::signalEnd() {
-  rtfDegubTerm->append("<font style=\"background-color:red;\">--Transmission Over--</font>");
+  rtfDegubTerm->append("<font style=\"background-color:red;color:black;\">--Transmission Over--</font>");
+}
+
+void DebugTerm::signalNewCommand(QString name) {
+  rtfDegubTerm->append("<font style=\"background-color:#FF5555;min-width:100%;width:100%;max-width:100%;display:block;color:black;\">--"+name+"--</font>");
 }
