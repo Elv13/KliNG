@@ -17,6 +17,8 @@ TermSession::TermSession(QWidget* parent =0, ExecutionMonitor* anExecMonitor) : 
 
 void TermSession::addTerm() {
   Term* aTerm = new Term(0);
+  QObject::connect(aTerm, SIGNAL(addToHistory(QString,bool)), this, SLOT(addToHistory(QString,bool)));
+
   
   if (count == 0) {
     this->baseTerm = aTerm;
@@ -113,6 +115,7 @@ void TermSession::loadSession(QString name) {
   printf("SELECT NAME,ICON,PATH,TYPE,INPUT,COMMAND FROM TSESSION_ITEM WHERE SESSION = %d\n",index);
   while (query2.next())  {
     Term* aTerm = new Term(this);
+    QObject::connect(aTerm, SIGNAL(addToHistory(QString,bool)), this, SLOT(addToHistory(QString,bool)));
     termTab->addTab(aTerm,query2.value(0).toString());
     aTerm->setWorkingDirectory(query2.value(2).toString());
     aTerm->execute(query2.value(5).toString());
@@ -127,4 +130,9 @@ void TermSession::fowardSignals(QString name, VirtTtyThread* aThread) {
 
 void TermSession::testConnect(QString text) {
   printf("salut");
+}
+
+
+void SessionEditor::fowardHistory(QString name, bool addToDb) {
+  emit addToHistory(name, addToDb);
 }

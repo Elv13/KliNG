@@ -75,7 +75,7 @@
       QCheckBox* ckbShowHiddenFile;
       QSplitter* completerSplitter;
       static QStringList* commandList;
-      static History** aDockHistory;
+      //static History** aDockHistory;
       static QStringList* aliasList;
       static QStringList* defaultArgsList;
       static QStringList* functionList;
@@ -108,6 +108,7 @@
       void cmdInfo(QString, int);
       void showCompleter(QString);
       void newCommand(QString name, VirtTtyThread* aThread);
+      void addToHistory(QString,bool);
 
   };
 #endif

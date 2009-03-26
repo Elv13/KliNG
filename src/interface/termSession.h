@@ -36,12 +36,14 @@ class TermSession : public QWidget {
       //void addTerm(History* aDockHistory, QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList, QStringList* historyStringList);
       void remTerm();
       void testConnect(QString text);
+      void fowardHistory(QString name, bool addToDb);
       
     /*private slots:*/
       void fowardSignals(QString name, VirtTtyThread* aThread);
 
     signals:
       void newCommand(QString name, VirtTtyThread* aThread);
+      void addToHistory(QString, bool);
       
   };
 #endif

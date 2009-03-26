@@ -208,6 +208,7 @@
   }
   
   bool Shell::evalCommand() {
+    qDebug() << "In eval : " << commandArray[currentLine].trimmed().left(2).toLower();
     if (commandArray[currentLine].trimmed().left(1).toLower() == "#") { 
       currentLine++;
       //highlightLine(currentLine);
@@ -215,7 +216,8 @@
       //sendCommand(commandArray[currentLine].toStdString().c_str());
       analyseCommand(commandArray[currentLine],parseCommand(commandArray[currentLine]));
     }
-    else if (commandArray[currentLine].trimmed().left(2).toLower() == "if") {                            
+    else if (commandArray[currentLine].trimmed().left(2).toLower() == "if") {  
+      printf("\n\n\n\n\nJe suis dans le if\n\n\n\n");
       ifStatement();
     }
     else if (commandArray[currentLine].trimmed().left(5).toLower() == "while") {                            
@@ -256,6 +258,19 @@
       aThread->start();
     }
   }
+  
+  /*void Shell::sendCommand() {
+  if (executionQueue.count() != 0) {
+    VirtTtyThread* aThread = new VirtTtyThread("sfdsf", executionQueue[0]);
+    QObject::connect(aThread->aVirtTTY, SIGNAL(isOver(QString, QString)), this, SLOT(sendCommand()));
+    executionQueue.pop_front();
+    //signalNextLine();
+    aThread->start();
+  }
+  else {
+    executeNextCommand();
+  }
+}*/
   
   void Shell::signalNextLine(){}
   
@@ -417,37 +432,41 @@
     }*/
   }
   
-  void Shell::signalNewCommand(QString command) {}
+void Shell::signalNewCommand(QString command) {}
   
-  QVector< QVector<QString> > Shell::splitCommand(QVector<QString> original) {
-    QVector< QVector<QString> > result;
-    int lastFind=0;
-    int j =0;
-    if ((original.indexOf("&&") != -1) || (original.indexOf("&") != -1)) {
-      QVector<QString> aCommand;
-      result.push_back(aCommand);
-      while (original.count() != 0) {
-        if ((original[0] != "&&") && (original[0] != "&")) {
-          result.last().push_back(original[0]);
-          original.pop_front();
-        }
-        else {
-          checkCommand(&(result.last()));
-          if (original.count() != 1) {
-            QVector<QString> aCommand2;
-            result.push_back(aCommand2);
-          }
-          if ((original[0] == "&") && (result.last().first() != "&"))
-            result.last().push_back("&");
+QVector< QVector<QString> > Shell::splitCommand(QVector<QString> original) {
+  QVector< QVector<QString> > result;
+  int lastFind=0;
+  int j =0;
+  if ((original.indexOf("&&") != -1) || (original.indexOf("&") != -1)) {
+    QVector<QString> aCommand;
+    result.push_back(aCommand);
+    while (original.count() != 0) {
+      if ((original[0] != "&&") && (original[0] != "&")) {
+	result.last().push_back(original[0]);
+	original.pop_front();
+      }
+      else {
+	checkCommand(&(result.last()));
+	if (original.count() != 1) {
+	  QVector<QString> aCommand2;
+	  result.push_back(aCommand2);
+	}
+	if (original.count() > 0) //BUG
+	  if ((original[0] == "&")) {
+	    if (result.last().count() > 0)
+	      if ((result.last()[0] != "&"))
+		result.last().push_back("&");
+	  }
 
-          original.pop_front();
-        }
+	original.pop_front();
       }
     }
-    else {
-      result.push_back(original);
-    }
-    checkCommand(&(result.last()));
-    return result;
   }
+  else {
+    result.push_back(original);
+  }
+  checkCommand(&(result.last()));
+  return result;
+}
   

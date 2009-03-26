@@ -72,9 +72,19 @@ using namespace std;
 
     public:
       VirtTtyThread(QString command, QVector<QString> args, QObject *parent = 0, QCheckBox* showGUI = 0, QString key = 0) : QThread(parent) {
-        aCommand = command;
+        //aCommand = command;
         this->args = args;
         aVirtTTY = new VirtTTY(showGUI);
+        aVirtTTY->key = key;
+      }
+      VirtTtyThread(QVector<QString> args, QString key = 0) : QThread(0) {
+        //aCommand = command;
+        this->args = args;
+        aVirtTTY = new VirtTTY(0);
+        aVirtTTY->key = key;
+      }
+      VirtTtyThread(QString key = 0) : QThread(0) {
+        aVirtTTY = new VirtTTY(0);
         aVirtTTY->key = key;
       }
       ~VirtTtyThread() {delete aVirtTTY;}
@@ -82,8 +92,6 @@ using namespace std;
         aVirtTTY->execute(args);
       }
       VirtTTY* aVirtTTY;
-    private:
-      QString aCommand;
       QVector<QString> args;
   };
 
