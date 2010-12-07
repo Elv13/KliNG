@@ -443,4 +443,5 @@ using namespace std;
       return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
     }
     fclose (pFile);
+    return 0;
   }

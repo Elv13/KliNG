@@ -22,11 +22,17 @@ class ScriptMonitorItem: public AbstractMonitorItem, public Shell {
   public:
     ScriptMonitorItem(QWidget* parent, QString command) : AbstractMonitorItem(parent,command),Shell(Term::commandList,Term::aliasList,Term::defaultArgsList,Term::functionList),aDebugTerm(0) {
       setupActions();
-      command;
+      //command;
       QTimer *timer = new QTimer(this);
       connect(timer, SIGNAL(timeout()), this, SLOT(incrementTimer()));
       timer->start(1000);
-      currentTty = new VirtTtyThread();
+      
+      
+      
+      currentTty = ((VirtTtyThread*) new VirtTtyThread());
+      
+      
+      
       QString inputFileName = KStandardDirs::locateLocal("appdata", "/script/") + command;
       QString tmpFile;
       if(KIO::NetAccess::download(inputFileName, tmpFile, this)) {

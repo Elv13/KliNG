@@ -8,6 +8,7 @@
 #include "history.h"
 #include "executionMonitor.h"
 #include "../virtTTY.h"
+#include "sessionEditor.h"
 
 class TermSession : public QWidget {
     Q_OBJECT

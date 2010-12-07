@@ -63,6 +63,7 @@
       else if (commandArray[currentLine].trimmed().left(4).toLower() == "else")
         elseStatement();
     }
+    return true;
   }
   
   bool Shell::whileLoop() {
@@ -92,10 +93,11 @@
       signalNextLine();
       evalCommand();
     }
+    return true;
   }
   
   bool Shell::forLoop() {
-    
+    return true;
   }
   
   bool Shell::untilLoop() {
@@ -131,6 +133,7 @@
       signalNextLine();
       evalCommand();
     }
+    return true;
   }
   
   bool Shell::doneStatement() { 
@@ -148,7 +151,7 @@
       currentLine++;
       evalCommand();
     }
-    
+    return true;
   }
   
   bool Shell::elseStatement() {
@@ -169,6 +172,7 @@
         fiStatement();
       }
     }
+    return true;
   }
   
   bool Shell::elifStatement() {
@@ -197,6 +201,7 @@
         elseStatement();
       }
     }
+    return true;
   }
   
   bool Shell::fiStatement() {
@@ -205,6 +210,7 @@
     //highlightLine(currentLine);
     signalNextLine();
     evalCommand();
+    return true;
   }
   
   bool Shell::evalCommand() {
@@ -247,6 +253,7 @@
       //TODO add back sbCurrentLine = sbCurrentLine->nextSBItem;
       //signalNextLine();
     }
+    return true;
   }
   
   void Shell::sendCommand() {

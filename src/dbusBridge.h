@@ -1,7 +1,7 @@
 #define DBUS_API_SUBJECT_TO_CHANGE
 #include <QThread>
 #include <QHash>
-#include <dbus/dbus.h>
+//#include <dbus/dbus.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -30,7 +30,7 @@ class DbusListener : public QThread {
     void updateMon(int jobId, int second);
   private:
     QHash<int, JobInfo> jobs;
-    void manageQueue(DBusMessageIter args, DBusMessage* msg);
-    void manageExec(DBusMessageIter args, DBusMessage* msg);
+    //void manageQueue(DBusMessageIter args, DBusMessage* msg);
+    //void manageExec(DBusMessageIter args, DBusMessage* msg);
     void receive();
 };

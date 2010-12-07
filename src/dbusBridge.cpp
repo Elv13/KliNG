@@ -1,7 +1,7 @@
 #include "dbusBridge.h"
 
-void DbusListener::manageQueue(DBusMessageIter args, DBusMessage* msg) {
-  int jobId;
+//void DbusListener::manageQueue(DBusMessageIter args, DBusMessage* msg) {
+  /*int jobId;
   char* command;
   int second;
   if (!dbus_message_iter_init(msg, &args)) {
@@ -17,10 +17,6 @@ void DbusListener::manageQueue(DBusMessageIter args, DBusMessage* msg) {
   }
 
   dbus_message_iter_next(&args);
-  /*if (!dbus_message_iter_init(msg, &args)) {
-    fprintf(stderr, "Missiing ID\n");
-    return;
-  }*/
   if (DBUS_TYPE_STRING == dbus_message_iter_get_arg_type(&args)) {
     dbus_message_iter_get_basic(&args, &command);
   }
@@ -30,11 +26,6 @@ void DbusListener::manageQueue(DBusMessageIter args, DBusMessage* msg) {
   }
   
   dbus_message_iter_next(&args);
-  /*if (!dbus_message_iter_init(msg, &args)) {
-    fprintf(stderr, "Missing ID\n");
-    return;
-  }
-  else */
   if (DBUS_TYPE_INT32 == dbus_message_iter_get_arg_type(&args)) {
     dbus_message_iter_get_basic(&args, &second);
   }
@@ -46,8 +37,6 @@ void DbusListener::manageQueue(DBusMessageIter args, DBusMessage* msg) {
   if (jobs.find(jobId) == jobs.end()) {
     jobs[jobId].jobId = jobId;
     jobs[jobId].command = command;
-    //ScriptMonitor* aScriptMonitor = new ScriptMonitor(NULL, command);
-    //emit newMonitor(aScriptMonitor);
     newMonitor(jobId, command);
   }
   else {
@@ -56,11 +45,11 @@ void DbusListener::manageQueue(DBusMessageIter args, DBusMessage* msg) {
 
   jobs[jobId].secondLeft = second;
 
-  printf("Queuing %d: %s Time left: %d\n", jobId, command, second);
-}
+  printf("Queuing %d: %s Time left: %d\n", jobId, command, second);*/
+//}
 
-void DbusListener::manageExec(DBusMessageIter args, DBusMessage* msg) {
-  int jobId;
+//void DbusListener::manageExec(DBusMessageIter args, DBusMessage* msg) {
+  /*int jobId;
   char* command;
   char* text;
 
@@ -91,11 +80,11 @@ void DbusListener::manageExec(DBusMessageIter args, DBusMessage* msg) {
     fprintf(stderr, "Wrong data type (textt)\n");
     return;
   }
-  printf("Exec %d: %s Text: %s\n", jobId, command, text);
-}
+  printf("Exec %d: %s Text: %s\n", jobId, command, text);*/
+//}
 
 void DbusListener::receive() {
-   DBusMessage* msg;
+   /*DBusMessage* msg;
    DBusMessageIter args;
    DBusConnection* conn;
    DBusError err;
@@ -145,9 +134,9 @@ void DbusListener::receive() {
       }
       dbus_message_unref(msg);
    }
-   dbus_connection_close(conn);
+   dbus_connection_close(conn);*/
 }
 
 void DbusListener::run() {
-  receive();
+  //receive();
 }

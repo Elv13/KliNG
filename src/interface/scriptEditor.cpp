@@ -722,5 +722,5 @@
       currentLine++;
       evalCommand();
     }
-    
+    return true;
   }

@@ -53,8 +53,11 @@
 
       kde4_add_executable(kling ${kling_SRCS})
 
+      #target_link_libraries(kling ${KDE4_KDEUI_LIBS}
+      #${KDE4_KIO_LIBS} ${QT_QTSQL_LIBRARY} ${QT_WEBKIT_LIBRARY}${QT_LIBRARIES} QtWebKit dbus-1 QtSql)
+      
       target_link_libraries(kling ${KDE4_KDEUI_LIBS}
-      ${KDE4_KIO_LIBS} ${QT_QTSQL_LIBRARY} ${QT_WEBKIT_LIBRARY}${QT_LIBRARIES} QtWebKit dbus-1 QtSql)
+      ${KDE4_KIO_LIBS} ${QT_QTSQL_LIBRARY} ${QT_WEBKIT_LIBRARY}${QT_LIBRARIES} QtWebKit QtSql)
 
       install(TARGETS kling DESTINATION ${BIN_INSTALL_DIR})
       install( FILES klingui.rc

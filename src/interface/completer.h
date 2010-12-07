@@ -18,6 +18,7 @@
 #include <QFont>
 #include <QStringList>
 #include <KIcon>
+#include <stdio.h>
 
   struct FilteredFileStruct {
     bool isEmpty;

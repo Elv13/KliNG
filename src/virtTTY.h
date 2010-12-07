@@ -71,19 +71,19 @@ using namespace std;
     Q_OBJECT
 
     public:
-      VirtTtyThread(QString command, QVector<QString> args, QObject *parent = 0, QCheckBox* showGUI = 0, QString key = 0) : QThread(parent) {
+      VirtTtyThread(QString command, QVector<QString> args, QObject *parent = 0, QCheckBox* showGUI = 0, QString key = "") : QThread(parent) {
         //aCommand = command;
         this->args = args;
         aVirtTTY = new VirtTTY(showGUI);
         aVirtTTY->key = key;
       }
-      VirtTtyThread(QVector<QString> args, QString key = 0) : QThread(0) {
+      VirtTtyThread(QVector<QString> args, QString key = "") : QThread(0) {
         //aCommand = command;
         this->args = args;
         aVirtTTY = new VirtTTY(0);
         aVirtTTY->key = key;
       }
-      VirtTtyThread(QString key = 0) : QThread(0) {
+      VirtTtyThread(QString key = "") : QThread(0) {
         aVirtTTY = new VirtTTY(0);
         aVirtTTY->key = key;
       }

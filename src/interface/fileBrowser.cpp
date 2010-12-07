@@ -129,14 +129,16 @@
         }
       }
     lblCurrentDir->setText("<b>" + currentDir + "</b> (" + QString::number(rowCount -2) + " total item, " + QString::number(hiddenItem - 2) + " hidden, " + QString::number(rowCount - hiddenItem) + " visible)");
+    return true;
   }
 
   bool FileBrowser::enterDir(QString name) {
     //TODO //will calculte a better path (no more ../dir/../dir2
+    return true;
   }
 
   QString FileBrowser::getCurrentDir() {
-    
+    return "";
   }
 
   void FileBrowser::clearMe() {
@@ -146,15 +148,15 @@
   }
 
   bool FileBrowser::isReadable() {
-    
+    return true;
   }
 
   bool FileBrowser::isWritable() {
-    
+    return true;
   }
 
   bool FileBrowser::isExecutable() {
-    
+    return true;
   }
 
   QString FileBrowser::getPermission(QString fileName) {
@@ -210,7 +212,7 @@
   }
 
   KIcon FileBrowser::getIcon(QString fileName) {
-    
+    return KIcon();
   }
 
   void FileBrowser::openDir(QTableWidgetItem * item) {

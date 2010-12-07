@@ -11,6 +11,7 @@
 #include <QCheckBox>
 #include <QTextEdit>
 #include <KIcon>
+#include <stdio.h>
 
 QT_BEGIN_NAMESPACE
 

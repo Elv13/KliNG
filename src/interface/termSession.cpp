@@ -133,6 +133,6 @@ void TermSession::testConnect(QString text) {
 }
 
 
-void SessionEditor::fowardHistory(QString name, bool addToDb) {
+void TermSession::fowardHistory(QString name, bool addToDb) {
   emit addToHistory(name, addToDb);
 }
