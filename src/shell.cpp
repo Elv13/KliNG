@@ -4,6 +4,7 @@
 #include <QtSql>
 #include <QSqlDatabase>
 #include <QtDebug>
+#include <unistd.h>
 
   Shell::Shell(QStringList* commandList, QStringList* aliasList, QStringList* defaultArgsList, QStringList* functionList) {
     builtIn << "cd" << "clear" << "seq";

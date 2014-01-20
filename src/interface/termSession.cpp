@@ -17,7 +17,7 @@ TermSession::TermSession(QWidget* parent =0, ExecutionMonitor* anExecMonitor) : 
 
 void TermSession::addTerm() {
   Term* aTerm = new Term(0);
-  QObject::connect(aTerm, SIGNAL(addToHistory(QString,bool)), this, SLOT(addToHistory(QString,bool)));
+  QObject::connect(aTerm, SIGNAL(addToHistory(QString,bool)), this, SLOT(addToHistory2(QString,bool)));
 
   
   if (count == 0) {

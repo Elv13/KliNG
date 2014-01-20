@@ -97,13 +97,15 @@
       void resizeCompleter();
       void cmdInfoChanged(QString);
       void showFileBrowser(QString path, bool setPath);
-      void addToHistory(QString line);
       void updateDate(QString date, QString key);
       void textChanged(QString text);
       void sendCommand();
       void setChildPid(int pid);
       void updateMonitor(float cpup, float mem);
-      
+
+    public slots:
+      void addToHistory2(QString line,bool i=true);
+
     signals:
       void cmdInfo(QString, int);
       void showCompleter(QString);

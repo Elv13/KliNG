@@ -185,7 +185,7 @@ QStringList* Term::commandList= new QStringList();
     QObject::connect(this, SIGNAL(cmdInfo(QString,int)), completer, SLOT(updateCommand(QString,int)));
     QObject::connect(this, SIGNAL(cmdInfo(QString,int)), completer, SLOT(updateHistory(QString,int)));
     QObject::connect(this, SIGNAL(cmdInfo(QString,int)), completer, SLOT(updateFile(QString,int)));
-    QObject::connect(fileBrowser, SIGNAL(addToHistory(QString)), this, SLOT(addToHistory(QString)));
+    QObject::connect(fileBrowser, SIGNAL(addToHistory(QString)), this, SLOT(addToHistory2(QString)));
 
     label->setText("Search:");
     kpushbutton_5->setText("search");
@@ -298,7 +298,7 @@ QStringList* Term::commandList= new QStringList();
     rtfCmdOutput->hide();
   }
 
-  void Term::addToHistory(QString line) {
+  void Term::addToHistory2(QString line,bool) {
     emit addToHistory(line, true);
   }
 
